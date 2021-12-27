@@ -25,26 +25,28 @@ def afficherEnConsoleElement(element):
     for sousElement in element:
         print(str(sousElement.tag)+' : '+ str(sousElement.text))
 
+def Agnatique(sosa):
+    print('on recherche le sosa :' + str(sosa))
 
-
-sosaRecherche = 2
-Agnatique(2)
-
-def Agnatique(sosa)
-    print('on recherche le sosa :' + str(sosaRecherche))
-
-    resultatRecherche = recupererParSosa(sosaRecherche, root)
+    resultatRecherche = recupererParSosa(sosa, root)
     afficherEnConsoleElement(resultatRecherche)
     print('===========================================================================')
     while resultatRecherche != None:
-        sosaRecherche = sosaRecherche + sosaRecherche
-        print('on recherche le sosa :' + str(sosaRecherche))
-        resultatRecherche = recupererParSosa(sosaRecherche, root)
+        sosa = sosa + sosa
+        print('on recherche le sosa :' + str(sosa))
+        resultatRecherche = recupererParSosa(sosa, root)
         if resultatRecherche != None:
             afficherEnConsoleElement(resultatRecherche)
         else:
             print('fin de la branche')
         print('===========================================================================')
+
+
+
+
+Agnatique(2)
+
+
 
 
 
