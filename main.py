@@ -1,9 +1,13 @@
 from meza import io
-
+import json
 from xml.dom import minidom
 import xml.etree.ElementTree as ET
 from tkinter import *
 
+try:
+    to_unicode = unicode
+except NameError:
+    to_unicode = str
 
 def recupererParSosa(sosa, racine):
     resultatRecherche = None
@@ -24,7 +28,7 @@ def trouveDate(s):
 
 
 def definirPersonne(racine):
-    listPersonne = []
+    listPersonne = {}
     listlistEnfant = []
     nombreEnfants = 0
     nombreEnfantsUnknown = 0
@@ -32,14 +36,18 @@ def definirPersonne(racine):
     nombreConjointsUnknown = 0
     for element in racine:
         personne = {}
-
+        conjoints = []
         for sousElement in element:
+
             if sousElement != None and sousElement.text != None and sousElement.tag != None:
                 if sousElement.tag == 'Br':
                     personne['Branche'] = sousElement.text
                 elif sousElement.tag == 'Enregist':
                     personne['Enregistrement'] = sousElement.text
+                elif sousElement.tag == 'Rel':
+                    personne['Religion'] = sousElement.text
                 elif sousElement.tag == 'Conj' or sousElement.tag == 'Conjoint2':
+
                     conjoint = {}
                     nombreConjoints = nombreConjoints + 1
                     infosConjoint = sousElement.text.split(' ')
@@ -64,9 +72,9 @@ def definirPersonne(racine):
                     elif len(infosConjoint) > 3:
                         print(infosConjoint)
                         nombreConjointsUnknown = nombreConjointsUnknown + 1
+                        conjoint['info'] = sousElement.text
 
-
-
+                    conjoints.append(conjoint)
                 elif sousElement.tag == 'Enfants':
                     text = sousElement.text
                     listeEnfants = text.split('\n')
@@ -172,10 +180,17 @@ def definirPersonne(racine):
                         ListeEnfantFinale.append(newEnfant)
                 else:
                     personne[sousElement.tag] = sousElement.text
-
-        listPersonne.append(personne)
+            personne['conjoints'] = conjoints
+        listPersonne[personne['Enregistrement']] = personne
     # for item in listPersonne:
     #     print(item)
+    with io.open('baseDeDonnee.json', 'w', encoding='utf8') as outfile:
+        str_ = json.dumps(
+            listPersonne,
+            indent=4, sort_keys=True,
+            separators=(',', ': '), ensure_ascii=False)
+        outfile.write(to_unicode(str_))
+
     print('==== Enfants ====')
     print('''nombre d'enfants : '''+str(nombreEnfants))
     percentage = (100*nombreEnfantsUnknown)/nombreEnfants
