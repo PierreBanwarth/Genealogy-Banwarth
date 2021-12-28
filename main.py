@@ -45,6 +45,11 @@ def definirPersonne(racine):
                     infosConjoint = sousElement.text.split(' ')
                     while '' in  infosConjoint:
                         infosConjoint.remove('')
+                    for s in infosConjoint:
+                        if trouveDate(s):
+                            conjoint['dateMariage'] = s
+                            #infosConjoint.remove(s)
+
                     if len(infosConjoint) == 2:
                         conjoint['Nom'] = infosConjoint[0]
                         conjoint['prenom'] = infosConjoint[1]
