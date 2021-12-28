@@ -178,8 +178,10 @@ def definirPersonne(racine):
                             nombreEnfantsUnknown = nombreEnfantsUnknown+1
                             #print(infosEnfant)
                         ListeEnfantFinale.append(newEnfant)
+                    personne['enfants'] = ListeEnfantFinale
                 else:
                     personne[sousElement.tag] = sousElement.text
+
             personne['conjoints'] = conjoints
         listPersonne[personne['Enregistrement']] = personne
     # for item in listPersonne:
