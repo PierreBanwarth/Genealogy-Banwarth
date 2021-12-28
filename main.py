@@ -5,9 +5,6 @@ import xml.etree.ElementTree as ET
 from tkinter import *
 
 
-
-
-
 def recupererParSosa(sosa, racine):
     resultatRecherche = None
     for element in racine:
@@ -21,22 +18,54 @@ def afficherEnConsoleElement(element):
     for sousElement in element:
         print(str(sousElement.tag)+' : '+ str(sousElement.text))
 
+def trouveDate(s):
+    return any(i.isdigit() for i in s)
+
+
+
 def definirPersonne(racine):
     listPersonne = []
     listlistEnfant = []
     nombreEnfants = 0
-    unknown = 0
+    nombreEnfantsUnknown = 0
+    nombreConjoints = 0
+    nombreConjointsUnknown = 0
     for element in racine:
         personne = {}
 
         for sousElement in element:
             if sousElement != None and sousElement.text != None and sousElement.tag != None:
-                personne[sousElement.tag] = sousElement.text
+                if sousElement.tag == 'Br':
+                    personne['Branche'] = sousElement.text
+                elif sousElement.tag == 'Enregist':
+                    personne['Enregistrement'] = sousElement.text
+                elif sousElement.tag == 'Conj' or sousElement.tag == 'Conjoint2':
+                    conjoint = {}
+                    nombreConjoints = nombreConjoints + 1
+                    infosConjoint = sousElement.text.split(' ')
+                    while '' in  infosConjoint:
+                        infosConjoint.remove('')
+                    if len(infosConjoint) == 2:
+                        conjoint['Nom'] = infosConjoint[0]
+                        conjoint['prenom'] = infosConjoint[1]
+                    elif len(infosConjoint) == 3 and not trouveDate(infosConjoint[2]):
+                        if infosConjoint[1].isupper():
+                            conjoint['Nom'] = infosConjoint[0] +' '+ infosConjoint[1]
+                            conjoint['prenom'] = infosConjoint[2]
+                        else:
+                            conjoint['Nom'] = infosConjoint[0]
+                            conjoint['prenom'] = infosConjoint[1] +' '+ infosConjoint[2]
 
-                if sousElement.tag == 'Enfants':
+                    elif len(infosConjoint) > 3:
+                        print(infosConjoint)
+                        nombreConjointsUnknown = nombreConjointsUnknown + 1
+
+
+
+                elif sousElement.tag == 'Enfants':
                     text = sousElement.text
                     listeEnfants = text.split('\n')
-
+                    ListeEnfantFinale = []
                     for enfant in listeEnfants:
                         nombreEnfants = nombreEnfants+1
                         infosEnfant = enfant.split(' ')
@@ -46,60 +75,112 @@ def definirPersonne(racine):
 
                         # + deces
                         # o naissance
-
+                        newEnfant = {}
                         if '+' in infosEnfant:
                             indexDeces = infosEnfant.index('+')+1
                             if indexDeces < len(infosEnfant):
-                                # print('Deces : '+infosEnfant[indexDeces])
-                                pass
+                                newEnfant['dateDeces'] = infosEnfant[indexDeces]
+
                         if 'x' in infosEnfant:
                             indexMariage = infosEnfant.index('x')+1
                             if indexDeces < len(infosEnfant):
-                                # print('Mariage : '+infosEnfant[indexMariage])
-                                pass
+                                newEnfant['dateMariage'] = infosEnfant[indexMariage]
+
                         if '' in  infosEnfant:
                             infosEnfant.remove('')
-                        elif 'vers' in infosEnfant:
-                            index = infosEnfant.index('vers')
-                            dateApprox = infosEnfant[index+1]
-                        elif 'Vers' in infosEnfant:
-                            index = infosEnfant.index('Vers')
+                        elif 'vers' in infosEnfant or 'Vers' in infosEnfant:
+                            if 'vers' in infosEnfant:
+                                index = infosEnfant.index('vers')
+                            elif 'Vers' in infosEnfant:
+                                index = infosEnfant.index('Vers')
+
                             dateApprox = infosEnfant[index+1]
 
+                            if len(infosEnfant) == 3:
+                                newEnfant['nom1'] = infosEnfant[0]
+                            if len(infosEnfant) == 4:
+                                newEnfant['nom1'] = infosEnfant[0]
+                                newEnfant['nom2'] = infosEnfant[1]
+                            newEnfant['dateApprox'] = dateApprox
+
                         elif 'o' in infosEnfant:
-                            indexNaissance = infosEnfant.index('o')+1
-                            pass
+                            indexO = infosEnfant.index('o')
+                            indexNaissance = indexO+1
+                            newEnfant['dateNaissance'] = infosEnfant[indexNaissance]
+                            if indexO == 1:
+                                newEnfant['nom1'] = infosEnfant[0]
+                            elif indexO == 2:
+                                newEnfant['nom1'] = infosEnfant[0]
+                                newEnfant['nom2'] = infosEnfant[1]
+
                         elif len(infosEnfant) == 3 and '/' in infosEnfant[2]:
-                            pass
+                            newEnfant['nom1'] = infosEnfant[0]
+                            newEnfant['nom2'] = infosEnfant[1]
+                            newEnfant['dateNaissance'] = infosEnfant[2]
+
                             #print('prenom : '+infosEnfant[0]+' nom : '+infosEnfant[1])
                             #print('date : '+infosEnfant[2])
                         elif len(infosEnfant) == 2 and '/' in infosEnfant[1]:
-                            pass
-                            #print('prenom : '+infosEnfant[0])
-                            #print('date : '+infosEnfant[1])
+                            newEnfant['nom1'] = infosEnfant[0]
+                            newEnfant['dateNaissance'] = infosEnfant[1]
                         elif infosEnfant[0] == '*':
                             pass
                         elif len(infosEnfant) == 1:
-                            #print('prenom : '+infosEnfant[0])
-                            pass
+                            newEnfant['nom1'] = infosEnfant[0]
                         elif len(infosEnfant) == 3 and infosEnfant[1] == 'en':
-                            pass
-                        elif len(infosEnfant) == 2 and len(infosEnfant[1]) == 4:
-                            pass
+                            newEnfant['nom1'] = infosEnfant[0]
+                            newEnfant['dateNaissance'] = infosEnfant[2]
+                        elif 'env' in infosEnfant or 'env.' in infosEnfant:
+                            #cas nom prenom
+                            if len(infosEnfant) == 3:
+                                newEnfant['nom1'] = infosEnfant[0]
+                                newEnfant['dateNaissance'] = infosEnfant[2]
+                            if len(infosEnfant) == 4:
+                                # 1= nom, 2 = env, 3 = date
+                                newEnfant['nom1'] = infosEnfant[0]
+                                newEnfant['nom2'] = infosEnfant[1]
+                                newEnfant['dateNaissance'] = infosEnfant[3]
+
+                            #cas nom
+                        elif len(infosEnfant) >= 2 and trouveDate(infosEnfant[1]):
+                            date = infosEnfant[1]
+                            date = date.replace(',','/')
+                            date = date.replace('.','/')
+                            newEnfant['nom1'] = infosEnfant[0]
+                            newEnfant['dateNaissance'] = date
+
+                        elif len(infosEnfant) >= 3 and trouveDate(infosEnfant[2]):
+                            date = infosEnfant[2]
+                            date = date.replace(',','/')
+                            date = date.replace('.','/')
+                            newEnfant['nom1'] = infosEnfant[0]
+                            newEnfant['nom2'] = infosEnfant[1]
+                            newEnfant['dateNaissance'] = date
+                        elif len(infosEnfant) == 2:
+                            newEnfant['nom1'] = infosEnfant[0]
+                            newEnfant['nom2'] = infosEnfant[1]
 
                         else:
                             listlistEnfant.append(infosEnfant)
-                            unknown = unknown+1
-        listPersonne.append(personne)
+                            nombreEnfantsUnknown = nombreEnfantsUnknown+1
+                            #print(infosEnfant)
+                        ListeEnfantFinale.append(newEnfant)
+                else:
+                    personne[sousElement.tag] = sousElement.text
 
+        listPersonne.append(personne)
+    # for item in listPersonne:
+    #     print(item)
+    print('==== Enfants ====')
     print('''nombre d'enfants : '''+str(nombreEnfants))
-    percentage = (100*unknown)/nombreEnfants
-    #nombre d'enfant = 100
-    #unknown =
-    print('Pourcentage : '+str(percentage))
-    listlistEnfant.sort(key = len)
-    for item in listlistEnfant:
-        print(item)
+    percentage = (100*nombreEnfantsUnknown)/nombreEnfants
+    print('     Pourcentage erreure enfant: '+str(percentage))
+
+    print('==== Conjoints ====')
+    print('nombre de conjoints : '+str(nombreConjoints))
+    percentage = (100*nombreConjointsUnknown)/nombreConjoints
+    print('     Pourcentage erreure conjoints: '+str(percentage))
+
 
 
 def Agnatique(sosa):
