@@ -36070,7 +36070,7 @@ Leonard 26/3/1624</Enfants>
 <Prenom>Jean Baptiste</Prenom>
 <LieuNaissance>39*SEPTMONCEL</LieuNaissance>
 <DNaissance>1746-12-06T00:00:00</DNaissance>
-<LieuMariage>39µSEPTMONCEL</LieuMariage>
+<LieuMariage>39*SEPTMONCEL</LieuMariage>
 <DMariage>1774-04-27T00:00:00</DMariage>
 <LieuDeces>39*LES MOLUNES</LieuDeces>
 <DDeces>1807-02-09T00:00:00</DDeces>
@@ -36091,7 +36091,7 @@ Marie Julienne 14/12/1788 Septm</Enfants>
 <Prenom>Marie Antoine</Prenom>
 <LieuNaissance>39*SEPTMONCEL</LieuNaissance>
 <DNaissance>1748-02-08T00:00:00</DNaissance>
-<LieuMariage>39µSEPTMONCEL</LieuMariage>
+<LieuMariage>39*SEPTMONCEL</LieuMariage>
 <DMariage>1774-04-27T00:00:00</DMariage>
 <LieuDeces>39*LES MOLUNES</LieuDeces>
 <DDeces>1812-03-22T00:00:00</DDeces>
@@ -61347,7 +61347,7 @@ Jean</Enfants>
 <Sosa>22324</Sosa>
 <Nom>JOURDAIN</Nom>
 <Prenom>Jean</Prenom>
-<LieuDeces>16ORADOUR  d&apos;AIGRE</LieuDeces>
+<LieuDeces>16*ORADOUR D'AIGRE</LieuDeces>
 <DDeces>1694-04-04T00:00:00</DDeces>
 <Conj>SAUTON Jeanne</Conj>
 <Profession>-Meunier</Profession>
@@ -61361,7 +61361,7 @@ Marie</Enfants>
 <Sosa>22325</Sosa>
 <Nom>SAUTON</Nom>
 <Prenom>Jeanne</Prenom>
-<LieuDeces>16ORADOUR  d&apos;AIGRE</LieuDeces>
+<LieuDeces>16*ORADOUR D'AIGRE</LieuDeces>
 <DDeces>1692-07-12T00:00:00</DDeces>
 <Conj>JOURDAIN Jean</Conj>
 <Enfants>Jacques
@@ -84204,9 +84204,9 @@ Rose Louise 25/2/1824</Enfants>
 <Prenom>François</Prenom>
 <LieuNaissance>21*MONT ST JEAN</LieuNaissance>
 <DNaissance>1774-03-12T00:00:00</DNaissance>
-<LieuMariage>219MONT ST JEAN</LieuMariage>
+<LieuMariage>219*MONT ST JEAN</LieuMariage>
 <DMariage>1803-11-08T00:00:00</DMariage>
-<LieuDeces>21MONT ST JEAN</LieuDeces>
+<LieuDeces>21*MONT ST JEAN</LieuDeces>
 <DDeces>1849-03-17T00:00:00</DDeces>
 <Conj>MANLAY Reine</Conj>
 <Enfants>Jeanne 16/7/1811
@@ -84223,9 +84223,9 @@ François 4/7/1820</Enfants>
 <Prenom>Reine</Prenom>
 <LieuNaissance>21*MARCILLY OGNY</LieuNaissance>
 <DNaissance>1775-09-18T00:00:00</DNaissance>
-<LieuMariage>219MONT ST JEAN</LieuMariage>
+<LieuMariage>219*MONT ST JEAN</LieuMariage>
 <DMariage>1803-11-08T00:00:00</DMariage>
-<LieuDeces>219MONT ST JEAN</LieuDeces>
+<LieuDeces>219*MONT ST JEAN</LieuDeces>
 <DDeces>1809-05-20T00:00:00</DDeces>
 <Conj>TROLARD François</Conj>
 <Enfants>*</Enfants>
@@ -107451,7 +107451,7 @@ François 28/10/1723</Enfants>
 <Sosa>3724</Sosa>
 <Nom>PIERRE</Nom>
 <Prenom>Denis</Prenom>
-<LieuNaissance>219MONT ST JEAN</LieuNaissance>
+<LieuNaissance>219*MONT ST JEAN</LieuNaissance>
 <DNaissance>1672-09-25T00:00:00</DNaissance>
 <LieuMariage>21*MISSERY</LieuMariage>
 <DMariage>1707-01-11T00:00:00</DMariage>
@@ -107674,7 +107674,7 @@ Leonard 25/11/1685</Enfants>
 <Prenom>Claudine</Prenom>
 <LieuMariage>21*MONT ST JEAN</LieuMariage>
 <DMariage>1670-01-21T00:00:00</DMariage>
-<LieuDeces>219MONT ST JEAN</LieuDeces>
+<LieuDeces>219*MONT ST JEAN</LieuDeces>
 <DDeces>1694-11-27T00:00:00</DDeces>
 <Conj>PIERRE Dimanche</Conj>
 <Enfants>François 3/111670

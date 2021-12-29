@@ -13,36 +13,103 @@ except NameError:
 def trouveDate(s):
     return any(i.isdigit() for i in s)
 
+def formatDate(s):
+    #"DateNaissance": "1833-05-21T00:00:00",
+    if len(s) == len('1833-05-21T00:00:00'):
+        array = s.split('T')[0].split('-')
+        return array[2]+'/'+array[1]+'/'+array[0]
+    else:
+        print(s)
+
+def dateEnfantFormat(s):
+    array = s.split('/')
+    result = ''
+    if len(array) == 3:
+        if len(array[0]) == 1:
+            array[0] = '0'+array[0]
+        if len(array[1]) == 1:
+            array[1] = '0'+array[1]
+        return array[0]+'/'+array[1]+'/'+array[2]
+    else:
+        return s
+
+def getLieuxFromString(s):
+    if '*' in s:
+        s = s.split('*')
+        return {
+            'departement' : s[0],
+            'ville' : s[1]
+        }
+
+    else:
+        s = s[1:]
+        s = s.split(')')
+        if s[0] == 'I':
+            pays  ='Italie'
+        if s[0] == 'D' or s[0] == 'B':
+            pays  ='Swisse'
+        if s[0] == 'S':
+            pays  ='Allemagne'
+        return {
+            'pays' : pays,
+            'ville' : s[1]
+        }
+
 def convertirBase(racine):
     listPersonne = {}
+    lieux = []
+
     nombreEnfants = 0
     nombreEnfantsUnknown = 0
     nombreConjoints = 0
     nombreConjointsUnknown = 0
+
     for element in racine:
         personne = {}
         conjoints = []
+
         enregistrement = False
         for sousElement in element:
-
             if sousElement != None and sousElement.text != None and sousElement.tag != None:
+
                 if sousElement.tag == 'Br':
                     personne['Branche'] = sousElement.text
+
+                elif sousElement.tag.startswith('Lieu'):
+                    # JSON file
+                    f = open ('data/departements-region.json', "r")
+                    # Reading from file
+                    data = json.loads(f.read())
+                    lieu = getLieuxFromString(sousElement.text)
+                    if 'departement' in lieu:
+                        for item in data:
+                            if str(item['num_dep']) == str(lieu['departement']):
+                                lieu['departementName'] = item['dep_name']
+                                lieu['regionName'] = item['region_name']
+
+                    if lieu not in lieux:
+                        lieux.append(lieu)
+                    index = lieux.index(lieu)
+                    personne[sousElement.tag] = index
+
                 elif sousElement.tag == 'PPM':
                     personne['PerePresentMariage'] = sousElement.text
                 elif sousElement.tag == 'PMM':
                     personne['MerePresentMariage'] = sousElement.text
                 elif sousElement.tag == 'DMariage':
-                    personne['DateMariage'] = sousElement.text
+                    personne['DateMariage'] = formatDate(sousElement.text)
                 elif sousElement.tag == 'DNaissance':
-                    personne['DateNaissance'] = sousElement.text
+                    personne['DateNaissance'] = formatDate(sousElement.text)
                 elif sousElement.tag == 'DDeces':
-                    personne['DateDeces'] = sousElement.text
+                    personne['DateDeces'] = formatDate(sousElement.text)
                 elif sousElement.tag == 'Enregist':
                     enregistrement = True
                     personne['Enregistrement'] = sousElement.text
                 elif sousElement.tag == 'Rel':
                     personne['Religion'] = sousElement.text
+                elif sousElement.tag == 'Profession':
+                    if sousElement.text[0] == '-' or sousElement.text[0] == '+':
+                        personne['Profession'] = sousElement.text[1:]
                 elif sousElement.tag == 'Conj' or sousElement.tag == 'Conjoint2':
                     conjoint = {}
                     nombreConjoints = nombreConjoints + 1
@@ -116,7 +183,7 @@ def convertirBase(racine):
                         elif 'o' in infosEnfant:
                             indexO = infosEnfant.index('o')
                             indexNaissance = indexO+1
-                            newEnfant['dateNaissance'] = infosEnfant[indexNaissance]
+                            newEnfant['dateNaissance'] = dateEnfantFormat(infosEnfant[indexNaissance])
                             if indexO == 1:
                                 newEnfant['nom1'] = infosEnfant[0]
                             elif indexO == 2:
@@ -126,30 +193,30 @@ def convertirBase(racine):
                         elif len(infosEnfant) == 3 and '/' in infosEnfant[2]:
                             newEnfant['nom1'] = infosEnfant[0]
                             newEnfant['nom2'] = infosEnfant[1]
-                            newEnfant['dateNaissance'] = infosEnfant[2]
+                            newEnfant['dateNaissance'] = dateEnfantFormat(infosEnfant[2])
 
                             #print('prenom : '+infosEnfant[0]+' nom : '+infosEnfant[1])
                             #print('date : '+infosEnfant[2])
                         elif len(infosEnfant) == 2 and '/' in infosEnfant[1]:
                             newEnfant['nom1'] = infosEnfant[0]
-                            newEnfant['dateNaissance'] = infosEnfant[1]
+                            newEnfant['dateNaissance'] = dateEnfantFormat(infosEnfant[1])
                         elif infosEnfant[0] == '*':
                             pass
                         elif len(infosEnfant) == 1:
                             newEnfant['nom1'] = infosEnfant[0]
                         elif len(infosEnfant) == 3 and infosEnfant[1] == 'en':
                             newEnfant['nom1'] = infosEnfant[0]
-                            newEnfant['dateNaissance'] = infosEnfant[2]
+                            newEnfant['dateNaissance'] = dateEnfantFormat(infosEnfant[2])
                         elif 'env' in infosEnfant or 'env.' in infosEnfant:
                             #cas nom prenom
                             if len(infosEnfant) == 3:
                                 newEnfant['nom1'] = infosEnfant[0]
-                                newEnfant['dateNaissance'] = infosEnfant[2]
+                                newEnfant['dateNaissance'] = dateEnfantFormat(infosEnfant[2])
                             if len(infosEnfant) == 4:
                                 # 1= nom, 2 = env, 3 = date
                                 newEnfant['nom1'] = infosEnfant[0]
                                 newEnfant['nom2'] = infosEnfant[1]
-                                newEnfant['dateNaissance'] = infosEnfant[3]
+                                newEnfant['dateNaissance'] = dateEnfantFormat(infosEnfant[3])
 
                             #cas nom
                         elif len(infosEnfant) >= 2 and trouveDate(infosEnfant[1]):
@@ -157,7 +224,7 @@ def convertirBase(racine):
                             date = date.replace(',','/')
                             date = date.replace('.','/')
                             newEnfant['nom1'] = infosEnfant[0]
-                            newEnfant['dateNaissance'] = date
+                            newEnfant['dateNaissance'] = dateEnfantFormat(date)
 
                         elif len(infosEnfant) >= 3 and trouveDate(infosEnfant[2]):
                             date = infosEnfant[2]
@@ -165,7 +232,7 @@ def convertirBase(racine):
                             date = date.replace('.','/')
                             newEnfant['nom1'] = infosEnfant[0]
                             newEnfant['nom2'] = infosEnfant[1]
-                            newEnfant['dateNaissance'] = date
+                            newEnfant['dateNaissance'] = dateEnfantFormat(date)
                         elif len(infosEnfant) == 2:
                             newEnfant['nom1'] = infosEnfant[0]
                             newEnfant['nom2'] = infosEnfant[1]
@@ -173,7 +240,8 @@ def convertirBase(racine):
                         else:
                             nombreEnfantsUnknown = nombreEnfantsUnknown+1
                             #print(infosEnfant)
-                        ListeEnfantFinale.append(newEnfant)
+                        if newEnfant != {}:
+                            ListeEnfantFinale.append(newEnfant)
 
 
                     ListeEnfantFinale.insert(0,{'Sosa' : 'ToFind'})
@@ -181,23 +249,25 @@ def convertirBase(racine):
                 else:
                     personne[sousElement.tag] = sousElement.text
         personne['conjoints'] = conjoints
+
         if enregistrement:
             enregistrement = personne['Enregistrement']
             del(personne['Enregistrement'])
             listPersonne[enregistrement] = personne
-    # for item in listPersonne:
-    #     print(item)
+
+
+    sauvegardeBase(lieux, 'lieux.json')
     print('==== Enfants ====')
     print('''nombre d'enfants : '''+str(nombreEnfants))
     percentage = (100*nombreEnfantsUnknown)/nombreEnfants
-    print('     Pourcentage erreure enfant: '+str(percentage))
+    print('=> Pourcentage erreure enfant: '+str(percentage))
 
     print('==== Conjoints ====')
     print('nombre de conjoints : '+str(nombreConjoints))
     percentage = (100*nombreConjointsUnknown)/nombreConjoints
-    print('     Pourcentage erreure conjoints: '+str(percentage))
-    return listPersonne
+    print('=> Pourcentage erreure conjoints: '+str(percentage))
 
+    return listPersonne
 
 def retrouverEnfant(jsonBySosa):
     result = {}
@@ -212,18 +282,6 @@ def retrouverEnfant(jsonBySosa):
 
         result[key] = personne.toJson()
     return result
-        # if personne.Male:
-        #     txtPersonne = 'Pere :'
-        # else:
-        #     txtPersonne = 'Mere :'
-        # if fils.Male:
-        #     txtHeritier = 'fils :'
-        # else:
-        #     txtHeritier = 'fille :'
-
-        # print(txtPersonne+str(personne))
-        # print(txtHeritier+str(fils))
-
 
 def baseBySosa(json):
     test = {}
@@ -293,8 +351,8 @@ def affichage():
 
     fenetre.mainloop()
 
-def sauvegardeBase(jsonFinal):
-    with io.open('baseDeDonnee.json', 'w', encoding='utf8') as outfile:
+def sauvegardeBase(jsonFinal, filename):
+    with io.open(filename, 'w', encoding='utf8') as outfile:
         str_ = json.dumps(
             jsonFinal,
             indent=4, sort_keys=True,
@@ -306,13 +364,11 @@ def main():
     racine = arbre.getroot()
 
     jsonFinal = convertirBase(racine)
-    sauvegardeBase(jsonFinal)
-
     #On crée la base de donnée par sosa pour faciliter les recherches
     jsonBySosa = baseBySosa(jsonFinal)
-
     result = retrouverEnfant(jsonBySosa)
-    sauvegardeBase(jsonFinal)
+
+    sauvegardeBase(result,  'baseDeDonneeBySosa.json')
 
     # for key, val in jsonFinal.items():
     #     print(val['Sosa'])
