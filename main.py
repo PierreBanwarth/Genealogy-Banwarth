@@ -3,33 +3,18 @@ import json
 from xml.dom import minidom
 import xml.etree.ElementTree as ET
 from tkinter import *
-
+from person import Person
 try:
     to_unicode = unicode
 except NameError:
     to_unicode = str
 
-def recupererParSosa(sosa, racine):
-    resultatRecherche = None
-    for element in racine:
-        for sousElement in element:
-            if sousElement != None and sousElement.tag == 'Sosa' and sousElement.text == str(sosa):
-                resultatRecherche = element
-
-    return resultatRecherche
-
-def afficherEnConsoleElement(element):
-    for sousElement in element:
-        print(str(sousElement.tag)+' : '+ str(sousElement.text))
 
 def trouveDate(s):
     return any(i.isdigit() for i in s)
 
-
-
-def definirPersonne(racine):
+def convertirBase(racine):
     listPersonne = {}
-    listlistEnfant = []
     nombreEnfants = 0
     nombreEnfantsUnknown = 0
     nombreConjoints = 0
@@ -37,17 +22,28 @@ def definirPersonne(racine):
     for element in racine:
         personne = {}
         conjoints = []
+        enregistrement = False
         for sousElement in element:
 
             if sousElement != None and sousElement.text != None and sousElement.tag != None:
                 if sousElement.tag == 'Br':
                     personne['Branche'] = sousElement.text
+                elif sousElement.tag == 'PPM':
+                    personne['PerePresentMariage'] = sousElement.text
+                elif sousElement.tag == 'PMM':
+                    personne['MerePresentMariage'] = sousElement.text
+                elif sousElement.tag == 'DMariage':
+                    personne['DateMariage'] = sousElement.text
+                elif sousElement.tag == 'DNaissance':
+                    personne['DateNaissance'] = sousElement.text
+                elif sousElement.tag == 'DDeces':
+                    personne['DateDeces'] = sousElement.text
                 elif sousElement.tag == 'Enregist':
+                    enregistrement = True
                     personne['Enregistrement'] = sousElement.text
                 elif sousElement.tag == 'Rel':
                     personne['Religion'] = sousElement.text
                 elif sousElement.tag == 'Conj' or sousElement.tag == 'Conjoint2':
-
                     conjoint = {}
                     nombreConjoints = nombreConjoints + 1
                     infosConjoint = sousElement.text.split(' ')
@@ -70,7 +66,7 @@ def definirPersonne(racine):
                             conjoint['prenom'] = infosConjoint[1] +' '+ infosConjoint[2]
 
                     elif len(infosConjoint) > 3:
-                        print(infosConjoint)
+                        # print(infosConjoint)
                         nombreConjointsUnknown = nombreConjointsUnknown + 1
                         conjoint['info'] = sousElement.text
 
@@ -89,6 +85,7 @@ def definirPersonne(racine):
                         # + deces
                         # o naissance
                         newEnfant = {}
+
                         if '+' in infosEnfant:
                             indexDeces = infosEnfant.index('+')+1
                             if indexDeces < len(infosEnfant):
@@ -174,25 +171,22 @@ def definirPersonne(racine):
                             newEnfant['nom2'] = infosEnfant[1]
 
                         else:
-                            listlistEnfant.append(infosEnfant)
                             nombreEnfantsUnknown = nombreEnfantsUnknown+1
                             #print(infosEnfant)
                         ListeEnfantFinale.append(newEnfant)
+
+
+                    ListeEnfantFinale.insert(0,{'Sosa' : 'ToFind'})
                     personne['enfants'] = ListeEnfantFinale
                 else:
                     personne[sousElement.tag] = sousElement.text
-
-            personne['conjoints'] = conjoints
-        listPersonne[personne['Enregistrement']] = personne
+        personne['conjoints'] = conjoints
+        if enregistrement:
+            enregistrement = personne['Enregistrement']
+            del(personne['Enregistrement'])
+            listPersonne[enregistrement] = personne
     # for item in listPersonne:
     #     print(item)
-    with io.open('baseDeDonnee.json', 'w', encoding='utf8') as outfile:
-        str_ = json.dumps(
-            listPersonne,
-            indent=4, sort_keys=True,
-            separators=(',', ': '), ensure_ascii=False)
-        outfile.write(to_unicode(str_))
-
     print('==== Enfants ====')
     print('''nombre d'enfants : '''+str(nombreEnfants))
     percentage = (100*nombreEnfantsUnknown)/nombreEnfants
@@ -202,26 +196,42 @@ def definirPersonne(racine):
     print('nombre de conjoints : '+str(nombreConjoints))
     percentage = (100*nombreConjointsUnknown)/nombreConjoints
     print('     Pourcentage erreure conjoints: '+str(percentage))
+    return listPersonne
 
 
+def retrouverEnfant(jsonBySosa):
+    result = {}
+    for key, val in jsonBySosa.items():
+        personne = Person(val)
 
-def Agnatique(sosa):
-    print('on recherche le sosa :' + str(sosaRecherche))
+        sosaFils = str(personne.getSonSosa())
+        fils = Person(jsonBySosa[sosaFils])
 
-    resultatRecherche = recupererParSosa(sosaRecherche, racine)
-    afficherEnConsoleElement(resultatRecherche)
-    print('===========================================================================')
-    while resultatRecherche != None:
-        sosaRecherche = sosaRecherche + sosaRecherche
-        print('on recherche le sosa :' + str(sosaRecherche))
-        resultatRecherche = recupererParSosa(sosaRecherche, racine)
-        if resultatRecherche != None:
-            afficherEnConsoleElement(resultatRecherche)
-        else:
-            print('fin de la branche')
-        print('===========================================================================')
+        if personne.isToFindSon():
+            personne.addAine(fils)
 
+        result[key] = personne.toJson()
+    return result
+        # if personne.Male:
+        #     txtPersonne = 'Pere :'
+        # else:
+        #     txtPersonne = 'Mere :'
+        # if fils.Male:
+        #     txtHeritier = 'fils :'
+        # else:
+        #     txtHeritier = 'fille :'
+
+        # print(txtPersonne+str(personne))
+        # print(txtHeritier+str(fils))
+
+
+def baseBySosa(json):
+    test = {}
+    for key, val in json.items():
+        test[val['Sosa']] = val
 #     liste.insert(i, item)
+    return test
+
 def affichage():
     fenetre = Tk()
     fenetre['bg']='white'
@@ -283,15 +293,29 @@ def affichage():
 
     fenetre.mainloop()
 
+def sauvegardeBase(jsonFinal):
+    with io.open('baseDeDonnee.json', 'w', encoding='utf8') as outfile:
+        str_ = json.dumps(
+            jsonFinal,
+            indent=4, sort_keys=True,
+            separators=(',', ': '), ensure_ascii=False)
+        outfile.write(to_unicode(str_))
 
 def main():
     arbre = ET.parse('data/table1.xml')
     racine = arbre.getroot()
-    definirPersonne(racine)
-    # all item attributes
-    # sosaRecherche = 2
-    # Agnatique(2)
 
+    jsonFinal = convertirBase(racine)
+    sauvegardeBase(jsonFinal)
+
+    #On crée la base de donnée par sosa pour faciliter les recherches
+    jsonBySosa = baseBySosa(jsonFinal)
+
+    result = retrouverEnfant(jsonBySosa)
+    sauvegardeBase(jsonFinal)
+
+    # for key, val in jsonFinal.items():
+    #     print(val['Sosa'])
 
 if __name__ == "__main__":
     main()
