@@ -3,7 +3,7 @@ import json
 from fichiers import *
 
 
-
+UNKNOWN = 'Sans'
 astrologie = getAstrologie()
 regnes = getRegnes()
 
@@ -11,7 +11,7 @@ class Personne:
 
     def getRegnes(self):
         regnesPersonne = []
-        if self.DateNaissance != 'Unknown' and self.DateDeces != 'Unknown' and len(self.DateNaissance.split('/')) == 3 and len(self.DateDeces.split('/')) == 3:
+        if self.DateNaissance != UNKNOWN and self.DateDeces != UNKNOWN and len(self.DateNaissance.split('/')) == 3 and len(self.DateDeces.split('/')) == 3:
             D = self.DateDeces.split('/')[2]
             N = self.DateNaissance.split('/')[2]
             for regne in regnes:
@@ -54,76 +54,76 @@ class Personne:
         if 'Aine' in json:
             self.Aine = json['Aine']
         else:
-            self.Aine = 'Unkown'
+            self.Aine = UNKNOWN
 
         if 'Cadet' in json:
             self.Cadet = json['Cadet']
         else:
-            self.Cadet = 'Unkown'
+            self.Cadet = UNKNOWN
 
         if 'LieuDeces' in json:
             self.LieuDeces = json['LieuDeces']
         else:
-            self.LieuDeces = 'Unknown'
+            self.LieuDeces = UNKNOWN
 
         if 'MerePresentMariage' in json:
             self.MerePresentMariage = json['MerePresentMariage']
         else:
-            self.MerePresentMariage = 'Unkown'
+            self.MerePresentMariage = UNKNOWN
 
         if 'PerePresentMariage' in json:
             self.PerePresentMariage = json['PerePresentMariage']
         else:
-            self.PerePresentMariage = 'Unkown'
+            self.PerePresentMariage = UNKNOWN
 
         if 'Note' in json:
             self.Note = json['Note']
         else:
-            self.Note = 'Unkown'
+            self.Note = UNKNOWN
 
         if 'DateMariage' in json:
             self.DateMariage = json['DateMariage']
         else:
-            self.DateMariage = 'Unkown'
+            self.DateMariage = UNKNOWN
 
         if 'DateDeces' in json:
             self.DateDeces = json['DateDeces']
         else:
-            self.DateDeces = 'Unkown'
+            self.DateDeces = UNKNOWN
 
         if 'DateNaissance' in json:
             self.DateNaissance = json['DateNaissance']
         else:
-            self.DateNaissance = 'Unkown'
+            self.DateNaissance = UNKNOWN
 
         if 'LieuMariage' in json:
             self.LieuMariage = json['LieuMariage']
         else:
-            self.LieuMariage = 'Unkown'
+            self.LieuMariage = UNKNOWN
 
         if 'Religion' in json:
             self.Religion = json['Religion']
         else:
-            self.Religion = 'Unkown'
+            self.Religion = UNKNOWN
 
         if 'Profession' in json:
             self.Profession = json['Profession']
         else:
-            self.Profession = 'Unkown'
+            self.Profession = UNKNOWN
 
         if 'LieuNaissance' in json:
             self.LieuNaissance = json['LieuNaissance']
         else:
-            self.LieuNaissance = 'Unkown'
+            self.LieuNaissance = UNKNOWN
 
         if 'Nom' in json:
             self.Nom = json['Nom']
         else:
-            self.Nom = 'Unkown'
+            self.Nom = UNKNOWN
         if 'Prenom' in json:
             self.Prenom = json['Prenom']
         else:
-            self.Nom = 'Unkown'
+            self.Nom = UNKNOWN
 
         self.Sosa = int(json['Sosa'])
 
@@ -172,33 +172,37 @@ class Personne:
         return 'Todo calcul age'
 
     def getLieuNaissance(self):
-        if self.LieuNaissance != 'Unknown':
-                lieux = getLieux()
-                DictLieux = lieux[int(self.LieuNaissance)]
+        if self.LieuNaissance == UNKNOWN:
+            return self.lieuNaissance
+        else:
+            lieux = getLieux()
+            DictLieux = lieux[int(self.LieuNaissance)]
+            if 'pays' in DictLieux:
+                return DictLieux['pays']+' '+DictLieux['ville']
+            else:
+                return DictLieux['ville']+' '+ DictLieux['departementName']+'('+DictLieux['departement']+')'
+
+    def getLieuDeces(self):
+        if self.LieuDeces != UNKNOWN:
+            with open('data/lieux.json') as json_file:
+                lieux = json.load(json_file)
+                DictLieux = lieux[int(self.LieuDeces)]
                 if 'pays' in DictLieux:
                     return DictLieux['pays']+' '+DictLieux['ville']
                 else:
                     return DictLieux['ville']+' '+ DictLieux['departementName']+'('+DictLieux['departement']+')'
         else:
-            return self.lieuNaissance
-
-    def getLieuDeces(self):
-        if self.LieuDeces != 'Unknown':
-            with open('data/lieux.json') as json_file:
-                lieux = json.load(json_file)
-                DictLieux = lieux[int(self.LieuDeces)]
-                return DictLieux['ville']+' '+ DictLieux['departementName']+'('+DictLieux['departement']+')'
-        else:
             return self.LieuDeces
 
     def getLieuMariage(self):
-        if self.LieuMariage != 'Unknown':
-
+        if self.LieuMariage != UNKNOWN:
             with open('data/lieux.json') as json_file:
                 lieux = json.load(json_file)
                 DictLieux = lieux[int(self.LieuMariage)]
-
-                return DictLieux['ville']+' '+ DictLieux['departementName']+'('+DictLieux['departement']+')'
+                if 'pays' in DictLieux:
+                    return DictLieux['pays']+' '+DictLieux['ville']
+                else:
+                    return DictLieux['ville']+' '+ DictLieux['departementName']+'('+DictLieux['departement']+')'
         else:
             self.lieuMariage
 
