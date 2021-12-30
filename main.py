@@ -1,9 +1,12 @@
-from meza import io
 import json
 from xml.dom import minidom
 import xml.etree.ElementTree as ET
 from tkinter import *
-from person import Person
+from person import *
+from personneLabel import PersonneLabel
+from functools import partial
+
+
 try:
     to_unicode = unicode
 except NameError:
@@ -283,6 +286,7 @@ def retrouverEnfant(jsonBySosa):
         result[key] = personne.toJson()
     return result
 
+
 def baseBySosa(json):
     test = {}
     for key, val in json.items():
@@ -290,7 +294,7 @@ def baseBySosa(json):
 #     liste.insert(i, item)
     return test
 
-def affichage():
+def affichage(jsonArbre, jsonPersonne):
     fenetre = Tk()
     fenetre['bg']='white'
 
@@ -320,10 +324,6 @@ def affichage():
 
     Personnage = LabelFrame(Millieu,  text='Personne', borderwidth=2, relief=GROOVE)
     Personnage.pack(side=LEFT, fill=BOTH,expand=1)
-
-    # frame 3 dans frame 2
-
-
     Mariage = LabelFrame(Bas, text='Mariage(s)', borderwidth=2, relief=GROOVE)
     Mariage.pack(side=LEFT, fill=BOTH,expand=1)
 
@@ -335,7 +335,54 @@ def affichage():
     Fratrie = LabelFrame(Bas, text='Fratrie', borderwidth=2, relief=GROOVE)
     Fratrie.pack(side=LEFT, fill=BOTH,expand=1)
 
+    personneLabel = PersonneLabel(Person(jsonArbre["2"]), Personnage)
 
+    def getFather(jsonPersonne, jsonArbre):
+        pere = jsonArbre[str(jsonPersonne['Sosa']*2)]
+        resultat = pere
+        personneLabel.set(Person(resultat))
+
+        buttonFather.configure(command=partial(getFather, resultat, jsonArbre))
+        buttonMother.configure(command=partial(getMother, resultat, jsonArbre))
+        buttonFils.configure(command=partial(getHeritier, resultat, jsonArbre))
+
+    def getMother(jsonPersonne, jsonArbre):
+        mere = jsonArbre[str(jsonPersonne['Sosa']*2+1)]
+        resultat = mere
+        personneLabel.set(Person(resultat))
+
+        buttonMother.configure(command=partial(getMother, resultat, jsonArbre))
+        buttonFather.configure(command=partial(getFather, resultat, jsonArbre))
+        buttonFils.configure(command=partial(getHeritier, resultat, jsonArbre))
+
+    def getHeritier(jsonPersonne, jsonArbre):
+        if jsonPersonne['Sosa'] % 2 == 0:
+            heritier = jsonArbre[str(int(jsonPersonne['Sosa']/2))]
+        else:
+            heritier = jsonArbre[str(int(jsonPersonne['Sosa']/2-1))]
+        resultat = heritier
+        personneLabel.set(Person(resultat))
+
+        buttonFather.configure(command=partial(getFather, resultat, jsonArbre))
+        buttonMother.configure(command=partial(getMother, resultat, jsonArbre))
+        buttonFils.configure(command=partial(getHeritier, resultat, jsonArbre))
+
+    buttonMother = Button(
+        Mere,
+        text="Mere",
+        command=partial(getMother, jsonPersonne, jsonArbre)
+    )
+
+    buttonFather = Button(
+        Pere,
+        text="Pere",
+        command=partial(getFather, jsonPersonne, jsonArbre)
+    )
+    buttonFils= Button(
+        Millieu,
+        text="Fils",
+        command=partial(getHeritier, jsonPersonne, jsonArbre)
+    )
 
     # Ajout de labels
     Label(Mere, text="Mere").pack(padx=10, pady=10)
@@ -347,29 +394,42 @@ def affichage():
     Label(Mariage, text="Mariage").pack(padx=10, pady=10)
     Label(Enfant, text="Enfant").pack(padx=10, pady=10)
     Label(Fratrie, text="Fratrie").pack(padx=10, pady=10)
+    buttonFather.pack()
+    buttonMother.pack()
+    buttonFils.pack()
+
+    personneLabel.pack()
+
+    # frame 3 dans frame 2
 
 
     fenetre.mainloop()
 
+
+
 def sauvegardeBase(jsonFinal, filename):
-    with io.open(filename, 'w', encoding='utf8') as outfile:
+    with open(filename, 'w', encoding='utf8') as outfile:
         str_ = json.dumps(
             jsonFinal,
             indent=4, sort_keys=True,
             separators=(',', ': '), ensure_ascii=False)
         outfile.write(to_unicode(str_))
+def openBase(filename):
+    with open(filename) as json_file:
+        return json.load(json_file)
 
 def main():
-    arbre = ET.parse('data/table1.xml')
-    racine = arbre.getroot()
-
-    jsonFinal = convertirBase(racine)
-    #On crée la base de donnée par sosa pour faciliter les recherches
-    jsonBySosa = baseBySosa(jsonFinal)
-    result = retrouverEnfant(jsonBySosa)
-
-    sauvegardeBase(result,  'baseDeDonneeBySosa.json')
-
+    # arbre = ET.parse('data/table1.xml')
+    # racine = arbre.getroot()
+    #
+    # jsonFinal = convertirBase(racine)
+    # #On crée la base de donnée par sosa pour faciliter les recherches
+    # jsonBySosa = baseBySosa(jsonFinal)
+    # result = retrouverEnfant(jsonBySosa)
+    #
+    # sauvegardeBase(result,  'baseDeDonneeBySosa.json')
+    result = openBase('baseDeDonneeBySosa.json')
+    affichage(result, result['2'])
     # for key, val in jsonFinal.items():
     #     print(val['Sosa'])
 

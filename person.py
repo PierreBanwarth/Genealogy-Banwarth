@@ -1,4 +1,6 @@
 import datetime # we will use this for date objects
+import json
+
 astro = [
     {'signe' : 'Belier', 'dateDebut' : '21/03', 'dateFin' : '19/04'},
     {'signe' : 'Taureau', 'dateDebut' : '20/04', 'dateFin' : '20/05'},
@@ -175,6 +177,12 @@ class Person:
         else:
             self.Cadet = 'Unkown'
 
+        if 'LieuDeces' in json:
+            self.LieuDeces = json['LieuDeces']
+        else:
+            self.LieuDeces = 'Unknown'
+
+
         if 'MerePresentMariage' in json:
             self.MerePresentMariage = json['MerePresentMariage']
         else:
@@ -274,6 +282,41 @@ class Person:
 
     def getMere(self):
         return (self.Sosa*2)+1
+# "departement": "57",
+# "departementName": "Moselle",
+# "regionName": "Grand Est",
+# "ville": "BAUDRECOURT"
+
+    def getAge(self):
+        return 'Todo calcul age'
+
+    def getLieuNaissance(self):
+        if self.LieuNaissance != 'Unknown':
+            with open('lieux.json') as json_file:
+                lieux = json.load(json_file)
+                DictLieux = lieux[int(self.LieuNaissance)]
+                return DictLieux['ville']+' '+ DictLieux['departementName']+'('+DictLieux['departement']+')'
+        else:
+            return self.lieuNaissance
+
+    def getLieuDeces(self):
+        if self.LieuDeces != 'Unknown':
+            with open('lieux.json') as json_file:
+                lieux = json.load(json_file)
+                DictLieux = lieux[int(self.LieuDeces)]
+                return DictLieux['ville']+' '+ DictLieux['departementName']+'('+DictLieux['departement']+')'
+        else:
+            return self.LieuDeces
+    def getLieuMariage(self):
+        if self.LieuMariage != 'Unknown':
+
+            with open('lieux.json') as json_file:
+                lieux = json.load(json_file)
+                DictLieux = lieux[int(self.LieuMariage)]
+
+                return DictLieux['ville']+' '+ DictLieux['departementName']+'('+DictLieux['departement']+')'
+        else:
+            self.lieuMariage
 
     def __str__(self):
 
