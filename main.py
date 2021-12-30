@@ -6,11 +6,8 @@ from personne import *
 from personneLabel import PersonneLabel
 from functools import partial
 
+from fichiers import *
 
-try:
-    to_unicode = unicode
-except NameError:
-    to_unicode = str
 
 
 def trouveDate(s):
@@ -71,24 +68,26 @@ def convertirBase(racine):
         personne = {}
         conjoints = []
 
-        enregistrement = False
+        Sosa = False
         for sousElement in element:
             if sousElement != None and sousElement.text != None and sousElement.tag != None:
 
                 if sousElement.tag == 'Br':
                     personne['Branche'] = sousElement.text
-
+                elif sousElement.tag == 'Sosa':
+                    personne['Sosa'] = sousElement.text
+                    Sosa = True
                 elif sousElement.tag.startswith('Lieu'):
                     # JSON file
-                    f = open ('data/departements-region.json', "r")
-                    # Reading from file
-                    data = json.loads(f.read())
+
+                    regions = getRegions()
+
                     lieu = getLieuxFromString(sousElement.text)
                     if 'departement' in lieu:
-                        for item in data:
-                            if str(item['num_dep']) == str(lieu['departement']):
-                                lieu['departementName'] = item['dep_name']
-                                lieu['regionName'] = item['region_name']
+                        for region in regions:
+                            if str(region['num_dep']) == str(lieu['departement']):
+                                lieu['departementName'] = region['dep_name']
+                                lieu['regionName'] = region['region_name']
 
                     if lieu not in lieux:
                         lieux.append(lieu)
@@ -106,7 +105,7 @@ def convertirBase(racine):
                 elif sousElement.tag == 'DDeces':
                     personne['DateDeces'] = formatDate(sousElement.text)
                 elif sousElement.tag == 'Enregist':
-                    enregistrement = True
+
                     personne['Enregistrement'] = sousElement.text
                 elif sousElement.tag == 'Rel':
                     personne['Religion'] = sousElement.text
@@ -253,46 +252,37 @@ def convertirBase(racine):
                     personne[sousElement.tag] = sousElement.text
         personne['conjoints'] = conjoints
 
-        if enregistrement:
-            enregistrement = personne['Enregistrement']
-            del(personne['Enregistrement'])
-            listPersonne[enregistrement] = personne
+        if Sosa:
+            sosa = personne['Sosa']
+            listPersonne[int(sosa)] = Personne(personne)
 
 
-    sauvegardeBase(lieux, 'lieux.json')
+    sauvegardeBaseLieux(lieux)
     print('==== Enfants ====')
     print('''nombre d'enfants : '''+str(nombreEnfants))
-    percentage = (100*nombreEnfantsUnknown)/nombreEnfants
-    print('=> Pourcentage erreure enfant: '+str(percentage))
+    pourcentage = (100*nombreEnfantsUnknown)/nombreEnfants
+    print('=> Pourcentage erreure enfant: '+str(pourcentage))
 
     print('==== Conjoints ====')
     print('nombre de conjoints : '+str(nombreConjoints))
-    percentage = (100*nombreConjointsUnknown)/nombreConjoints
-    print('=> Pourcentage erreure conjoints: '+str(percentage))
+    pourcentage = (100*nombreConjointsUnknown)/nombreConjoints
+    print('=> Pourcentage erreure conjoints: '+str(pourcentage))
 
     return listPersonne
 
 def retrouverEnfant(jsonBySosa):
     result = {}
-    for key, val in jsonBySosa.items():
-        personne = Personne(val)
-
-        sosaFils = str(personne.getSonSosa())
-        fils = Personne(jsonBySosa[sosaFils])
+    for sosa, personne in jsonBySosa.items():
+        sosaFils = personne.getSonSosa()
+        fils = jsonBySosa[sosaFils]
 
         if personne.isToFindSon():
             personne.addAine(fils)
 
-        result[key] = personne.toJson()
+        result[sosa] = personne
     return result
 
 
-def baseBySosa(json):
-    test = {}
-    for key, val in json.items():
-        test[val['Sosa']] = val
-#     liste.insert(i, item)
-    return test
 
 def affichage(jsonArbre, jsonPersonne):
     fenetre = Tk()
@@ -407,28 +397,19 @@ def affichage(jsonArbre, jsonPersonne):
 
 
 
-def sauvegardeBase(jsonFinal, filename):
-    with open(filename, 'w', encoding='utf8') as outfile:
-        str_ = json.dumps(
-            jsonFinal,
-            indent=4, sort_keys=True,
-            separators=(',', ': '), ensure_ascii=False)
-        outfile.write(to_unicode(str_))
-def openBase(filename):
-    with open(filename) as json_file:
-        return json.load(json_file)
-
 def main():
-    # arbre = ET.parse('data/table1.xml')
-    # racine = arbre.getroot()
+    arbre = ET.parse('data/table1.xml')
+    racine = arbre.getroot()
     #
-    # jsonFinal = convertirBase(racine)
+    jsonBySosa = convertirBase(racine)
     # #On crée la base de donnée par sosa pour faciliter les recherches
     # jsonBySosa = baseBySosa(jsonFinal)
-    # result = retrouverEnfant(jsonBySosa)
+    result = retrouverEnfant(jsonBySosa)
     #
-    # sauvegardeBase(result,  'data/baseDeDonneeBySosa.json')
+    sauvegardeBasePersonne(result,  'data/baseDeDonneeBySosa.json')
+
     result = openBase('data/baseDeDonneeBySosa.json')
+
     affichage(result, result['2'])
     # for key, val in jsonFinal.items():
     #     print(val['Sosa'])
