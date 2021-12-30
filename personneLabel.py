@@ -1,6 +1,6 @@
 import datetime # we will use this for date objects
 from tkinter import *
-from person import Person
+from personne import Personne
 
 
 class PersonneLabel:

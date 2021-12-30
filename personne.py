@@ -122,7 +122,7 @@ regnes = [
 
 
 
-class Person:
+class Personne:
 
     def getRegnes(self):
         regnesPersonne = []
@@ -266,7 +266,7 @@ class Person:
     def isToFindSon(self):
         return 'Sosa' in self.enfants[0] and self.enfants[0]['Sosa']
 
-    def addAine(self, person):
+    def addAine(self, personne):
         self.enfants.pop(0)
         self.enfants.insert(0,person.getInfoHeritier())
 
@@ -292,7 +292,7 @@ class Person:
 
     def getLieuNaissance(self):
         if self.LieuNaissance != 'Unknown':
-            with open('lieux.json') as json_file:
+            with open('data/lieux.json') as json_file:
                 lieux = json.load(json_file)
                 DictLieux = lieux[int(self.LieuNaissance)]
                 return DictLieux['ville']+' '+ DictLieux['departementName']+'('+DictLieux['departement']+')'
@@ -301,7 +301,7 @@ class Person:
 
     def getLieuDeces(self):
         if self.LieuDeces != 'Unknown':
-            with open('lieux.json') as json_file:
+            with open('data/lieux.json') as json_file:
                 lieux = json.load(json_file)
                 DictLieux = lieux[int(self.LieuDeces)]
                 return DictLieux['ville']+' '+ DictLieux['departementName']+'('+DictLieux['departement']+')'
@@ -310,7 +310,7 @@ class Person:
     def getLieuMariage(self):
         if self.LieuMariage != 'Unknown':
 
-            with open('lieux.json') as json_file:
+            with open('data/lieux.json') as json_file:
                 lieux = json.load(json_file)
                 DictLieux = lieux[int(self.LieuMariage)]
 

@@ -2,7 +2,7 @@ import json
 from xml.dom import minidom
 import xml.etree.ElementTree as ET
 from tkinter import *
-from person import *
+from personne import *
 from personneLabel import PersonneLabel
 from functools import partial
 
@@ -275,10 +275,10 @@ def convertirBase(racine):
 def retrouverEnfant(jsonBySosa):
     result = {}
     for key, val in jsonBySosa.items():
-        personne = Person(val)
+        personne = Personne(val)
 
         sosaFils = str(personne.getSonSosa())
-        fils = Person(jsonBySosa[sosaFils])
+        fils = Personne(jsonBySosa[sosaFils])
 
         if personne.isToFindSon():
             personne.addAine(fils)
@@ -335,12 +335,12 @@ def affichage(jsonArbre, jsonPersonne):
     Fratrie = LabelFrame(Bas, text='Fratrie', borderwidth=2, relief=GROOVE)
     Fratrie.pack(side=LEFT, fill=BOTH,expand=1)
 
-    personneLabel = PersonneLabel(Person(jsonArbre["2"]), Personnage)
+    personneLabel = PersonneLabel(Personne(jsonArbre["2"]), Personnage)
 
     def getFather(jsonPersonne, jsonArbre):
         pere = jsonArbre[str(jsonPersonne['Sosa']*2)]
         resultat = pere
-        personneLabel.set(Person(resultat))
+        personneLabel.set(Personne(resultat))
 
         buttonFather.configure(command=partial(getFather, resultat, jsonArbre))
         buttonMother.configure(command=partial(getMother, resultat, jsonArbre))
@@ -349,7 +349,7 @@ def affichage(jsonArbre, jsonPersonne):
     def getMother(jsonPersonne, jsonArbre):
         mere = jsonArbre[str(jsonPersonne['Sosa']*2+1)]
         resultat = mere
-        personneLabel.set(Person(resultat))
+        personneLabel.set(Personne(resultat))
 
         buttonMother.configure(command=partial(getMother, resultat, jsonArbre))
         buttonFather.configure(command=partial(getFather, resultat, jsonArbre))
@@ -361,7 +361,7 @@ def affichage(jsonArbre, jsonPersonne):
         else:
             heritier = jsonArbre[str(int(jsonPersonne['Sosa']/2-1))]
         resultat = heritier
-        personneLabel.set(Person(resultat))
+        personneLabel.set(Personne(resultat))
 
         buttonFather.configure(command=partial(getFather, resultat, jsonArbre))
         buttonMother.configure(command=partial(getMother, resultat, jsonArbre))
@@ -427,8 +427,8 @@ def main():
     # jsonBySosa = baseBySosa(jsonFinal)
     # result = retrouverEnfant(jsonBySosa)
     #
-    # sauvegardeBase(result,  'baseDeDonneeBySosa.json')
-    result = openBase('baseDeDonneeBySosa.json')
+    # sauvegardeBase(result,  'data/baseDeDonneeBySosa.json')
+    result = openBase('data/baseDeDonneeBySosa.json')
     affichage(result, result['2'])
     # for key, val in jsonFinal.items():
     #     print(val['Sosa'])
