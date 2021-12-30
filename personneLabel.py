@@ -21,6 +21,7 @@ class PersonneLabel:
         self.labelAge = Label(labelPere, textvariable=self.textDateNaissance)
         self.labelProfession = Label(labelPere, textvariable=self.textProfession)
         self.set(personne)
+        
     def pack(self):
         self.labelNom.pack()
         self.labelNaissance.pack()
