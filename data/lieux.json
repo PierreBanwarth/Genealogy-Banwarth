@@ -841,7 +841,7 @@
         "departement": "01",
         "departementName": "Ain",
         "regionName": "Auvergne-Rhone-Alpes",
-        "ville": "LES  ABERGEMENT"
+        "ville": "LES ABERGEMENT"
     },
     {
         "departement": "01",
@@ -2070,12 +2070,6 @@
         "ville": "LAJOUX"
     },
     {
-        "departement": "71",
-        "departementName": "Saone-et-Loire",
-        "regionName": "Bourgogne-Franche-Comte",
-        "ville": "MONTAGNY les  BUXY"
-    },
-    {
         "departement": "01",
         "departementName": "Ain",
         "regionName": "Auvergne-Rhone-Alpes",
@@ -2497,19 +2491,13 @@
         "departement": "16",
         "departementName": "Charente",
         "regionName": "Nouvelle-Aquitaine",
-        "ville": "GENAC  ?"
+        "ville": "GENAC ?"
     },
     {
         "departement": "16",
         "departementName": "Charente",
         "regionName": "Nouvelle-Aquitaine",
         "ville": " St CYBARDEAUX"
-    },
-    {
-        "departement": "16",
-        "departementName": "Charente",
-        "regionName": "Nouvelle-Aquitaine",
-        "ville": "St  CYBARDEAUX"
     },
     {
         "departement": "67",
@@ -3145,7 +3133,7 @@
         "departement": "01",
         "departementName": "Ain",
         "regionName": "Auvergne-Rhone-Alpes",
-        "ville": "LE Pt  ABERGEMENT"
+        "ville": "LE Pt ABERGEMENT"
     },
     {
         "departement": "01",
@@ -3591,12 +3579,6 @@
         "departement": "01",
         "departementName": "Ain",
         "regionName": "Auvergne-Rhone-Alpes",
-        "ville": "LE Gd  ABERGEMENT"
-    },
-    {
-        "departement": "01",
-        "departementName": "Ain",
-        "regionName": "Auvergne-Rhone-Alpes",
         "ville": "Beny"
     },
     {
@@ -3692,12 +3674,6 @@
     {
         "departement": "019",
         "ville": "RETOD"
-    },
-    {
-        "departement": "01",
-        "departementName": "Ain",
-        "regionName": "Auvergne-Rhone-Alpes",
-        "ville": "LE Pt ABERGEMENT"
     },
     {
         "departement": "74",
