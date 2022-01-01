@@ -12,5 +12,7 @@ class Date:
         self.date = json['value']
 
     def __str__(self):
-
-        return self.date
+        if self.date == None:
+            return ''
+        else:
+            return self.date

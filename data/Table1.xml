@@ -50189,7 +50189,7 @@ Agathe 21/11/1701</Enfants>
 <LieuDeces>52*VARENNES/AMANCE</LieuDeces>
 <DDeces>1712-06-29T00:00:00</DDeces>
 <Conj>DHEROT Daniel</Conj>
-<CdD>dcd</CdD>
+<CdD>dec</CdD>
 <Enfants>Francoise 1/11/1679
 Francois 23/3/1681
 Christophe 14/6/1683
@@ -58356,7 +58356,6 @@ Kridter</Enfants>
 <Nom>XXX</Nom>
 <Prenom>xxxxx</Prenom>
 <Conj>HASENBURGER Antoine</Conj>
-<CdD>Rodolphe</CdD>
 <Enfants>J George</Enfants>
 </Table1>
 <Table1>
@@ -82619,7 +82618,7 @@ Laurent ne en 1615</Note>
 <Conj>DENIS Marie Madeleine</Conj>
 <Enfants>Clement 26/10/1987
 Quentin 09/11/1991
-Cloe 28/12/1998</Enfants>
+Cloe 28/12/1995</Enfants>
 <Aine>1987</Aine>
 <Cadet>1998</Cadet>
 </Table1>
@@ -82636,9 +82635,9 @@ Cloe 28/12/1998</Enfants>
 <Conj>MILLET Erik</Conj>
 <Enfants>Clement 26/10/1987
 Quentin 09/11/1993
-Cloe 28/12/1998</Enfants>
+Cloe 28/12/1995</Enfants>
 <Aine>1987</Aine>
-<Cadet>1998</Cadet>
+<Cadet>1995</Cadet>
 </Table1>
 <Table1>
 <Enregist>4969</Enregist>
@@ -102446,7 +102445,6 @@ Denis 28/4/1686</Enfants>
 <LieuDeces>01*VILLEMOTIER</LieuDeces>
 <DDeces>1677-04-27T00:00:00</DDeces>
 <Conj>PROST Clauda</Conj>
-<CdD>65</CdD>
 <Enfants>Thorin vers 1640
 Claude vers 1644
 Louis vers 1645

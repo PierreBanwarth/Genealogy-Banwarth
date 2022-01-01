@@ -6,22 +6,10 @@
         "ville": "CRAZ"
     },
     {
-        "departement": "01",
-        "departementName": "Ain",
-        "regionName": "Auvergne-Rhone-Alpes",
-        "ville": "CRAZ en MICHAILLE"
-    },
-    {
         "departement": "57",
         "departementName": "Moselle",
         "regionName": "Grand Est",
         "ville": "BAUDRECOURT"
-    },
-    {
-        "departement": "57",
-        "departementName": "Moselle",
-        "regionName": "Grand Est",
-        "ville": "HERNY"
     },
     {
         "departement": "57",
@@ -306,12 +294,6 @@
         "ville": "SAINT TRIVIER"
     },
     {
-        "departement": "01",
-        "departementName": "Ain",
-        "regionName": "Auvergne-Rhone-Alpes",
-        "ville": "VERNOUX"
-    },
-    {
         "departement": "71",
         "departementName": "Saone-et-Loire",
         "regionName": "Bourgogne-Franche-Comte",
@@ -375,13 +357,13 @@
         "departement": "71",
         "departementName": "Saone-et-Loire",
         "regionName": "Bourgogne-Franche-Comte",
-        "ville": "JULLY Les BUXY"
+        "ville": "GRANGES"
     },
     {
         "departement": "71",
         "departementName": "Saone-et-Loire",
         "regionName": "Bourgogne-Franche-Comte",
-        "ville": "GRANGES"
+        "ville": "JULLY Les BUXY"
     },
     {
         "departement": "71",
@@ -467,12 +449,6 @@
         "departement": "01",
         "departementName": "Ain",
         "regionName": "Auvergne-Rhone-Alpes",
-        "ville": "FERNEY VOLTAIRE"
-    },
-    {
-        "departement": "01",
-        "departementName": "Ain",
-        "regionName": "Auvergne-Rhone-Alpes",
         "ville": "BOURG en BRESSE"
     },
     {
@@ -486,12 +462,6 @@
         "departementName": "Ain",
         "regionName": "Auvergne-Rhone-Alpes",
         "ville": "DOUVRES"
-    },
-    {
-        "departement": "01",
-        "departementName": "Ain",
-        "regionName": "Auvergne-Rhone-Alpes",
-        "ville": "PEROUGES"
     },
     {
         "departement": "71",
@@ -566,12 +536,6 @@
         "ville": "AMEUGNY"
     },
     {
-        "departement": "71",
-        "departementName": "Saone-et-Loire",
-        "regionName": "Bourgogne-Franche-Comte",
-        "ville": "CORMATIN"
-    },
-    {
         "departement": "39",
         "departementName": "Jura",
         "regionName": "Bourgogne-Franche-Comte",
@@ -604,12 +568,6 @@
         "departementName": "Jura",
         "regionName": "Bourgogne-Franche-Comte",
         "ville": "SEPTMONCEL"
-    },
-    {
-        "departement": "91",
-        "departementName": "Essonne",
-        "regionName": "ÃŽle-de-France",
-        "ville": "EPINAY sur ORGE"
     },
     {
         "departement": "16",
@@ -676,18 +634,6 @@
         "ville": "TURCKHEIM"
     },
     {
-        "departement": "39",
-        "departementName": "Jura",
-        "regionName": "Bourgogne-Franche-Comte",
-        "ville": "BELLECOMBE"
-    },
-    {
-        "departement": "01",
-        "departementName": "Ain",
-        "regionName": "Auvergne-Rhone-Alpes",
-        "ville": "St TRIVIER de COURTES"
-    },
-    {
         "departement": "71",
         "departementName": "Saone-et-Loire",
         "regionName": "Bourgogne-Franche-Comte",
@@ -716,12 +662,6 @@
         "departementName": "Saone-et-Loire",
         "regionName": "Bourgogne-Franche-Comte",
         "ville": "LA CHAPELLE / BRANCION"
-    },
-    {
-        "departement": "71",
-        "departementName": "Saone-et-Loire",
-        "regionName": "Bourgogne-Franche-Comte",
-        "ville": "MOROGES"
     },
     {
         "departement": "71",
@@ -829,12 +769,6 @@
         "departement": "01",
         "departementName": "Ain",
         "regionName": "Auvergne-Rhone-Alpes",
-        "ville": "LE PETIT ABERGEMENT"
-    },
-    {
-        "departement": "01",
-        "departementName": "Ain",
-        "regionName": "Auvergne-Rhone-Alpes",
         "ville": "HOTONNES"
     },
     {
@@ -854,6 +788,12 @@
         "departementName": "Ain",
         "regionName": "Auvergne-Rhone-Alpes",
         "ville": "NANTUA"
+    },
+    {
+        "departement": "01",
+        "departementName": "Ain",
+        "regionName": "Auvergne-Rhone-Alpes",
+        "ville": "LE PETIT ABERGEMENT"
     },
     {
         "departement": "01",
@@ -1036,12 +976,6 @@
         "ville": "SOULTZ"
     },
     {
-        "departement": "01",
-        "departementName": "Ain",
-        "regionName": "Auvergne-Rhone-Alpes",
-        "ville": "AMBRONAY"
-    },
-    {
         "departement": "71",
         "departementName": "Saone-et-Loire",
         "regionName": "Bourgogne-Franche-Comte",
@@ -1076,12 +1010,6 @@
         "departementName": "Saone-et-Loire",
         "regionName": "Bourgogne-Franche-Comte",
         "ville": "COUCHES"
-    },
-    {
-        "departement": "71",
-        "departementName": "Saone-et-Loire",
-        "regionName": "Bourgogne-Franche-Comte",
-        "ville": "St JEAN de TREZY"
     },
     {
         "departement": "71",
@@ -1124,6 +1052,12 @@
         "departementName": "Ain",
         "regionName": "Auvergne-Rhone-Alpes",
         "ville": "HAUTEVILLE LOMPNES"
+    },
+    {
+        "departement": "01",
+        "departementName": "Ain",
+        "regionName": "Auvergne-Rhone-Alpes",
+        "ville": "AMBRONAY"
     },
     {
         "departement": "01",
@@ -1177,12 +1111,6 @@
         "departement": "01",
         "departementName": "Ain",
         "regionName": "Auvergne-Rhone-Alpes",
-        "ville": "MONTREVEL CUET"
-    },
-    {
-        "departement": "01",
-        "departementName": "Ain",
-        "regionName": "Auvergne-Rhone-Alpes",
         "ville": "St DIDIER D'AUSSIAT"
     },
     {
@@ -1225,18 +1153,6 @@
         "departement": "68",
         "departementName": "Haut-Rhin",
         "regionName": "Grand Est",
-        "ville": "HOLTZWIHR"
-    },
-    {
-        "departement": "68",
-        "departementName": "Haut-Rhin",
-        "regionName": "Grand Est",
-        "ville": "BIESHEIM"
-    },
-    {
-        "departement": "68",
-        "departementName": "Haut-Rhin",
-        "regionName": "Grand Est",
         "ville": "ARTZENHEIM"
     },
     {
@@ -1261,12 +1177,6 @@
         "departement": "01",
         "departementName": "Ain",
         "regionName": "Auvergne-Rhone-Alpes",
-        "ville": "COURTES"
-    },
-    {
-        "departement": "01",
-        "departementName": "Ain",
-        "regionName": "Auvergne-Rhone-Alpes",
         "ville": "MANTENAY"
     },
     {
@@ -1274,12 +1184,6 @@
         "departementName": "Ain",
         "regionName": "Auvergne-Rhone-Alpes",
         "ville": "CONDAMINE"
-    },
-    {
-        "departement": "01",
-        "departementName": "Ain",
-        "regionName": "Auvergne-Rhone-Alpes",
-        "ville": "St JEAN leVIEUX"
     },
     {
         "departement": "52",
@@ -1332,16 +1236,16 @@
         "ville": "WURTZBOURG"
     },
     {
+        "departement": "39",
+        "departementName": "Jura",
+        "regionName": "Bourgogne-Franche-Comte",
+        "ville": "BELLECOMBE"
+    },
+    {
         "departement": "01",
         "departementName": "Ain",
         "regionName": "Auvergne-Rhone-Alpes",
         "ville": "LELEX"
-    },
-    {
-        "departement": "71",
-        "departementName": "Saone-et-Loire",
-        "regionName": "Bourgogne-Franche-Comte",
-        "ville": "VARENNES St SAUVEUR"
     },
     {
         "departement": "71",
@@ -1354,12 +1258,6 @@
         "departementName": "Saone-et-Loire",
         "regionName": "Bourgogne-Franche-Comte",
         "ville": "SAINT USUGE"
-    },
-    {
-        "departement": "71",
-        "departementName": "Saone-et-Loire",
-        "regionName": "Bourgogne-Franche-Comte",
-        "ville": "SAVIGNY en REVERMONT"
     },
     {
         "departement": "71",
@@ -1395,13 +1293,19 @@
         "departement": "01",
         "departementName": "Ain",
         "regionName": "Auvergne-Rhone-Alpes",
+        "ville": "ETREZ"
+    },
+    {
+        "departement": "01",
+        "departementName": "Ain",
+        "regionName": "Auvergne-Rhone-Alpes",
         "ville": "FOISSIAT"
     },
     {
         "departement": "01",
         "departementName": "Ain",
         "regionName": "Auvergne-Rhone-Alpes",
-        "ville": "ETREZ"
+        "ville": "MONTREVEL CUET"
     },
     {
         "departement": "01",
@@ -1455,12 +1359,6 @@
         "departement": "01",
         "departementName": "Ain",
         "regionName": "Auvergne-Rhone-Alpes",
-        "ville": "St SULPICE"
-    },
-    {
-        "departement": "01",
-        "departementName": "Ain",
-        "regionName": "Auvergne-Rhone-Alpes",
         "ville": "St NIZIER le BOUCHOUX"
     },
     {
@@ -1474,18 +1372,6 @@
         "departementName": "Ain",
         "regionName": "Auvergne-Rhone-Alpes",
         "ville": "SAINT JULIEN"
-    },
-    {
-        "departement": "71",
-        "departementName": "Saone-et-Loire",
-        "regionName": "Bourgogne-Franche-Comte",
-        "ville": "SAINT CYR"
-    },
-    {
-        "departement": "01",
-        "departementName": "Ain",
-        "regionName": "Auvergne-Rhone-Alpes",
-        "ville": "COLIGNY"
     },
     {
         "departement": "01",
@@ -1560,12 +1446,6 @@
         "ville": "RUSSILLY"
     },
     {
-        "departement": "71",
-        "departementName": "Saone-et-Loire",
-        "regionName": "Bourgogne-Franche-Comte",
-        "ville": "GERMOLLES"
-    },
-    {
         "departement": "52",
         "departementName": "Haute-Marne",
         "regionName": "Grand Est",
@@ -1576,12 +1456,6 @@
         "departementName": "Saone-et-Loire",
         "regionName": "Bourgogne-Franche-Comte",
         "ville": "MENETREUIL"
-    },
-    {
-        "departement": "71",
-        "departementName": "Saone-et-Loire",
-        "regionName": "Bourgogne-Franche-Comte",
-        "ville": "CORTIAMBLE"
     },
     {
         "departement": "01",
@@ -1608,22 +1482,10 @@
         "ville": "SAINTE JULIE"
     },
     {
-        "departement": "01",
-        "departementName": "Ain",
-        "regionName": "Auvergne-Rhone-Alpes",
-        "ville": "VIEU-d'IZENAVE"
-    },
-    {
         "departement": "71",
         "departementName": "Saone-et-Loire",
         "regionName": "Bourgogne-Franche-Comte",
         "ville": "L'Aberg de CUISERY"
-    },
-    {
-        "departement": "01",
-        "departementName": "Ain",
-        "regionName": "Auvergne-Rhone-Alpes",
-        "ville": "St JULIEN"
     },
     {
         "departement": "01",
@@ -1648,12 +1510,6 @@
         "departementName": "Ain",
         "regionName": "Auvergne-Rhone-Alpes",
         "ville": "CHEZERY FORENS"
-    },
-    {
-        "departement": "01",
-        "departementName": "Ain",
-        "regionName": "Auvergne-Rhone-Alpes",
-        "ville": "LEAZ"
     },
     {
         "departement": "39",
@@ -1710,18 +1566,6 @@
         "ville": "SAINT CHAFFREY"
     },
     {
-        "departement": "71",
-        "departementName": "Saone-et-Loire",
-        "regionName": "Bourgogne-Franche-Comte",
-        "ville": "BRIENNE"
-    },
-    {
-        "departement": "71",
-        "departementName": "Saone-et-Loire",
-        "regionName": "Bourgogne-Franche-Comte",
-        "ville": "JOUVENCON"
-    },
-    {
         "departement": "68",
         "departementName": "Haut-Rhin",
         "regionName": "Grand Est",
@@ -1742,10 +1586,6 @@
         "ville": "SCHLOSSWIL"
     },
     {
-        "pays": "Allemagne",
-        "ville": "BIGLEN"
-    },
-    {
         "departement": "68",
         "departementName": "Haut-Rhin",
         "regionName": "Grand Est",
@@ -1756,12 +1596,6 @@
         "departementName": "Haut-Rhin",
         "regionName": "Grand Est",
         "ville": "HOUSSEN"
-    },
-    {
-        "departement": "71",
-        "departementName": "Saone-et-Loire",
-        "regionName": "Bourgogne-Franche-Comte",
-        "ville": "MONTPONT"
     },
     {
         "departement": "01",
@@ -1800,6 +1634,12 @@
         "ville": "NOGENT"
     },
     {
+        "departement": "71",
+        "departementName": "Saone-et-Loire",
+        "regionName": "Bourgogne-Franche-Comte",
+        "ville": "VARENNES St SAUVEUR"
+    },
+    {
         "departement": "01",
         "departementName": "Ain",
         "regionName": "Auvergne-Rhone-Alpes",
@@ -1836,16 +1676,10 @@
         "ville": "VANDEINS"
     },
     {
-        "departement": "71",
-        "departementName": "Saone-et-Loire",
-        "regionName": "Bourgogne-Franche-Comte",
-        "ville": "SAINT MARCEL"
-    },
-    {
         "departement": "01",
         "departementName": "Ain",
         "regionName": "Auvergne-Rhone-Alpes",
-        "ville": "BELLEGARDE / VALSERINE"
+        "ville": "St TRIVIER de COURTES"
     },
     {
         "departement": "01",
@@ -1881,12 +1715,6 @@
         "departement": "68",
         "departementName": "Haut-Rhin",
         "regionName": "Grand Est",
-        "ville": "WINTZFELDEN"
-    },
-    {
-        "departement": "68",
-        "departementName": "Haut-Rhin",
-        "regionName": "Grand Est",
         "ville": "WESTHALTEN"
     },
     {
@@ -1908,6 +1736,12 @@
         "ville": "St JEAN le VIEU"
     },
     {
+        "departement": "68",
+        "departementName": "Haut-Rhin",
+        "regionName": "Grand Est",
+        "ville": "HOLTZWIHR"
+    },
+    {
         "departement": "71",
         "departementName": "Saone-et-Loire",
         "regionName": "Bourgogne-Franche-Comte",
@@ -1918,12 +1752,6 @@
         "departementName": "Saone-et-Loire",
         "regionName": "Bourgogne-Franche-Comte",
         "ville": "LANCHARD"
-    },
-    {
-        "departement": "67",
-        "departementName": "Bas-Rhin",
-        "regionName": "Grand Est",
-        "ville": "OBENHEIM"
     },
     {
         "departement": "67",
@@ -1947,12 +1775,6 @@
         "departement": "67",
         "departementName": "Bas-Rhin",
         "regionName": "Grand Est",
-        "ville": "KOGENHEIM"
-    },
-    {
-        "departement": "67",
-        "departementName": "Bas-Rhin",
-        "regionName": "Grand Est",
         "ville": "SUNDHOUSE"
     },
     {
@@ -1968,16 +1790,16 @@
         "ville": "BOESENBIESEN"
     },
     {
-        "departement": "71",
-        "departementName": "Saone-et-Loire",
-        "regionName": "Bourgogne-Franche-Comte",
-        "ville": "VARENNE St SAUVEUR"
+        "departement": "67",
+        "departementName": "Bas-Rhin",
+        "regionName": "Grand Est",
+        "ville": "KOGENHEIM"
     },
     {
         "departement": "71",
         "departementName": "Saone-et-Loire",
         "regionName": "Bourgogne-Franche-Comte",
-        "ville": "FARGES"
+        "ville": "VARENNE St SAUVEUR"
     },
     {
         "departement": "71",
@@ -2104,12 +1926,6 @@
         "ville": "LUTTERBACH"
     },
     {
-        "departement": "68",
-        "departementName": "Haut-Rhin",
-        "regionName": "Grand Est",
-        "ville": "MASEVAUX"
-    },
-    {
         "departement": "67",
         "departementName": "Bas-Rhin",
         "regionName": "Grand Est",
@@ -2173,19 +1989,7 @@
         "departement": "16",
         "departementName": "Charente",
         "regionName": "Nouvelle-Aquitaine",
-        "ville": "LA CHAPELLE"
-    },
-    {
-        "departement": "16",
-        "departementName": "Charente",
-        "regionName": "Nouvelle-Aquitaine",
         "ville": "BIGNAC"
-    },
-    {
-        "departement": "16",
-        "departementName": "Charente",
-        "regionName": "Nouvelle-Aquitaine",
-        "ville": "MARSAC"
     },
     {
         "departement": "16",
@@ -2209,18 +2013,6 @@
         "departement": "16",
         "departementName": "Charente",
         "regionName": "Nouvelle-Aquitaine",
-        "ville": "VAUX-ROUILLAC"
-    },
-    {
-        "departement": "16",
-        "departementName": "Charente",
-        "regionName": "Nouvelle-Aquitaine",
-        "ville": "St AMANT de BOIXE"
-    },
-    {
-        "departement": "16",
-        "departementName": "Charente",
-        "regionName": "Nouvelle-Aquitaine",
         "ville": "COULONGES"
     },
     {
@@ -2239,19 +2031,13 @@
         "departement": "16",
         "departementName": "Charente",
         "regionName": "Nouvelle-Aquitaine",
-        "ville": "VARS"
+        "ville": "MARSAC"
     },
     {
         "departement": "16",
         "departementName": "Charente",
         "regionName": "Nouvelle-Aquitaine",
         "ville": "DOUZAT"
-    },
-    {
-        "departement": "16",
-        "departementName": "Charente",
-        "regionName": "Nouvelle-Aquitaine",
-        "ville": "SIGOGNE"
     },
     {
         "departement": "16",
@@ -2269,7 +2055,13 @@
         "departement": "16",
         "departementName": "Charente",
         "regionName": "Nouvelle-Aquitaine",
-        "ville": "ANGOULEME"
+        "ville": "SIGOGNE"
+    },
+    {
+        "departement": "16",
+        "departementName": "Charente",
+        "regionName": "Nouvelle-Aquitaine",
+        "ville": "VARS"
     },
     {
         "departement": "16",
@@ -2287,25 +2079,13 @@
         "departement": "16",
         "departementName": "Charente",
         "regionName": "Nouvelle-Aquitaine",
-        "ville": "VERDILLE"
-    },
-    {
-        "departement": "16",
-        "departementName": "Charente",
-        "regionName": "Nouvelle-Aquitaine",
-        "ville": "ASNIERES / NOUERE"
+        "ville": "St AMANT de BOIXE"
     },
     {
         "departement": "16",
         "departementName": "Charente",
         "regionName": "Nouvelle-Aquitaine",
         "ville": "St ETIENNE / MONTIGNAC"
-    },
-    {
-        "departement": "16",
-        "departementName": "Charente",
-        "regionName": "Nouvelle-Aquitaine",
-        "ville": "JARNAC"
     },
     {
         "departement": "16",
@@ -2395,6 +2175,12 @@
         "departement": "16",
         "departementName": "Charente",
         "regionName": "Nouvelle-Aquitaine",
+        "ville": "ANGOULEME"
+    },
+    {
+        "departement": "16",
+        "departementName": "Charente",
+        "regionName": "Nouvelle-Aquitaine",
         "ville": "JAULDES"
     },
     {
@@ -2419,6 +2205,12 @@
         "departement": "16",
         "departementName": "Charente",
         "regionName": "Nouvelle-Aquitaine",
+        "ville": "VAUX-ROUILLAC"
+    },
+    {
+        "departement": "16",
+        "departementName": "Charente",
+        "regionName": "Nouvelle-Aquitaine",
         "ville": "MONTIGNE"
     },
     {
@@ -2428,22 +2220,10 @@
         "ville": "VAUX - ROUILLAC"
     },
     {
-        "departement": "16",
-        "departementName": "Charente",
-        "regionName": "Nouvelle-Aquitaine",
-        "ville": "FOUSSIGNAC"
-    },
-    {
         "departement": "17",
         "departementName": "Charente-Maritime",
         "regionName": "Nouvelle-Aquitaine",
         "ville": "BURIE"
-    },
-    {
-        "departement": "16",
-        "departementName": "Charente",
-        "regionName": "Nouvelle-Aquitaine",
-        "ville": "St SULPICE de COGNAC"
     },
     {
         "departement": "16",
@@ -2503,25 +2283,19 @@
         "departement": "67",
         "departementName": "Bas-Rhin",
         "regionName": "Grand Est",
-        "ville": "MARCKOLSHEIM"
-    },
-    {
-        "departement": "67",
-        "departementName": "Bas-Rhin",
-        "regionName": "Grand Est",
         "ville": "LAUTERBOURG"
-    },
-    {
-        "departement": "16",
-        "departementName": "Charente",
-        "regionName": "Nouvelle-Aquitaine",
-        "ville": "XAMBES"
     },
     {
         "departement": "71",
         "departementName": "Saone-et-Loire",
         "regionName": "Bourgogne-Franche-Comte",
         "ville": "BISSEY / Cruchaud"
+    },
+    {
+        "departement": "71",
+        "departementName": "Saone-et-Loire",
+        "regionName": "Bourgogne-Franche-Comte",
+        "ville": "MOROGES"
     },
     {
         "departement": "17",
@@ -2546,12 +2320,6 @@
         "departementName": "Ain",
         "regionName": "Auvergne-Rhone-Alpes",
         "ville": "CHEZERY"
-    },
-    {
-        "departement": "01",
-        "departementName": "Ain",
-        "regionName": "Auvergne-Rhone-Alpes",
-        "ville": "MIJOUX"
     },
     {
         "departement": "52",
@@ -2632,14 +2400,14 @@
         "ville": "LA RIXOUSE"
     },
     {
-        "pays": "Swisse",
-        "ville": "FRIEDRICHSHAFEN"
+        "departement": "01",
+        "departementName": "Ain",
+        "regionName": "Auvergne-Rhone-Alpes",
+        "ville": "MIJOUX"
     },
     {
-        "departement": "21",
-        "departementName": "Cote-d'Or",
-        "regionName": "Bourgogne-Franche-Comte",
-        "ville": "AGENCOURT"
+        "pays": "Swisse",
+        "ville": "FRIEDRICHSHAFEN"
     },
     {
         "departement": "21",
@@ -2652,12 +2420,6 @@
         "departementName": "Nord",
         "regionName": "Hauts-de-France",
         "ville": "SECLIN"
-    },
-    {
-        "departement": "57",
-        "departementName": "Moselle",
-        "regionName": "Grand Est",
-        "ville": "METZ"
     },
     {
         "departement": "57",
@@ -2680,12 +2442,6 @@
     {
         "pays": "Allemagne",
         "ville": "VALLORBE"
-    },
-    {
-        "departement": "03",
-        "departementName": "Allier",
-        "regionName": "Auvergne-Rhone-Alpes",
-        "ville": "CUSSET"
     },
     {
         "departement": "01",
@@ -2733,12 +2489,6 @@
         "departement": "57",
         "departementName": "Moselle",
         "regionName": "Grand Est",
-        "ville": "SAINT EPVRES"
-    },
-    {
-        "departement": "57",
-        "departementName": "Moselle",
-        "regionName": "Grand Est",
         "ville": "St EPVRE"
     },
     {
@@ -2746,12 +2496,6 @@
         "departementName": "Cote-d'Or",
         "regionName": "Bourgogne-Franche-Comte",
         "ville": "LONGECOURT en PLAINE"
-    },
-    {
-        "departement": "21",
-        "departementName": "Cote-d'Or",
-        "regionName": "Bourgogne-Franche-Comte",
-        "ville": "GENLIS"
     },
     {
         "departement": "21",
@@ -2790,12 +2534,6 @@
         "ville": "LA BASSEE"
     },
     {
-        "departement": "59",
-        "departementName": "Nord",
-        "regionName": "Hauts-de-France",
-        "ville": "HERLIES"
-    },
-    {
         "departement": "62",
         "departementName": "Pas-de-Calais",
         "regionName": "Hauts-de-France",
@@ -2805,13 +2543,13 @@
         "departement": "57",
         "departementName": "Moselle",
         "regionName": "Grand Est",
-        "ville": "VIGNY"
+        "ville": "ANCY les SOLGNE"
     },
     {
         "departement": "57",
         "departementName": "Moselle",
         "regionName": "Grand Est",
-        "ville": "ANCY les SOLGNE"
+        "ville": "VIGNY"
     },
     {
         "departement": "21",
@@ -2829,19 +2567,7 @@
         "departement": "71",
         "departementName": "Saone-et-Loire",
         "regionName": "Bourgogne-Franche-Comte",
-        "ville": "LA CELLE en MORVAN"
-    },
-    {
-        "departement": "71",
-        "departementName": "Saone-et-Loire",
-        "regionName": "Bourgogne-Franche-Comte",
         "ville": "LA Pte VERRIERE"
-    },
-    {
-        "departement": "62",
-        "departementName": "Pas-de-Calais",
-        "regionName": "Hauts-de-France",
-        "ville": "CARVIN"
     },
     {
         "departement": "62",
@@ -2886,14 +2612,14 @@
         "ville": "MONT ST JEAN"
     },
     {
-        "departement": "219",
-        "ville": "MONT ST JEAN"
-    },
-    {
         "departement": "21",
         "departementName": "Cote-d'Or",
         "regionName": "Bourgogne-Franche-Comte",
         "ville": "MARCILLY OGNY"
+    },
+    {
+        "departement": "219",
+        "ville": "MONT ST JEAN"
     },
     {
         "departement": "21",
@@ -2912,12 +2638,6 @@
         "departementName": "Saone-et-Loire",
         "regionName": "Bourgogne-Franche-Comte",
         "ville": "DRACY St LOUP"
-    },
-    {
-        "departement": "71",
-        "departementName": "Saone-et-Loire",
-        "regionName": "Bourgogne-Franche-Comte",
-        "ville": "St LEGER du BOIS"
     },
     {
         "departement": "71",
@@ -2959,19 +2679,7 @@
         "departement": "59",
         "departementName": "Nord",
         "regionName": "Hauts-de-France",
-        "ville": "ENNETIERES en WEPPES"
-    },
-    {
-        "departement": "59",
-        "departementName": "Nord",
-        "regionName": "Hauts-de-France",
         "ville": "ILLIES"
-    },
-    {
-        "departement": "59",
-        "departementName": "Nord",
-        "regionName": "Hauts-de-France",
-        "ville": "SAINGHIN en WEPPE"
     },
     {
         "departement": "59",
@@ -2986,6 +2694,12 @@
         "ville": "St VENANT"
     },
     {
+        "departement": "59",
+        "departementName": "Nord",
+        "regionName": "Hauts-de-France",
+        "ville": "HERLIES"
+    },
+    {
         "departement": "57",
         "departementName": "Moselle",
         "regionName": "Grand Est",
@@ -2996,12 +2710,6 @@
         "departementName": "Moselle",
         "regionName": "Grand Est",
         "ville": "Vigny"
-    },
-    {
-        "departement": "71",
-        "departementName": "Saone-et-Loire",
-        "regionName": "Bourgogne-Franche-Comte",
-        "ville": "ROUSSILLON en MORVAN"
     },
     {
         "departement": "71",
@@ -3073,12 +2781,6 @@
         "departement": "59",
         "departementName": "Nord",
         "regionName": "Hauts-de-France",
-        "ville": "ENNETIERE en WEPPES"
-    },
-    {
-        "departement": "59",
-        "departementName": "Nord",
-        "regionName": "Hauts-de-France",
         "ville": "HALLENS lez HAUBOUDIN"
     },
     {
@@ -3098,12 +2800,6 @@
         "departementName": "Nord",
         "regionName": "Hauts-de-France",
         "ville": "HOUPLINES"
-    },
-    {
-        "departement": "59",
-        "departementName": "Nord",
-        "regionName": "Hauts-de-France",
-        "ville": "WAVRIN"
     },
     {
         "departement": "54",
@@ -3202,18 +2898,6 @@
         "ville": "SAINGHIN en WEPPES0"
     },
     {
-        "departement": "59",
-        "departementName": "Nord",
-        "regionName": "Hauts-de-France",
-        "ville": "HOUPLINE"
-    },
-    {
-        "departement": "62",
-        "departementName": "Pas-de-Calais",
-        "regionName": "Hauts-de-France",
-        "ville": "GUARBECQUE"
-    },
-    {
         "departement": "62",
         "departementName": "Pas-de-Calais",
         "regionName": "Hauts-de-France",
@@ -3223,19 +2907,7 @@
         "departement": "62",
         "departementName": "Pas-de-Calais",
         "regionName": "Hauts-de-France",
-        "ville": "SAINT FLORIS"
-    },
-    {
-        "departement": "62",
-        "departementName": "Pas-de-Calais",
-        "regionName": "Hauts-de-France",
         "ville": "SAINT VENANT"
-    },
-    {
-        "departement": "01",
-        "departementName": "Ain",
-        "regionName": "Auvergne-Rhone-Alpes",
-        "ville": "SUTRIEU"
     },
     {
         "departement": "59",
@@ -3244,16 +2916,16 @@
         "ville": "BEAUCAMPS"
     },
     {
-        "departement": "62",
-        "departementName": "Pas-de-Calais",
+        "departement": "59",
+        "departementName": "Nord",
         "regionName": "Hauts-de-France",
-        "ville": "ROBECQ"
+        "ville": "SAINGHIN en WEPPE"
     },
     {
         "departement": "62",
         "departementName": "Pas-de-Calais",
         "regionName": "Hauts-de-France",
-        "ville": "HANTAY"
+        "ville": "ROBECQ"
     },
     {
         "departement": "62",
@@ -3280,12 +2952,6 @@
         "ville": "BACHY"
     },
     {
-        "departement": "59",
-        "departementName": "Nord",
-        "regionName": "Hauts-de-France",
-        "ville": "COBRIEUX"
-    },
-    {
         "pays": "Allemagne",
         "ville": "BALLAIGUES"
     },
@@ -3308,16 +2974,10 @@
         "ville": "VILLEREVERSURE"
     },
     {
-        "departement": "59",
-        "departementName": "Nord",
-        "regionName": "Hauts-de-France",
-        "ville": "LILLE"
-    },
-    {
         "departement": "57",
         "departementName": "Moselle",
         "regionName": "Grand Est",
-        "ville": " MONTIGNY les METZ"
+        "ville": "METZ"
     },
     {
         "departement": "57",
@@ -3354,12 +3014,6 @@
         "departementName": "Saone-et-Loire",
         "regionName": "Bourgogne-Franche-Comte",
         "ville": "AUTUN"
-    },
-    {
-        "departement": "57",
-        "departementName": "Moselle",
-        "regionName": "Grand Est",
-        "ville": "MARSAL"
     },
     {
         "departement": "01",
@@ -3410,10 +3064,22 @@
         "ville": "ERQUINGHEM"
     },
     {
+        "departement": "01",
+        "departementName": "Ain",
+        "regionName": "Auvergne-Rhone-Alpes",
+        "ville": "COLIGNY"
+    },
+    {
         "departement": "59",
         "departementName": "Nord",
         "regionName": "Hauts-de-France",
         "ville": "GONDECOURT"
+    },
+    {
+        "departement": "59",
+        "departementName": "Nord",
+        "regionName": "Hauts-de-France",
+        "ville": "LILLE"
     },
     {
         "departement": "01",
@@ -3438,12 +3104,6 @@
         "departementName": "Cote-d'Or",
         "regionName": "Bourgogne-Franche-Comte",
         "ville": "VELOGNY"
-    },
-    {
-        "departement": "21",
-        "departementName": "Cote-d'Or",
-        "regionName": "Bourgogne-Franche-Comte",
-        "ville": "CLAMEREY"
     },
     {
         "departement": "67",
@@ -3488,12 +3148,6 @@
         "ville": "TRIMBACH"
     },
     {
-        "departement": "67",
-        "departementName": "Bas-Rhin",
-        "regionName": "Grand Est",
-        "ville": "NIEDERBETSCHDORF"
-    },
-    {
         "pays": "Swisse",
         "ville": "BISCHWEIER"
     },
@@ -3532,12 +3186,6 @@
         "departementName": "Cote-d'Or",
         "regionName": "Bourgogne-Franche-Comte",
         "ville": "SELONGEY"
-    },
-    {
-        "departement": "21",
-        "departementName": "Cote-d'Or",
-        "regionName": "Bourgogne-Franche-Comte",
-        "ville": "BLANCEY"
     },
     {
         "departement": "21",
@@ -3603,19 +3251,7 @@
         "departement": "62",
         "departementName": "Pas-de-Calais",
         "regionName": "Hauts-de-France",
-        "ville": "GONNEHEM"
-    },
-    {
-        "departement": "62",
-        "departementName": "Pas-de-Calais",
-        "regionName": "Hauts-de-France",
         "ville": "VENDIN Les BETHUNE"
-    },
-    {
-        "departement": "62",
-        "departementName": "Pas-de-Calais",
-        "regionName": "Hauts-de-France",
-        "ville": "COLONNE / la LYS"
     },
     {
         "departement": "62",
@@ -3634,6 +3270,12 @@
         "departementName": "Pas-de-Calais",
         "regionName": "Hauts-de-France",
         "ville": "HAINES"
+    },
+    {
+        "departement": "62",
+        "departementName": "Pas-de-Calais",
+        "regionName": "Hauts-de-France",
+        "ville": "GONNEHEM"
     },
     {
         "departement": "74",
@@ -3672,10 +3314,6 @@
         "ville": "LYON"
     },
     {
-        "departement": "019",
-        "ville": "RETOD"
-    },
-    {
         "departement": "74",
         "departementName": "Haute-Savoie",
         "regionName": "Auvergne-Rhone-Alpes",
@@ -3706,22 +3344,10 @@
         "ville": "lLIEHON"
     },
     {
-        "departement": "62",
-        "departementName": "Pas-de-Calais",
-        "regionName": "Hauts-de-France",
-        "ville": "GIVENCHY les LA BASSEE"
-    },
-    {
         "departement": "59",
         "departementName": "Nord",
         "regionName": "Hauts-de-France",
         "ville": "BEAUCAMPS LIGNY"
-    },
-    {
-        "departement": "59",
-        "departementName": "Nord",
-        "regionName": "Hauts-de-France",
-        "ville": "LE MAISNIL"
     },
     {
         "departement": "59",
@@ -3754,6 +3380,12 @@
         "ville": "CHARNY"
     },
     {
+        "departement": "71",
+        "departementName": "Saone-et-Loire",
+        "regionName": "Bourgogne-Franche-Comte",
+        "ville": "ROUSSILLON en MORVAN"
+    },
+    {
         "departement": "62",
         "departementName": "Pas-de-Calais",
         "regionName": "Hauts-de-France",
@@ -3775,7 +3407,7 @@
         "departement": "59",
         "departementName": "Nord",
         "regionName": "Hauts-de-France",
-        "ville": "LOMPRET"
+        "ville": "WAVRIN"
     },
     {
         "departement": "57",
@@ -3853,12 +3485,6 @@
         "departement": "21",
         "departementName": "Cote-d'Or",
         "regionName": "Bourgogne-Franche-Comte",
-        "ville": "BEZE"
-    },
-    {
-        "departement": "21",
-        "departementName": "Cote-d'Or",
-        "regionName": "Bourgogne-Franche-Comte",
         "ville": "MARSANNAY le BOIS"
     },
     {
@@ -3898,8 +3524,10 @@
         "ville": "MINOT"
     },
     {
-        "pays": "Swisse",
-        "ville": "BREISACH"
+        "departement": "67",
+        "departementName": "Bas-Rhin",
+        "regionName": "Grand Est",
+        "ville": "MARCKOLSHEIM"
     },
     {
         "departement": "21",
@@ -3953,7 +3581,7 @@
         "departement": "57",
         "departementName": "Moselle",
         "regionName": "Grand Est",
-        "ville": "TINCRY"
+        "ville": "SAINT EPVRES"
     },
     {
         "departement": "54",
@@ -3972,12 +3600,6 @@
         "departementName": "Meurthe-et-Moselle",
         "regionName": "Grand Est",
         "ville": "PANNES"
-    },
-    {
-        "departement": "71",
-        "departementName": "Saone-et-Loire",
-        "regionName": "Bourgogne-Franche-Comte",
-        "ville": "CURGY"
     },
     {
         "departement": "21",
@@ -4022,22 +3644,10 @@
         "ville": "MARLIENS"
     },
     {
-        "departement": "59",
-        "departementName": "Nord",
-        "regionName": "Hauts-de-France",
-        "ville": "SAINGHIN en W."
-    },
-    {
         "departement": "21",
         "departementName": "Cote-d'Or",
         "regionName": "Bourgogne-Franche-Comte",
         "ville": "CHENOVE"
-    },
-    {
-        "departement": "21",
-        "departementName": "Cote-d'Or",
-        "regionName": "Bourgogne-Franche-Comte",
-        "ville": "AUXONNE"
     },
     {
         "departement": "21",
@@ -4084,12 +3694,6 @@
         "departementName": "Cote-d'Or",
         "regionName": "Bourgogne-Franche-Comte",
         "ville": "MISSERY\n21"
-    },
-    {
-        "departement": "21",
-        "departementName": "Cote-d'Or",
-        "regionName": "Bourgogne-Franche-Comte",
-        "ville": "PRECY sous THIL"
     },
     {
         "departement": "67",
@@ -4140,6 +3744,12 @@
     {
         "pays": "Swisse",
         "ville": "REUTLINGEN"
+    },
+    {
+        "departement": "21",
+        "departementName": "Cote-d'Or",
+        "regionName": "Bourgogne-Franche-Comte",
+        "ville": "GENLIS"
     },
     {
         "departement": "50",

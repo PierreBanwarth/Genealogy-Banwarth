@@ -12,8 +12,8 @@ from classes.fichiers import *
 
 from functools import partial
 
-
-def parseEnfants(s):
+lieux = []
+def parseListeEnfants(s):
     listeEnfantFinale = []
     listeEnfants = s.split('\n')
 
@@ -23,6 +23,7 @@ def parseEnfants(s):
     for enfantString in listeEnfants:
         enfant = enfantFromString(enfantString)
         listeEnfantFinale.append(enfant)
+    print(listeEnfantFinale)
     return listeEnfantFinale
 
 
@@ -80,62 +81,87 @@ def parseConjoint(s):
 
     return conjoint
 
+def getIndexLieux(s):
+    regions = getRegions()
+    lieu = getLieuxFromString(s)
+    if 'departement' in lieu:
+        for region in regions:
+            if str(region['num_dep']) == str(lieu['departement']):
+                lieu['departementName'] = region['dep_name']
+                lieu['regionName'] = region['region_name']
+    if lieu not in lieux:
+        lieux.append(lieu)
+    index = lieux.index(lieu)
+    return index
 def convertirBase(racine):
     listPersonne = {}
-    lieux = []
+
 
     erreursEnfants = []
     erreursConjoints = []
 
-    nombreEnfants = 0
-    nombreEnfantsUnknown = 0
-    nombreConjoints = 0
-    nombreConjointsUnknown = 0
-
     for element in racine:
-        personne = {}
+        personne = Personne()
         conjoints = []
 
-        Sosa = False
         for sousElement in element:
             if sousElement != None and sousElement.text != None and sousElement.tag != None:
-
-                if sousElement.tag == 'Br':
-                    personne['Branche'] = sousElement.text
-                elif sousElement.tag == 'Sosa':
-                    personne['Sosa'] = sousElement.text
-                    Sosa = True
-                elif sousElement.tag.startswith('Lieu'):
-                    # JSON file
-                    regions = getRegions()
-                    lieu = getLieuxFromString(sousElement.text)
-                    if 'departement' in lieu:
-                        for region in regions:
-                            if str(region['num_dep']) == str(lieu['departement']):
-                                lieu['departementName'] = region['dep_name']
-                                lieu['regionName'] = region['region_name']
-                    if lieu not in lieux:
-                        lieux.append(lieu)
-                    index = lieux.index(lieu)
-                    personne[sousElement.tag] = index
+                if sousElement.tag == 'Prenom':
+                    personne.setPrenom(sousElement.text)
 
                 elif sousElement.tag == 'PPM':
-                    personne['PerePresentMariage'] = sousElement.text
+                    personne.setPerePresentMariage(sousElement.text)
                 elif sousElement.tag == 'PMM':
-                    personne['MerePresentMariage'] = sousElement.text
+                    personne.setMerePresenteMariage(sousElement.text)
                 elif sousElement.tag == 'DMariage':
-                    personne['DateMariage'] = formatDate(sousElement.text)
+                    personne.setDateMariage(formatDate(sousElement.text))
                 elif sousElement.tag == 'DNaissance':
-                    personne['dateNaissance'] = formatDate(sousElement.text)
+                    personne.setDateNaissance(formatDate(sousElement.text))
                 elif sousElement.tag == 'DDeces':
-                    personne['DateDeces'] = formatDate(sousElement.text)
+                    personne.setDateDeces(formatDate(sousElement.text))
                 elif sousElement.tag == 'Enregist':
-                    personne['Enregistrement'] = sousElement.text
+                    personne.setEnregistrement(sousElement.text)
                 elif sousElement.tag == 'Rel':
-                    personne['Religion'] = sousElement.text
+                    personne.setReligion(sousElement.text)
+                elif sousElement.tag == 'AdD':
+                    personne.setAgeDeces(sousElement.text)
+                elif sousElement.tag == 'RechEnf':
+                    personne.setRechercheEnfantTermine()
+                elif sousElement.tag == 'CdD':
+                    personne.setConjointDecedesDeces(sousElement.text)
                 elif sousElement.tag == 'Profession':
                     if sousElement.text[0] == '-' or sousElement.text[0] == '+':
-                        personne['Profession'] = sousElement.text[1:]
+                        personne.setProfession(sousElement.text[1:])
+                elif sousElement.tag == 'Nom':
+                    personne.setNom(sousElement.text)
+                elif sousElement.tag == 'Br':
+                    personne.setBranche(sousElement.text)
+                elif sousElement.tag == 'Sosa':
+                    personne.setSosa(sousElement.text)
+                elif sousElement.tag == 'Cadet':
+                    personne.setCadet(sousElement.text)
+                elif sousElement.tag == 'Note':
+                    personne.setNote(sousElement.text)
+                elif sousElement.tag == 'Aine':
+                    personne.setAine(sousElement.text)
+                elif sousElement.tag == ('LieuNaissance'):
+                    # JSON file
+                    index = getIndexLieux(sousElement.text)
+                    personne.setLieuNaissance(index)
+                elif sousElement.tag == 'LieuNaissance':
+                    # JSON file
+                    index = getIndexLieux(sousElement.text)
+                    personne.setLieuNaissance(index)
+                elif sousElement.tag == 'LieuDeces':
+                    # JSON file
+                    index = getIndexLieux(sousElement.text)
+                    personne.setLieuDeces(index)
+
+                elif sousElement.tag == 'LieuMariage':
+                    # JSON file
+
+                    personne.setLieuMariage(index)
+
                 # elif sousElement.tag == 'Conj':
                 #     nombreConjoints = nombreConjoints + 1
                 #     conjoint = parseConjoint(sousElement.text)
@@ -148,21 +174,15 @@ def convertirBase(racine):
                 #         conjoint = parseConjoint(item)
                 #         conjoints.append(conjoint)
                 elif sousElement.tag == 'Enfants':
-                    text = sousElement.text
-                    personne['enfants'] = parseEnfants(text)
-
-                else:
-                    personne[sousElement.tag] = sousElement.text
-        personne['conjoints'] = conjoints
-
-        if Sosa:
-            sosa = personne['Sosa']
-            listPersonne[int(sosa)] = Personne(personne)
-
+                    personne.setEnfants(parseListeEnfants(sousElement.text))
+                    print(personne.getEnfants())
+                elif sousElement.tag != 'Conj' and sousElement.tag != 'Conjoint2':
+                    print(sousElement.tag+'  : '+sousElement.text)
+        # personne['conjoints'] = conjoints
+        sosa = personne.getSosa()
+        listPersonne[int(sosa)] = personne
 
     sauvegardeBaseLieux(lieux)
-    sauvegardeBase(erreursEnfants, 'erreursEnfants.json')
-    sauvegardeBase(erreursConjoints, 'erreursConjoints.json')
     return listPersonne
 
 def retrouverEnfant(jsonBySosa):
@@ -172,8 +192,9 @@ def retrouverEnfant(jsonBySosa):
         if sosa != sosaFils:
             fils = Enfant()
             fils.setJson(jsonBySosa[sosaFils])
+
             personne.addAine(fils)
-            result[sosa] = personne
+        result[sosa] = personne
     return result
 def affichage(arbre, personnePrincipale):
     fenetre = Tk()
@@ -290,9 +311,9 @@ def main():
     jsonBySosa = convertirBase(racine)
     result = retrouverEnfant(jsonBySosa)
 
-    sauvegardeBasePersonne(result, 'data/baseDeDonneeBySosa.json')
+    sauvegardeBasePersonne(jsonBySosa, 'data/baseDeDonneeBySosa.json')
 
-    # result = openBaseBySosa('data/baseDeDonneeBySosa.json')
+    result = openBaseBySosa('data/baseDeDonneeBySosa.json')
     # affichage(result, result[2])
 
 if __name__ == "__main__":
