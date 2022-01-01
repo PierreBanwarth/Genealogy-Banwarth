@@ -26,10 +26,10 @@ class PersonneLabel:
         self.enfantsLabel = []
         self.enfantsText = []
 
-        for index, item in enumerate(personne.enfants):
+        for index, item in enumerate(personne.getEnfants()):
             self.enfantsText.append(StringVar())
             self.enfantsLabel.append(Label(self.labelEnfant, textvariable=self.enfantsText[index]))
-            
+
         self.set(personne)
 
 
@@ -51,7 +51,7 @@ class PersonneLabel:
         self.enfantsLabel = []
         self.enfantsText = []
 
-        for index, item in enumerate(personne.enfants):
+        for index, item in enumerate(personne.getEnfants()):
             self.enfantsText.append(StringVar())
             self.enfantsLabel.append(Label(self.labelEnfant, textvariable=self.enfantsText[index]))
 
@@ -63,11 +63,9 @@ class PersonneLabel:
         self.textAge.set('Age :'+personne.getAge())
         self.textProfession.set('Profession'+personne.Profession)
 
-        for index, item in enumerate(personne.enfants):
-            if 'nom1' in item and 'nom2' in item:
-                self.enfantsText[index].set(item['nom1']+' '+item['nom2'])
-            elif 'nom1' in item:
-                self.enfantsText[index].set(item['nom1'])
+        for index, item in enumerate(personne.getEnfants()):
+            if 'Prenom' in item:
+                self.enfantsText[index].set(item['Prenom'])
             else:
                 self.enfantsText[index].set(item['nom']+' '+item['prenom'])
         self.pack()

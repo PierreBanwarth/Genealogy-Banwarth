@@ -38,12 +38,13 @@ def goodFormatDateApproximative(s):
 def trouveDate(s):
     return any(i.isdigit() for i in s)
 def isYear(s):
-    return all(i.isdigit() for i in s) and (s[0] == '1' or s[0] == '2')
+    return all(i.isdigit() for i in s)
 def formatDate(s):
     #"DateNaissance": "1833-05-21T00:00:00",
     if len(s) == len('1833-05-21T00:00:00'):
         array = s.split('T')[0].split('-')
         return array[2]+'/'+array[1]+'/'+array[0]
+
 
 def dateEnfantFormat(s):
     array = s.split('/')
@@ -102,39 +103,48 @@ def getInfosDecesMariage(tableauString, objet, key, str):
     }
 
 
-def trouveDateKey(s, tableauString, objet, key):
-    if trouveDate(s):
-        dateClean = formatShortDate(s)
-
-        if goodFormatDate(dateClean) or isYear(dateClean):
-            if 'vers' in tableauString:
-                objet[key+'Approximative'] = 'vers ' + dateClean
-                tableauString.remove('vers')
-            elif 'avant' in tableauString:
-                objet[key+'Approximative'] = 'avant ' + dateClean
-                tableauString.remove('avant')
-            elif 'apres' in tableauString:
-                objet[key+'Approximative'] = 'apres ' + dateClean
-                tableauString.remove('apres')
+def trouveDateKey(tableauString, objet, key):
+    if 'vers' in tableauString:
+        tableauString.remove('vers')
+        prefix = 'vers '
+    elif 'avant' in tableauString:
+        tableauString.remove('avant')
+        prefix = 'avant '
+    elif 'apres' in tableauString:
+        tableauString.remove('apres')
+        prefix = 'apres '
+    else:
+        prefix = ''
+    if prefix != '':
+        print(prefix)
+    resultKey = key
+    resultValue = prefix
+    for s in tableauString:
+        if trouveDate(s):
+            dateClean = formatShortDate(s)
+            if goodFormatDate(dateClean) or isYear(dateClean):
+                if prefix == 'vers ' or prefix == 'avant ' or prefix == 'apres ' or '?' in dateClean or len(dateClean) == 4:
+                    resultKey = key+'Approximative'
+                    resultValue = prefix+dateClean
+            elif goodFormatDateApproximative(dateClean):
+                resultKey = key+'Approximative'
+                resultValue = dateClean.split('/')[0] +' ou '+dateClean.split('/')[1]
             else:
-                objet[key] = dateClean
-        elif goodFormatDateApproximative(dateClean):
-            objet[key+'Approx'] = dateClean.split('/')[0] +' ou '+dateClean.split('/')[1]
-        else:
-            if len(dateClean.split('/')) != 3:
-                pass
-        index = tableauString.index(s)
-        tableauString.pop(index)
-
+                resultKey=key
+                resultValue=dateClean
+            tableauString.remove(s)
     return {
         'tableauString' : tableauString,
-        'objet' : objet
+        'key' : resultKey,
+        'value': resultValue,
     }
 
 def parseEnfants(s):
-    ListeEnfantFinale = []
+    listeEnfantFinale = []
     listeEnfants = s.split('\n')
 
+    if '*' in listeEnfants:
+        listeEnfants.remove('*')
 
     for enfantString in listeEnfants:
         enfant = {}
@@ -146,11 +156,18 @@ def parseEnfants(s):
         if 'ondoye' in infosEnfant:
             pass
 
+
         result = getInfosDecesMariage(infosEnfant, enfant, 'dateDeces', '+')
         infosEnfant = result['tableauString']
 
         if 'dateDeces' in result['objet']:
             enfant['dateDeces'] = result['objet']['dateDeces']
+
+        result = getInfosDecesMariage(infosEnfant, enfant, 'dateNaissance', 'o')
+        infosEnfant = result['tableauString']
+
+        if 'dateNaissance' in result['objet']:
+            enfant['dateNaissance'] = result['objet']['dateNaissance']
 
         result = getInfosDecesMariage(infosEnfant, enfant, 'dateMariage', 'x')
         infosEnfant = result['tableauString']
@@ -158,22 +175,16 @@ def parseEnfants(s):
         if 'dateMariage' in result['objet']:
             enfant['dateMariage'] = result['objet']['dateMariage']
 
-        if '*' in infosEnfant:
-            ListeEnfantFinale.insert(0,{'Sosa' : 'ToFind'})
-            infosEnfant.remove('*')
-
         else:
-            for item in infosEnfant:
-                result = trouveDateKey(item, infosEnfant, enfant, 'dateNaissance')
-                infosEnfant = result['tableauString']
-                enfant = result['objet']
-                if 'dateNaissance' in result['objet']:
-                    enfant['dateNaissance'] = result['objet']['dateNaissance']
-                if 'dateNaissanceApproximative' in result['objet']:
-                    enfant['dateNaissanceApproximative'] = result['objet']['dateNaissanceApproximative']
+
+            result = trouveDateKey(infosEnfant, enfant, 'dateNaissance')
+            infosEnfant = result['tableauString']
+            if result['value'] != '':
+                enfant[result['key']] = result['value']
         enfant['Prenom'] = ' '.join(infosEnfant)
-        ListeEnfantFinale.append(enfant)
-    return ListeEnfantFinale
+
+        listeEnfantFinale.append(enfant)
+    return listeEnfantFinale
 
 
 
@@ -199,10 +210,16 @@ def parseConjoint(s):
     result = getInfosDecesMariage(infosConjoint, conjoint, 'dateDeces', '+')
     infosConjoint = result['tableauString']
     conjoint = result['objet']
-    for item in infosConjoint:
-        result = trouveDateKey(item, infosConjoint, conjoint, 'dateMariage')
-        infosConjoint = result['tableauString']
-        conjoint = result['objet']
+
+    result = getInfosDecesMariage(infosConjoint, conjoint, 'dateNaissance', 'o')
+
+    infosConjoint = result['tableauString']
+    conjoint = result['objet']
+
+    result = trouveDateKey(infosConjoint, conjoint, 'dateMariage')
+    infosConjoint = result['tableauString']
+    if result['value'] != '':
+        conjoint[result['key']] = result['value']
 
     TrouveNom = False
     for item in infosConjoint:
@@ -221,27 +238,21 @@ def parseConjoint(s):
     elif 'x' in infosConjoint:
         infosConjoint.remove('x')
         conjoint['Prenom'] = ' '.join(infosConjoint)
-        conjoint['NumeroMariage'] = 2
+        conjoint['NumeroMariage'] = 1
     elif 'xx' in infosConjoint:
         infosConjoint.remove('xx')
         conjoint['Prenom'] = ' '.join(infosConjoint)
-        conjoint['NumeroMariage'] = 3
+        conjoint['NumeroMariage'] = 2
     elif 'xxx' in infosConjoint:
         infosConjoint.remove('xxx')
         conjoint['Prenom'] = ' '.join(infosConjoint)
-        conjoint['NumeroMariage'] = 4
-
-    #
-    # elif 'xxx' in infosConjoint:
-    #     infosConjoint.remove('xxx')
-    #     conjoint['Prenom'] = ' '.join(infosConjoint)
+        conjoint['NumeroMariage'] = 3
 
     elif(len(infosConjoint)==2):
         conjoint['Prenom'] = ' '.join(infosConjoint)
     else:
         conjoint['info'] = ' '.join(infosConjoint)
-    # if 'Prenom' in conjoint:
-    #     print(conjoint['Prenom'])
+
     return conjoint
 
 def convertirBase(racine):
@@ -333,17 +344,15 @@ def retrouverEnfant(jsonBySosa):
     result = {}
     for sosa, personne in jsonBySosa.items():
         sosaFils = personne.getSonSosa()
-        fils = jsonBySosa[sosaFils]
-
-        if personne.isToFindSon():
+        if sosa != sosaFils:
+            fils = jsonBySosa[sosaFils]
             personne.addAine(fils)
-
-        result[sosa] = personne
+            result[sosa] = personne
     return result
 
 
 
-def affichage(arbre, personne):
+def affichage(arbre, personnePrincipale):
     fenetre = Tk()
     fenetre['bg']='white'
 
@@ -384,27 +393,27 @@ def affichage(arbre, personne):
     Fratrie = LabelFrame(Bas, text='Fratrie', borderwidth=2, relief=GROOVE)
     Fratrie.pack(side=LEFT, fill=BOTH,expand=1)
 
-    personneLabel = PersonneLabel(arbre["2"], Personnage, Enfant)
+    personneLabel = PersonneLabel(personnePrincipale, Personnage, Enfant)
 
-    def getFather(personne, arbre):
-        pere = arbre[str(personne.getPere())]
+    def getFather(personnePrincipale, arbre):
+        pere = arbre[personnePrincipale.getPere()]
         personneLabel.set(pere)
 
         buttonFather.configure(command=partial(getFather, pere, arbre))
         buttonMother.configure(command=partial(getMother, pere, arbre))
         buttonFils.configure(command=partial(getHeritier, pere, arbre))
 
-    def getMother(personne, arbre):
-        mere = arbre[str(personne.getMere())]
+    def getMother(personnePrincipale, arbre):
+        mere = arbre[personnePrincipale.getMere()]
         personneLabel.set(mere)
 
         buttonMother.configure(command=partial(getMother, mere, arbre))
         buttonFather.configure(command=partial(getFather, mere, arbre))
         buttonFils.configure(command=partial(getHeritier, mere, arbre))
 
-    def getHeritier(personne, arbre):
+    def getHeritier(personnePrincipale, arbre):
 
-        heritier = arbre[str(personne.getHeritier())]
+        heritier = arbre[personnePrincipale.getHeritier()]
         personneLabel.set(heritier)
 
         buttonFather.configure(command=partial(getFather, heritier, arbre))
@@ -414,18 +423,18 @@ def affichage(arbre, personne):
     buttonMother = Button(
         Mere,
         text="Mere",
-        command=partial(getMother, personne, arbre)
+        command=partial(getMother, personnePrincipale, arbre)
     )
 
     buttonFather = Button(
         Pere,
         text="Pere",
-        command=partial(getFather, personne, arbre)
+        command=partial(getFather, personnePrincipale, arbre)
     )
     buttonFils= Button(
         Millieu,
         text="Fils",
-        command=partial(getHeritier, personne, arbre)
+        command=partial(getHeritier, personnePrincipale, arbre)
     )
 
     # Ajout de labels
@@ -454,12 +463,15 @@ def affichage(arbre, personne):
 def main():
     arbre = ET.parse('data/table1.xml')
     racine = arbre.getroot()
+
     jsonBySosa = convertirBase(racine)
     result = retrouverEnfant(jsonBySosa)
+
     sauvegardeBasePersonne(result, 'data/baseDeDonneeBySosa.json')
 
-    result = openBaseBySosa('data/baseDeDonneeBySosa.json')
-
+    # result = openBaseBySosa('data/baseDeDonneeBySosa.json')
+    # print(result[2])
+    # affichage(result, result[2])
 
 if __name__ == "__main__":
     main()

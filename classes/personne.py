@@ -11,7 +11,7 @@ def openBaseBySosa(filename):
     finalJson = {}
     json = openBase(filename)
     for sosa, json in json.items():
-        finalJson[sosa] = Personne(json)
+        finalJson[int(sosa)] = Personne(json)
     return finalJson
 
 
@@ -55,14 +55,33 @@ class Personne:
         if not finded:
             print(date)
 
+    def getAnneeNaissance(self):
+        resultat = ''
+        if self.DateNaissance != UNKNOWN:
+            if self.DateNaissance and self.DateNaissance != UNKNOWN:
+                resultat = self.DateNaissance.split('/')[2]
+            elif self.DateNaissanceApproximative:
+                if len(self.DateNaissanceApproximative) == 4:
+                    resultat = self.DateNaissanceApproximative
+                elif len(self.DateNaissanceApproximative.split('/')) ==3:
+                    resultat = self.DateNaissanceApproximative.split('/')[3]
+        else:
+            resultat = 0
+        return int(resultat)
+
     def __init__(self, json):
 
-        self.Branche = json['Branche']
+        if 'Aine' in json:
+            self.Branche = json['Branche']
+        else:
+            self.Branche = UNKNOWN
+
 
         if 'Aine' in json:
             self.Aine = json['Aine']
         else:
             self.Aine = UNKNOWN
+
 
         if 'Cadet' in json:
             self.Cadet = json['Cadet']
@@ -91,18 +110,27 @@ class Personne:
 
         if 'DateMariage' in json:
             self.DateMariage = json['DateMariage']
+
+        elif 'dateMariageApproximative' in json:
+            self.DateMariageApproximative = json['dateMariageApproximative']
         else:
             self.DateMariage = UNKNOWN
 
+
         if 'DateDeces' in json:
             self.DateDeces = json['DateDeces']
+        elif 'dateDecesApproximative' in json:
+            self.DatesDecesApproximative = json['dateDecesApproximative']
         else:
             self.DateDeces = UNKNOWN
 
         if 'DateNaissance' in json:
             self.DateNaissance = json['DateNaissance']
+        elif 'dateNaissanceApproximative' in json:
+            self.DateNaissanceApproximative = json['dateNaissanceApproximative']
         else:
             self.DateNaissance = UNKNOWN
+
 
         if 'LieuMariage' in json:
             self.LieuMariage = json['LieuMariage']
@@ -144,13 +172,17 @@ class Personne:
         if 'enfants' in json:
             self.enfants = json['enfants']
         else:
-            self.enfants = ['Sans']
+            self.enfants = []
         self.getRegnes()
+        self.getAnneeNaissance()
+
+    def getEnfants(self):
+        return self.enfants
 
     def getSonSosa(self):
         if self.Sosa <= 3:
             return self.Sosa
-        if (self.Sosa % 2) == 0:
+        if self.Sosa % 2 == 0:
             return int(self.Sosa/2)
         else:
             return int((self.Sosa-1)/2)
@@ -160,13 +192,11 @@ class Personne:
             return 'Sosa' in self.enfants[0] and self.enfants[0]['Sosa']
 
     def addAine(self, personne):
-        self.enfants.pop(0)
         self.enfants.insert(0,personne.getInfoHeritier())
 
     def getInfoHeritier(self):
         result = {}
-        result['nom'] = self.Nom
-        result['prenom'] = self.Prenom
+        result['Prenom'] = self.Prenom
         result['dateNaissance'] = self.DateNaissance
         return result
 
@@ -177,7 +207,7 @@ class Personne:
         if self.Sosa % 2 == 0:
             return int(self.Sosa/2)
         else:
-            return int(self.Sosa/2-1)
+            return int((self.Sosa-1)/2)
 
     def getMere(self):
         return (self.Sosa*2)+1
