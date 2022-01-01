@@ -2,142 +2,16 @@ import json
 from xml.dom import minidom
 import xml.etree.ElementTree as ET
 from tkinter import *
-from classes.personne import *
 
+from classes.personne import *
+from classes.dates import *
+from classes.enfant import *
 from classes.personneLabel import PersonneLabel
+from classes.utils import *
+from classes.fichiers import *
+
 from functools import partial
 
-from  classes.fichiers import *
-
-
-def trouveNom(s):
-    return s.isupper() and len(s)>2
-def formatShortDate(s):
-    jour = ''
-    mois = ''
-    tab = s.split('/')
-    if len(tab) !=3:
-        return s
-    else:
-
-        if len(tab[0]) == 1:
-            jour = '0'+tab[0]
-        elif len(tab[0]) == 0:
-            jour = '??'
-        else:
-            jour = tab[0]
-        if len(tab[1]) == 1:
-            mois = '0'+tab[1]
-        else:
-            mois = tab[1]
-        return jour+'/'+mois+'/'+tab[2]
-def goodFormatDate(s):
-    return len(s.split('/')) == 3  and len(s.split('/')[0]) == 2 and len(s.split('/')[1]) == 2 and len(s.split('/')[2]) == 4
-def goodFormatDateApproximative(s):
-    return len(s.split('/')) == 2  and len(s.split('/')[0]) == 4 and len(s.split('/')[1]) == 4
-def trouveDate(s):
-    return any(i.isdigit() for i in s)
-def isYear(s):
-    return all(i.isdigit() for i in s)
-def formatDate(s):
-    #"DateNaissance": "1833-05-21T00:00:00",
-    if len(s) == len('1833-05-21T00:00:00'):
-        array = s.split('T')[0].split('-')
-        return array[2]+'/'+array[1]+'/'+array[0]
-
-
-def dateEnfantFormat(s):
-    array = s.split('/')
-    result = ''
-    if len(array) == 3:
-        if len(array[0]) == 1:
-            array[0] = '0'+array[0]
-        elif len(array[0]) == 0:
-            array[0] = '??'
-        if len(array[1]) == 1:
-            array[1] = '0'+array[1]
-        return array[0]+'/'+array[1]+'/'+array[2]
-    else:
-        return s
-def getLieuxFromString(s):
-    if '*' in s:
-        s = s.split('*')
-        return {
-            'departement' : s[0],
-            'ville' : s[1]
-        }
-
-    else:
-        s = s[1:]
-        s = s.split(')')
-        if s[0] == 'I':
-            pays  ='Italie'
-        if s[0] == 'D' or s[0] == 'B':
-            pays  ='Swisse'
-        if s[0] == 'S':
-            pays  ='Allemagne'
-        return {
-            'pays' : pays,
-            'ville' : s[1]
-        }
-
-def getInfosDecesMariage(tableauString, objet, key, str):
-    if str in tableauString:
-        indexChar = tableauString.index(str)
-        index = indexChar+1
-
-        if index < len(tableauString):
-            resultat = tableauString[index]
-            resultat = formatShortDate(resultat)
-            if resultat == 'avant':
-                resultat = tableauString[index+1]
-                resultat = formatShortDate(resultat)
-            objet[key] = resultat
-        if len(tableauString) > index:
-            tableauString.pop(index)
-        tableauString.remove(str)
-
-    return {
-        'tableauString' : tableauString,
-        'objet' : objet
-    }
-
-
-def trouveDateKey(tableauString, objet, key):
-    if 'vers' in tableauString:
-        tableauString.remove('vers')
-        prefix = 'vers '
-    elif 'avant' in tableauString:
-        tableauString.remove('avant')
-        prefix = 'avant '
-    elif 'apres' in tableauString:
-        tableauString.remove('apres')
-        prefix = 'apres '
-    else:
-        prefix = ''
-    if prefix != '':
-        print(prefix)
-    resultKey = key
-    resultValue = prefix
-    for s in tableauString:
-        if trouveDate(s):
-            dateClean = formatShortDate(s)
-            if goodFormatDate(dateClean) or isYear(dateClean):
-                if prefix == 'vers ' or prefix == 'avant ' or prefix == 'apres ' or '?' in dateClean or len(dateClean) == 4:
-                    resultKey = key+'Approximative'
-                    resultValue = prefix+dateClean
-            elif goodFormatDateApproximative(dateClean):
-                resultKey = key+'Approximative'
-                resultValue = dateClean.split('/')[0] +' ou '+dateClean.split('/')[1]
-            else:
-                resultKey=key
-                resultValue=dateClean
-            tableauString.remove(s)
-    return {
-        'tableauString' : tableauString,
-        'key' : resultKey,
-        'value': resultValue,
-    }
 
 def parseEnfants(s):
     listeEnfantFinale = []
@@ -147,61 +21,12 @@ def parseEnfants(s):
         listeEnfants.remove('*')
 
     for enfantString in listeEnfants:
-        enfant = {}
-
-        infosEnfant = cleanString(enfantString)
-
-        if 'o' in infosEnfant:
-            infosEnfant.remove('o')
-        if 'ondoye' in infosEnfant:
-            pass
-
-
-        result = getInfosDecesMariage(infosEnfant, enfant, 'dateDeces', '+')
-        infosEnfant = result['tableauString']
-
-        if 'dateDeces' in result['objet']:
-            enfant['dateDeces'] = result['objet']['dateDeces']
-
-        result = getInfosDecesMariage(infosEnfant, enfant, 'dateNaissance', 'o')
-        infosEnfant = result['tableauString']
-
-        if 'dateNaissance' in result['objet']:
-            enfant['dateNaissance'] = result['objet']['dateNaissance']
-
-        result = getInfosDecesMariage(infosEnfant, enfant, 'dateMariage', 'x')
-        infosEnfant = result['tableauString']
-
-        if 'dateMariage' in result['objet']:
-            enfant['dateMariage'] = result['objet']['dateMariage']
-
-        else:
-
-            result = trouveDateKey(infosEnfant, enfant, 'dateNaissance')
-            infosEnfant = result['tableauString']
-            if result['value'] != '':
-                enfant[result['key']] = result['value']
-        enfant['Prenom'] = ' '.join(infosEnfant)
-
+        enfant = enfantFromString(enfantString)
         listeEnfantFinale.append(enfant)
     return listeEnfantFinale
 
 
 
-def cleanString(s):
-    result = s.split(' ')
-    while '' in  result:
-        result.remove('')
-
-    for i in range(len(result)):
-        onlyX = True
-        if 'X' in result[i]:
-            for x in result[i]:
-                if x != 'X':
-                    onlyX = False
-        if onlyX:
-            result[i] = result[i].lower()
-    return result
 
 def parseConjoint(s):
     conjoint = {}
@@ -301,7 +126,7 @@ def convertirBase(racine):
                 elif sousElement.tag == 'DMariage':
                     personne['DateMariage'] = formatDate(sousElement.text)
                 elif sousElement.tag == 'DNaissance':
-                    personne['DateNaissance'] = formatDate(sousElement.text)
+                    personne['dateNaissance'] = formatDate(sousElement.text)
                 elif sousElement.tag == 'DDeces':
                     personne['DateDeces'] = formatDate(sousElement.text)
                 elif sousElement.tag == 'Enregist':
@@ -311,17 +136,17 @@ def convertirBase(racine):
                 elif sousElement.tag == 'Profession':
                     if sousElement.text[0] == '-' or sousElement.text[0] == '+':
                         personne['Profession'] = sousElement.text[1:]
-                elif sousElement.tag == 'Conj':
-                    nombreConjoints = nombreConjoints + 1
-                    conjoint = parseConjoint(sousElement.text)
-                    conjoints.append(conjoint)
-                elif sousElement.tag == 'Conjoint2':
-                    nombreConjoints = nombreConjoints + 1
-                    infosConjoint = sousElement.text.split('\n')
-                    for item in infosConjoint:
-                        nombreConjoints = nombreConjoints + 1
-                        conjoint = parseConjoint(item)
-                        conjoints.append(conjoint)
+                # elif sousElement.tag == 'Conj':
+                #     nombreConjoints = nombreConjoints + 1
+                #     conjoint = parseConjoint(sousElement.text)
+                #     conjoints.append(conjoint)
+                # elif sousElement.tag == 'Conjoint2':
+                #     nombreConjoints = nombreConjoints + 1
+                #     infosConjoint = sousElement.text.split('\n')
+                #     for item in infosConjoint:
+                #         nombreConjoints = nombreConjoints + 1
+                #         conjoint = parseConjoint(item)
+                #         conjoints.append(conjoint)
                 elif sousElement.tag == 'Enfants':
                     text = sousElement.text
                     personne['enfants'] = parseEnfants(text)
@@ -345,13 +170,11 @@ def retrouverEnfant(jsonBySosa):
     for sosa, personne in jsonBySosa.items():
         sosaFils = personne.getSonSosa()
         if sosa != sosaFils:
-            fils = jsonBySosa[sosaFils]
+            fils = Enfant()
+            fils.setJson(jsonBySosa[sosaFils])
             personne.addAine(fils)
             result[sosa] = personne
     return result
-
-
-
 def affichage(arbre, personnePrincipale):
     fenetre = Tk()
     fenetre['bg']='white'
@@ -470,7 +293,6 @@ def main():
     sauvegardeBasePersonne(result, 'data/baseDeDonneeBySosa.json')
 
     # result = openBaseBySosa('data/baseDeDonneeBySosa.json')
-    # print(result[2])
     # affichage(result, result[2])
 
 if __name__ == "__main__":

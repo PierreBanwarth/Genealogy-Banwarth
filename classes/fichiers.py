@@ -40,7 +40,7 @@ def sauvegardeBase(jsonFinal, filename):
 def sauvegardeBasePersonne(result, filename):
     finalJson = {}
     for sosa, personne in result.items():
-        finalJson[sosa] = personne.toJson()
+        finalJson[sosa] = personne.toJSON()
     sauvegardeBase(finalJson,filename)
 
 def openBase(filename):

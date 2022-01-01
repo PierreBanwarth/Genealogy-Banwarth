@@ -69,8 +69,8 @@ class Personne:
             resultat = 0
         return int(resultat)
 
-    def __init__(self, json):
 
+    def __init__(self, json):
         if 'Aine' in json:
             self.Branche = json['Branche']
         else:
@@ -173,6 +173,7 @@ class Personne:
             self.enfants = json['enfants']
         else:
             self.enfants = []
+
         self.getRegnes()
         self.getAnneeNaissance()
 
@@ -191,8 +192,8 @@ class Personne:
         if len(self.enfants)>0:
             return 'Sosa' in self.enfants[0] and self.enfants[0]['Sosa']
 
-    def addAine(self, personne):
-        self.enfants.insert(0,personne.getInfoHeritier())
+    def addAine(self, enfant):
+        self.enfants.insert(0,enfant)
 
     def getInfoHeritier(self):
         result = {}
@@ -267,7 +268,10 @@ class Personne:
         =====================================
         """ % (particule, self.Nom, self.Prenom, self.DateNaissance, self.Sosa )
 
-    def toJson(self):
+    def toJSON(self):
+        enfants = []
+        for item in self.enfants:
+            enfants.append(item.toJSON())
         return {
             'Nom' : self.Nom,
             'Prenom' : self.Prenom,
@@ -286,5 +290,5 @@ class Personne:
             'Religion' : self.Religion,
             'Sosa' : self.Sosa,
             'conjoints' : self.conjoints,
-            'enfants' : self.enfants,
+            'enfants' : enfants,
         }
