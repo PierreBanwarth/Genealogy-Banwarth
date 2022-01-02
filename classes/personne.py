@@ -17,6 +17,8 @@ def openBaseBySosa(filename):
 
 class Personne:
     def __init__(self):
+        self.Enfants = []
+        self.Conjoints = []
         self.Branche = None
         self.Aine = None
         self.Cadet = None
@@ -26,7 +28,6 @@ class Personne:
         self.DateMariage = None
         self.DateDeces = None
         self.DateNaissance = None
-
         self.LieuMariage = None
         self.LieuNaissance = None
         self.LieuDeces = None
@@ -35,8 +36,6 @@ class Personne:
         self.Religion = None
         self.Nom = None
         self.Male = True
-        self.Conjoints = None
-        self.Enfants = []
         self.Cadet = None
         self.Note = None
         self.Aine = None
@@ -46,6 +45,9 @@ class Personne:
 
     def getPrenom(self):
         return self.Prenom
+
+    def setConjoint(self, conjoints):
+        self.Conjoints = conjoints
 
     def setConjointDecedesDeces(self, s):
         self.ConjointDecedesDeces = s
@@ -149,19 +151,10 @@ class Personne:
             print(date)
 
     def getAnneeNaissance(self):
-        resultat = ''
         if self.DateNaissance != None:
-            if self.DateNaissance and self.DateNaissance != None:
-                resultat = self.DateNaissance.split('/')[2]
-            elif self.DateNaissanceApproximative:
-                if len(self.DateNaissanceApproximative) == 4:
-                    resultat = self.DateNaissanceApproximative
-                elif len(self.DateNaissanceApproximative.split('/')) ==3:
-                    resultat = self.DateNaissanceApproximative.split('/')[3]
+            return int(self.DateNaissance.getAnnee())
         else:
-            resultat = 0
-        return int(resultat)
-
+            return None
 
 
 
@@ -218,7 +211,6 @@ class Personne:
                 return DictLieux['pays']+' '+DictLieux['ville']
             else:
                 return DictLieux['ville']+' '+ DictLieux['departementName']+'('+DictLieux['departement']+')'
-
     def getLieuDeces(self):
         if self.LieuDeces != None:
             with open('data/lieux.json') as json_file:
@@ -230,7 +222,6 @@ class Personne:
                     return DictLieux['ville']+' '+ DictLieux['departementName']+'('+DictLieux['departement']+')'
         else:
             return self.LieuDeces
-
     def getLieuMariage(self):
         if self.LieuMariage != None:
             with open('data/lieux.json') as json_file:
@@ -255,7 +246,6 @@ class Personne:
         Sosa : %s
         =====================================
         """ % (particule, self.Nom, self.Prenom, self.DateNaissance, self.Sosa )
-
     def toJSON(self):
         enfants = []
         for item in self.Enfants:
@@ -307,70 +297,70 @@ class Personne:
             result['Aine'] = self.Aine
         if self.LieuDeces !=None:
             result['LieuDeces'] = self.LieuDeces
-            
+
         if self.LieuNaissance !=None:
             result['LieuNaissance'] = self.LieuNaissance
 
         if self.LieuMariage !=None:
             result['LieuMariage'] = self.LieuMariage
-
         if self.AgeDeces !=None:
             result['AgeDeces'] = self.AgeDeces
         if self.ConjointDecedesDeces !=None:
             result['ConjointDecedesDeces'] = self.ConjointDecedesDeces
         return result
     def setPersonne(self, json):
-            if 'Sosa' in json:
-                self.Sosa = json['Sosa']
-            if 'Note' in json:
-                self.Note = json['Note']
-            if 'Enfants' in json:
-                self.Enfants = enfantFromJson(json['Enfants'])
-            if 'Religion' in json:
-                self.Religion = json['Religion']
-            if 'Profession' in json:
-                self.Profession = json['Profession']
-            if 'PerePresentMariage' in json:
-                self.PerePresentMariage = json['PerePresentMariage']
-            if 'Aine' in json:
-                self.Aine = json['Aine']
-            if 'Branche' in json:
-                self.Branche = json['Branche']
-            if 'Cadet' in json:
-                self.Cadet = json['Cadet']
-            if 'Nom' in json:
-                self.Nom = json['Nom']
-            if 'Prenom' in json:
-                self.Prenom = json['Prenom']
-            if 'LieuNaissance' in json:
-                self.LieuNaissance = json['LieuNaissance']
-            if 'LieuMariage' in json:
-                self.LieuMariage = json['LieuMariage']
-            if 'MerePresenteMariage' in json:
-                self.MerePresenteMariage = json['MerePresenteMariage']
-            if 'Conjoint' in json:
-                self.Conjoint = json['Conjoint']
-            if 'DateNaissance' in json:
-                self.DateNaissance = Date({'key':'DateNaissance', 'value' :json['DateNaissance']})
-            if 'DateMariage' in json:
-                self.DateMariage = Date({'key':'DateMariage', 'value' :json['DateMariage']})
-            if 'DateDeces' in json:
-                self.DateDeces = Date({'key':'DateDeces', 'value' :json['DateDeces']})
-            if 'Note' in json:
-                self.Note = json['Note']
-            if 'LieuDeces' in json:
-                self.LieuDeces = json['LieuDeces']
-            if 'LieuMariage' in json:
-                self.LieuMariage = json['LieuMariage']
-            if 'LieuNaissance' in json:
-                self.LieuNaissance = json['LieuNaissance']
-
-
-            if 'Cadet' in json:
-                self.Cadet = json['Cadet']
-            if 'Aine' in json:
-                self.Aine = json['Aine']
-            if 'AgeDeces' in json:
-                self.AgeDeces = json['AgeDeces']
-            if 'ConjointDecedesDeces' in json:
-                self.ConjointDecedesDeces = json['ConjointDecedesDeces']
+        if 'Sosa' in json:
+            self.Sosa = json['Sosa']
+        if 'Note' in json:
+            self.Note = json['Note']
+        if 'Enfants' in json:
+            self.Enfants = enfantFromJson(json['Enfants'])
+        if 'Religion' in json:
+            self.Religion = json['Religion']
+        if 'Profession' in json:
+            self.Profession = json['Profession']
+        if 'PerePresentMariage' in json:
+            self.PerePresentMariage = json['PerePresentMariage']
+        if 'Aine' in json:
+            self.Aine = json['Aine']
+        if 'Branche' in json:
+            self.Branche = json['Branche']
+        if 'Cadet' in json:
+            self.Cadet = json['Cadet']
+        if 'Nom' in json:
+            self.Nom = json['Nom']
+        if 'Prenom' in json:
+            self.Prenom = json['Prenom']
+        if 'LieuNaissance' in json:
+            self.LieuNaissance = json['LieuNaissance']
+        if 'LieuMariage' in json:
+            self.LieuMariage = json['LieuMariage']
+        if 'MerePresenteMariage' in json:
+            self.MerePresenteMariage = json['MerePresenteMariage']
+        if 'Conjoint' in json:
+            self.Conjoint = json['Conjoint']
+        if 'DateNaissance' in json:
+            self.DateNaissance = Date({'key':'DateNaissance', 'value' :json['DateNaissance']})
+        if 'DateMariage' in json:
+            self.DateMariage = Date({'key':'DateMariage', 'value' :json['DateMariage']})
+        if 'DateDeces' in json:
+            self.DateDeces = Date({'key':'DateDeces', 'value' :json['DateDeces']})
+        if 'Note' in json:
+            self.Note = json['Note']
+        if 'LieuDeces' in json:
+            self.LieuDeces = json['LieuDeces']
+        if 'LieuMariage' in json:
+            self.LieuMariage = json['LieuMariage']
+        if 'LieuNaissance' in json:
+            self.LieuNaissance = json['LieuNaissance']
+        if 'Conjoints' in json:
+            self.Conjoints = json['Conjoints']
+        if 'Cadet' in json:
+            self.Cadet = json['Cadet']
+        if 'Aine' in json:
+            self.Aine = json['Aine']
+        if 'AgeDeces' in json:
+            self.AgeDeces = json['AgeDeces']
+        if 'ConjointDecedesDeces' in json:
+            self.ConjointDecedesDeces = json['ConjointDecedesDeces']
+        return self

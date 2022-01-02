@@ -35,7 +35,6 @@ def enfantFromString(enfantString):
 
 def enfantFromJson(json):
     enfants = []
-    print(json)
     if len(json)>0:
         for item in json:
             enfant = Enfant()
@@ -69,7 +68,14 @@ class Enfant:
 
     def setDateNaissance(self, json):
         self.DateNaissance = Date(json)
+    def getDateNaissance(self):
+        return self.DateNaissance
+    def getAnneeNaissance(self):
+        if self.DateNaissance != None:
+            if self.DateNaissance.getAnnee() != None:
 
+                return int(self.DateNaissance.getAnnee())
+        return None
     def setDateDeces(self, json):
         self.DateDeces = Date(json)
 

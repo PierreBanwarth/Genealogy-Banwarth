@@ -9,8 +9,11 @@ from classes.enfant import *
 from classes.personneLabel import PersonneLabel
 from classes.utils import *
 from classes.fichiers import *
-
+import collections
 from functools import partial
+
+
+import matplotlib.pyplot as plt
 
 lieux = []
 def parseListeEnfants(s):
@@ -23,7 +26,6 @@ def parseListeEnfants(s):
     for enfantString in listeEnfants:
         enfant = enfantFromString(enfantString)
         listeEnfantFinale.append(enfant)
-    print(listeEnfantFinale)
     return listeEnfantFinale
 
 
@@ -33,19 +35,22 @@ def parseConjoint(s):
     conjoint = {}
     infosConjoint = cleanString(s)
     TrouveDate = False
-    result = getInfosDecesMariage(infosConjoint, conjoint, 'dateDeces', '+')
-    infosConjoint = result['tableauString']
-    conjoint = result['objet']
+    resultat = getInfosDecesMariage(infosConjoint, 'dateDeces', '+')
+    infosConjoint = resultat['tableauString']
+    if resultat['resultat']['value'] != None:
+        print(resultat)
+        conjoint['dateDeces'] = resultat['resultat']['value']
 
-    result = getInfosDecesMariage(infosConjoint, conjoint, 'dateNaissance', 'o')
+    resultat = getInfosDecesMariage(infosConjoint, 'dateNaissance', 'o')
+    if resultat['resultat']['value'] != None:
+        print(resultat)
+        conjoint['dateNaissance'] = resultat['resultat']['value']
 
-    infosConjoint = result['tableauString']
-    conjoint = result['objet']
-
-    result = trouveDateKey(infosConjoint, conjoint, 'dateMariage')
-    infosConjoint = result['tableauString']
-    if result['value'] != '':
-        conjoint[result['key']] = result['value']
+    resultat = trouveDateKey(infosConjoint, conjoint, 'DateMariage')
+    infosEnfant = resultat['tableauString']
+    if resultat['resultat']['value'] != None:
+        conjoint['DateMariage'] = resultat['resultat']
+        print(resultat)
 
     TrouveNom = False
     for item in infosConjoint:
@@ -108,7 +113,6 @@ def convertirBase(racine):
             if sousElement != None and sousElement.text != None and sousElement.tag != None:
                 if sousElement.tag == 'Prenom':
                     personne.setPrenom(sousElement.text)
-
                 elif sousElement.tag == 'PPM':
                     personne.setPerePresentMariage(sousElement.text)
                 elif sousElement.tag == 'PMM':
@@ -145,40 +149,30 @@ def convertirBase(racine):
                 elif sousElement.tag == 'Aine':
                     personne.setAine(sousElement.text)
                 elif sousElement.tag == ('LieuNaissance'):
-                    # JSON file
                     index = getIndexLieux(sousElement.text)
                     personne.setLieuNaissance(index)
                 elif sousElement.tag == 'LieuNaissance':
-                    # JSON file
                     index = getIndexLieux(sousElement.text)
                     personne.setLieuNaissance(index)
                 elif sousElement.tag == 'LieuDeces':
-                    # JSON file
                     index = getIndexLieux(sousElement.text)
                     personne.setLieuDeces(index)
-
                 elif sousElement.tag == 'LieuMariage':
-                    # JSON file
-
+                    index = getIndexLieux(sousElement.text)
                     personne.setLieuMariage(index)
-
-                # elif sousElement.tag == 'Conj':
-                #     nombreConjoints = nombreConjoints + 1
-                #     conjoint = parseConjoint(sousElement.text)
-                #     conjoints.append(conjoint)
-                # elif sousElement.tag == 'Conjoint2':
-                #     nombreConjoints = nombreConjoints + 1
-                #     infosConjoint = sousElement.text.split('\n')
-                #     for item in infosConjoint:
-                #         nombreConjoints = nombreConjoints + 1
-                #         conjoint = parseConjoint(item)
-                #         conjoints.append(conjoint)
+                elif sousElement.tag == 'Conj':
+                    conjoint = parseConjoint(sousElement.text)
+                    conjoints.append(conjoint)
+                elif sousElement.tag == 'Conjoint2':
+                    infosConjoint = sousElement.text.split('\n')
+                    for item in infosConjoint:
+                        conjoint = parseConjoint(item)
+                        conjoints.append(conjoint)
                 elif sousElement.tag == 'Enfants':
                     personne.setEnfants(parseListeEnfants(sousElement.text))
-                    print(personne.getEnfants())
-                elif sousElement.tag != 'Conj' and sousElement.tag != 'Conjoint2':
-                    print(sousElement.tag+'  : '+sousElement.text)
-        # personne['conjoints'] = conjoints
+                    # print(personne.getEnfants())
+
+        personne.setConjoint(conjoints)
         sosa = personne.getSosa()
         listPersonne[int(sosa)] = personne
 
@@ -196,6 +190,8 @@ def retrouverEnfant(jsonBySosa):
             personne.addAine(fils)
         result[sosa] = personne
     return result
+
+
 def affichage(arbre, personnePrincipale):
     fenetre = Tk()
     fenetre['bg']='white'
@@ -302,18 +298,48 @@ def affichage(arbre, personnePrincipale):
 
     fenetre.mainloop()
 
+def convertXMLFile():
+    arbre = ET.parse('data/table1.xml')
+    racine = arbre.getroot()
+    jsonBySosa = convertirBase(racine)
+    result = retrouverEnfant(jsonBySosa)
+    sauvegardeBasePersonne(jsonBySosa, 'data/baseDeDonneeBySosa.json')
+
+def plotRepartitionAnnuelle(result):
+    test = {}
+    for k, v in result.items():
+        year = v.getAnneeNaissance()
+        if year != None:
+            if year not in test:
+                test[int(year)] = 1
+            else:
+                test[int(year)] = test[year]+1
+        for item in v.getEnfants():
+            if item.getDateNaissance() != None:
+                year = item.getAnneeNaissance()
+                if year != None:
+                    if year not in test:
+                        test[year] = 1
+                    else:
+                        test[year] = test[year]+1
+    print(test)
+    od = collections.OrderedDict(sorted(test.items()))
+    names = []
+    values = []
+
+    for k, v in test.items():
+        names.append(k)
+        values.append(v)
+    plt.figure(figsize=(9, 3))
+    plt.bar(names, values)
+    plt.suptitle('Repartition des dates de naissance par année')
+    plt.show()
 
 
 def main():
-    arbre = ET.parse('data/table1.xml')
-    racine = arbre.getroot()
-
-    jsonBySosa = convertirBase(racine)
-    result = retrouverEnfant(jsonBySosa)
-
-    sauvegardeBasePersonne(jsonBySosa, 'data/baseDeDonneeBySosa.json')
-
+    # convertXMLFile()
     result = openBaseBySosa('data/baseDeDonneeBySosa.json')
+    plotRepartitionAnnuelle(result)
     # affichage(result, result[2])
 
 if __name__ == "__main__":
