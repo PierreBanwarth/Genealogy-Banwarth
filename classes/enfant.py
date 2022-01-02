@@ -2,6 +2,7 @@ import datetime # we will use this for date objects
 import json
 from  classes.dates import *
 from  classes.utils import *
+import random
 
 def enfantFromString(enfantString):
 
@@ -38,16 +39,19 @@ def enfantFromJson(json):
     if len(json)>0:
         for item in json:
             enfant = Enfant()
-            if 'Prenom' in json:
-                enfant.Prenom = json['Prenom']
             for key, value in item.items():
-                if 'DateNaissance' in key:
+                if 'Prenom' == key:
+                    enfant.Prenom = value
+                elif 'Sosa' == key:
+                    enfant.Sosa = value
+                elif 'DateNaissance' in key:
                     enfant.DateNaissance = Date({'key':'DateNaissance', 'value':value})
-                elif 'DateMariage'in json:
+                elif 'DateMariage'in key:
                     enfant.DateMariage = Date({'key':'DateMariage', 'value':value})
-                elif 'DateDeces'in json:
+                elif 'DateDeces'in key:
                     enfant.DateDeces = Date({'key':'DateDeces', 'value':value})
             enfants.append(enfant)
+
     return enfants
 
 
@@ -58,10 +62,11 @@ class Enfant:
         self.DateNaissance = None
         self.DateMariage = None
         self.DateDeces = None
+        self.Sosa = None
 
     def setJson(self, personne):
-
-        self.Prenom = personne.getPrenom()
+        self.Sosa = personne.getSosa()
+        self.Prenom = personne.getNom()+' '+personne.getPrenom()
         self.DateNaissance = personne.DateNaissance
         self.DateDeces = personne.DateDeces
         self.DateMariage = personne.DateMariage
@@ -92,11 +97,33 @@ class Enfant:
             string = string+' Mariage : '+str(self.DateMariage)
         return string
 
+    def getDisplayStr(self):
+        sexe = 'F'
+        if self.Sosa != None:
+            id = self.Sosa
+            if self.Sosa%2==0:
+                sexe = 'M'
+            else:
+                sexe = 'F'
+        else:
+            id = random.randrange(100000, 10000000)
+        if self.DateNaissance == None and self.DateDeces == None:
+            resultat = """%s (id=%s, %s) """ % (self.Prenom.replace(" ", "").lower(), id, sexe)
+        if self.DateNaissance != None and self.DateDeces == None:
+            resultat = """%s (id=%s, %s, birthday=%s) """ % (self.Prenom.replace(" ", "").lower(), id, sexe, self.DateNaissance)
+        if self.DateNaissance == None and self.DateDeces != None:
+            resultat = """%s (id=%s, %s, deathDay=%s) """ % (self.Prenom.replace(" ", "").lower(), id, sexe , self.DateDeces)
+        if self.DateNaissance != None and self.DateDeces != None:
+            resultat = """%s (id=%s, %s,  birthday=%s, deathDay=%s) """ % (self.Prenom.replace(" ", "").lower(), id, sexe, self.DateNaissance, self.DateDeces)
+        return resultat
+        # Louis XIV (M, birthday=1638-09-05, deathday=1715-09-01)
 
     def toJSON(self):
         result = {
             'Prenom' : self.Prenom
         }
+        if self.Sosa != None:
+            result['Sosa'] = self.Sosa
         if self.DateNaissance != None:
             result['DateNaissance'] = str(self.DateNaissance)
         if self.DateDeces !=None:

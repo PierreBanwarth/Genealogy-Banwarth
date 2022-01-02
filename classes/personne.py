@@ -31,7 +31,7 @@ class Personne:
         self.LieuMariage = None
         self.LieuNaissance = None
         self.LieuDeces = None
-
+        self.Sexe = None
         self.Profession = None
         self.Religion = None
         self.Nom = None
@@ -45,6 +45,9 @@ class Personne:
 
     def getPrenom(self):
         return self.Prenom
+
+    def getConjoints(self):
+        return self.Conjoints
 
     def setConjoint(self, conjoints):
         self.Conjoints = conjoints
@@ -67,12 +70,18 @@ class Personne:
     def setBranche(self, s):
         self.Branche = s
 
-    def setSosa(self, s):
-        self.Sosa = int(s)
+    def setSexe(self):
+        if self.Sosa % 2 == 0:
+            self.Sexe = 'M'
+        else:
+            self.Sexe = 'F'
 
     def getSosa(self):
         return self.Sosa
 
+    def setSosa(self, s):
+        self.Sosa = int(s)
+        self.setSexe()
     def setLieuDeces(self, s):
         self.LieuDeces = s
 
@@ -156,8 +165,6 @@ class Personne:
         else:
             return None
 
-
-
     def getEnfants(self):
         return self.Enfants
 
@@ -211,6 +218,7 @@ class Personne:
                 return DictLieux['pays']+' '+DictLieux['ville']
             else:
                 return DictLieux['ville']+' '+ DictLieux['departementName']+'('+DictLieux['departement']+')'
+
     def getLieuDeces(self):
         if self.LieuDeces != None:
             with open('data/lieux.json') as json_file:
@@ -222,6 +230,15 @@ class Personne:
                     return DictLieux['ville']+' '+ DictLieux['departementName']+'('+DictLieux['departement']+')'
         else:
             return self.LieuDeces
+
+    def getConjointSosa(self):
+        if self.Sosa != None:
+            if self.Sosa % 2 == 0:
+                return self.Sosa+1
+            else:
+                return self.Sosa-1
+        else:
+            return 0
     def getLieuMariage(self):
         if self.LieuMariage != None:
             with open('data/lieux.json') as json_file:
@@ -239,13 +256,20 @@ class Personne:
             particule = 'Mr'
         else:
             particule = 'Mdme'
-        return """
-        =====================================
-        Nom : %s %s %s
-        Date de naissance : %s
-        Sosa : %s
-        =====================================
-        """ % (particule, self.Nom, self.Prenom, self.DateNaissance, self.Sosa )
+        return """ Nom : %s %s %s - Date de naissance : %s - Sosa : %s """ % (particule, self.Nom, self.Prenom, self.DateNaissance, self.Sosa )
+
+    def getDisplayStr(self):
+        if self.DateNaissance == None and self.DateDeces == None:
+            resultat = """%s %s -(id=%s, %s)- """ % (self.Nom.replace(" ", "").lower(), self.Prenom.replace(" ", ""), self.Sosa, self.Sexe)
+        if self.DateNaissance != None and self.DateDeces == None:
+            resultat = """%s %s -(id=%s, %s, birthday=%s)- """ % (self.Nom.replace(" ", "").lower(), self.Prenom.replace(" ", ""), self.Sosa, self.Sexe, self.DateNaissance)
+        if self.DateNaissance == None and self.DateDeces != None:
+            resultat = """%s %s -(id=%s, %s, deathDay=%s)- """ % (self.Nom.replace(" ", "").lower(), self.Prenom.replace(" ", ""), self.Sosa, self.Sexe , self.DateDeces)
+        if self.DateNaissance != None and self.DateDeces != None:
+            resultat = """%s %s -(id=%s, %s,  birthday=%s, deathDay=%s)- """ % (self.Nom.replace(" ", "").lower(), self.Prenom.replace(" ", ""), self.Sosa, self.Sexe, self.DateNaissance, self.DateDeces)
+        return resultat
+        # Louis XIV (M, birthday=1638-09-05, deathday=1715-09-01)
+
     def toJSON(self):
         enfants = []
         for item in self.Enfants:
@@ -308,9 +332,11 @@ class Personne:
         if self.ConjointDecedesDeces !=None:
             result['ConjointDecedesDeces'] = self.ConjointDecedesDeces
         return result
+
     def setPersonne(self, json):
         if 'Sosa' in json:
             self.Sosa = json['Sosa']
+            self.setSexe()
         if 'Note' in json:
             self.Note = json['Note']
         if 'Enfants' in json:
@@ -363,4 +389,5 @@ class Personne:
             self.AgeDeces = json['AgeDeces']
         if 'ConjointDecedesDeces' in json:
             self.ConjointDecedesDeces = json['ConjointDecedesDeces']
+
         return self

@@ -1,6 +1,8 @@
 import json
 from xml.dom import minidom
 import xml.etree.ElementTree as ET
+
+import pydot
 from tkinter import *
 
 from classes.personne import *
@@ -11,9 +13,13 @@ from classes.utils import *
 from classes.fichiers import *
 import collections
 from functools import partial
-
+import graphviz
 
 import matplotlib.pyplot as plt
+import os
+import os
+os.environ["PATH"] += os.pathsep + 'C:/Program Files/Graphviz/bin'
+
 
 lieux = []
 def parseListeEnfants(s):
@@ -38,19 +44,16 @@ def parseConjoint(s):
     resultat = getInfosDecesMariage(infosConjoint, 'dateDeces', '+')
     infosConjoint = resultat['tableauString']
     if resultat['resultat']['value'] != None:
-        print(resultat)
         conjoint['dateDeces'] = resultat['resultat']['value']
 
     resultat = getInfosDecesMariage(infosConjoint, 'dateNaissance', 'o')
     if resultat['resultat']['value'] != None:
-        print(resultat)
         conjoint['dateNaissance'] = resultat['resultat']['value']
 
     resultat = trouveDateKey(infosConjoint, conjoint, 'DateMariage')
     infosEnfant = resultat['tableauString']
     if resultat['resultat']['value'] != None:
         conjoint['DateMariage'] = resultat['resultat']
-        print(resultat)
 
     TrouveNom = False
     for item in infosConjoint:
@@ -60,9 +63,11 @@ def parseConjoint(s):
             else:
                 conjoint['Nom'] = str(item)
             infosConjoint.remove(item)
-
+    # if 'Nom' in conjoint:
+    #     print(conjoint['Nom'])
     if len(infosConjoint) == 1:
         conjoint['Prenom']  = ' '.join(infosConjoint)
+
     elif infosConjoint == ['xxx', 'xxxxx']:
         conjoint['Prenom'] = 'Inconnu'
         conjoint['Nom'] = 'Inconnu'
@@ -83,6 +88,8 @@ def parseConjoint(s):
         conjoint['Prenom'] = ' '.join(infosConjoint)
     else:
         conjoint['info'] = ' '.join(infosConjoint)
+    # if 'Prenom' in conjoint:
+    #     print(conjoint['Prenom'])
 
     return conjoint
 
@@ -98,6 +105,7 @@ def getIndexLieux(s):
         lieux.append(lieu)
     index = lieux.index(lieu)
     return index
+
 def convertirBase(racine):
     listPersonne = {}
 
@@ -190,7 +198,6 @@ def retrouverEnfant(jsonBySosa):
             personne.addAine(fils)
         result[sosa] = personne
     return result
-
 
 def affichage(arbre, personnePrincipale):
     fenetre = Tk()
@@ -304,7 +311,6 @@ def convertXMLFile():
     jsonBySosa = convertirBase(racine)
     result = retrouverEnfant(jsonBySosa)
     sauvegardeBasePersonne(jsonBySosa, 'data/baseDeDonneeBySosa.json')
-
 def plotRepartitionAnnuelle(result):
     test = {}
     for k, v in result.items():
@@ -322,7 +328,6 @@ def plotRepartitionAnnuelle(result):
                         test[year] = 1
                     else:
                         test[year] = test[year]+1
-    print(test)
     od = collections.OrderedDict(sorted(test.items()))
     names = []
     values = []
@@ -335,12 +340,40 @@ def plotRepartitionAnnuelle(result):
     plt.suptitle('Repartition des dates de naissance par année')
     plt.show()
 
+def exploreTreeDot(sosa, tree, sosaList, graph):
+    if sosa in tree:
+        personne = tree[sosa]
+        conjointSosa = personne.getConjointSosa()
+        if conjointSosa in tree:
+            conjoint = tree[conjointSosa]
+            if (conjointSosa, sosa) not in sosaList and (sosa, conjointSosa) not in sosaList:
+                sosaList.append((conjointSosa, sosa))
+
+                for item in personne.getEnfants():
+                    if item.Sosa != None:
+                        sonSosa = item.Sosa
+                        enfant = tree[sonSosa]
+                        a = enfant.getNom() + str(enfant.Sosa)
+                        b = conjoint.getNom() + str(conjoint.Sosa)
+                        c = personne.getNom() + str(personne.Sosa)
+                        graph.add_node(pydot.Node(a, shape="circle"))
+                        graph.add_node(pydot.Node(b, shape="circle"))
+                        graph.add_edge(pydot.Edge(c, a, color="blue"))
+                        graph.add_edge(pydot.Edge(b, a, color="blue"))
+        exploreTreeDot(personne.getMere(), tree, sosaList,graph)
+        exploreTreeDot(personne.getPere(), tree, sosaList,graph)
+# Louis XIV (M, birthday=1638-09-05, deathday=1715-09-01)
+
 
 def main():
     # convertXMLFile()
     result = openBaseBySosa('data/baseDeDonneeBySosa.json')
-    plotRepartitionAnnuelle(result)
-    # affichage(result, result[2])
+    # # plotRepartitionAnnuelle(result)
+    sosaList = []
+    graph = pydot.Dot("my_graph",graph_type="graph")
+    exploreTreeDot(2,result, sosaList,graph)
+    # # affichage(result, result[2])
+    graph.write_raw("output_raw.dot")
 
 if __name__ == "__main__":
     main()
