@@ -6,10 +6,7 @@ try:
 except NameError:
     to_unicode = str
 
-def getLieux():
-    with open('data/lieux.json') as json_file:
-        lieux = json.load(json_file)
-        return lieux
+
 
 def getRegnes():
     with open('data/regnes.json') as json_file:
@@ -21,10 +18,9 @@ def getAstrologie():
         astrologie = json.load(json_file)
         return astrologie
 
-def sauvegardeBaseLieux(jsonFinal):
-    sauvegardeBase(jsonFinal, 'data/lieux.json')
 
-def getRegions():
+
+def getFichierRegions():
     with open('data/departements-region.json') as json_file:
         regions = json.load(json_file)
         return regions

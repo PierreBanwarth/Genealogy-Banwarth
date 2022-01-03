@@ -2,6 +2,7 @@ import datetime # we will use this for date objects
 from tkinter import *
 from classes.personne import Personne
 
+from PIL import Image, ImageTk
 
 class PersonneLabel:
     def __init__(self, personne, labelPere, labelEnfant):
@@ -16,21 +17,36 @@ class PersonneLabel:
         self.textAge = StringVar()
         self.textProfession = StringVar()
 
-        self.labelNom = Label(labelPere, textvariable=self.textNom)
-        self.labelNaissance = Label(labelPere, textvariable=self.textDateNaissance)
-        self.labelLieuNaissance = Label(labelPere, textvariable=self.textLieuNaissance)
-        self.labelDeces = Label(labelPere, textvariable=self.textDeces)
-        self.labelLieuDeces = Label(labelPere, textvariable=self.textLieuDeces)
-        self.labelAge = Label(labelPere, textvariable=self.textDateNaissance)
-        self.labelProfession = Label(labelPere, textvariable=self.textProfession)
+        self.labelNom = Label(labelPere, textvariable=self.textNom, bg='white')
+        self.labelNaissance = Label(labelPere, textvariable=self.textDateNaissance, bg='white')
+        self.labelLieuNaissance = Label(labelPere, textvariable=self.textLieuNaissance, bg='white')
+        self.labelDeces = Label(labelPere, textvariable=self.textDeces, bg='white')
+        self.labelLieuDeces = Label(labelPere, textvariable=self.textLieuDeces, bg='white')
+        self.labelAge = Label(labelPere, textvariable=self.textDateNaissance, bg='white')
+        self.labelProfession = Label(labelPere, textvariable=self.textProfession, bg='white')
         self.enfantsLabel = []
         self.enfantsText = []
+
+        self.imageFrame = Frame(labelPere, width=800, height=600, bg='blue')
+        self.imageFrame.grid_propagate(0)
+        self.imageFrame.pack_propagate(0)
+
+        file = 'data/png/'+str(personne.Sosa)+'-output.png'
+        image = Image.open(file)
+        zoom = 0.45
+        #multiple image size by zoom
+        pixels_x, pixels_y = tuple([int(zoom * x)  for x in image.size])
+        img = ImageTk.PhotoImage(image.resize((pixels_x, pixels_y)))
+        self.labelImage = Label(self.imageFrame, image=img, bg='white')
+        self.labelImage.image = img
+        self.labelImage.pack()
+
 
         for index, item in enumerate(personne.getEnfants()):
             self.enfantsText.append(StringVar())
             self.enfantsLabel.append(Label(self.labelEnfant, textvariable=self.enfantsText[index]))
 
-        self.set(personne)
+        self.set(personne, labelPere)
 
 
     def pack(self):
@@ -44,28 +60,46 @@ class PersonneLabel:
         for item in self.enfantsLabel:
             item.pack()
 
-    def set(self, personne):
+
+        self.labelImage.pack()
+        self.imageFrame.pack()
+
+    def set(self, personne, labelPere):
         for item in self.enfantsLabel:
             item.destroy()
-
+        self.labelImage.destroy()
         self.enfantsLabel = []
         self.enfantsText = []
+
+        file = 'data/png/'+str(personne.Sosa)+'-output.png'
+        image = Image.open(file)
+        zoom = 0.45
+        #multiple image size by zoom
+        pixels_x, pixels_y = tuple([int(zoom * x)  for x in image.size])
+        img = ImageTk.PhotoImage(image.resize((pixels_x, pixels_y)))
+        self.labelImage = Label(self.imageFrame, image=img, bg='white')
+        self.labelImage.image = img
+        self.labelImage.pack()
 
         for index, item in enumerate(personne.getEnfants()):
             self.enfantsText.append(StringVar())
             self.enfantsLabel.append(Label(self.labelEnfant, textvariable=self.enfantsText[index]))
 
         self.textNom.set('Nom :'+personne.Nom +' '+personne.Prenom)
-        self.textDateNaissance.set('Date de Naissance :'+personne.DateNaissance)
-        self.textLieuNaissance.set('Lieu de Naissance :'+personne.getLieuNaissance())
-        self.textDeces.set('Date de deces :'+personne.DateDeces)
-        self.textLieuDeces.set('Lieu de deces :'+personne.getLieuDeces())
-        self.textAge.set('Age :'+personne.getAge())
-        self.textProfession.set('Profession'+personne.Profession)
+        self.textDateNaissance.set('Date de Naissance : '+str(personne.DateNaissance))
+        if personne.LieuNaissance != None:
+            self.textLieuNaissance.set('Lieu de Naissance : '+personne.LieuNaissance)
+        self.textDeces.set('Date de deces : '+str(personne.DateDeces))
+        if personne.LieuDeces != None:
+            self.textLieuDeces.set('Lieu de deces : '+personne.LieuDeces)
+        if personne.Profession != None:
+            self.textAge.set('Age : '+personne.getAge())
+        if personne.Profession != None:
+            self.textProfession.set('Profession : '+personne.Profession)
 
         for index, item in enumerate(personne.getEnfants()):
-            if 'Prenom' in item:
-                self.enfantsText[index].set(item['Prenom'])
+            if personne.getPrenom() != None:
+                self.enfantsText[index].set(personne.getPrenom())
             else:
-                self.enfantsText[index].set(item['nom']+' '+item['prenom'])
+                self.enfantsText[index].set(personne.getPrenom())
         self.pack()

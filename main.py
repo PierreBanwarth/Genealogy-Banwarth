@@ -93,18 +93,7 @@ def parseConjoint(s):
 
     return conjoint
 
-def getIndexLieux(s):
-    regions = getRegions()
-    lieu = getLieuxFromString(s)
-    if 'departement' in lieu:
-        for region in regions:
-            if str(region['num_dep']) == str(lieu['departement']):
-                lieu['departementName'] = region['dep_name']
-                lieu['regionName'] = region['region_name']
-    if lieu not in lieux:
-        lieux.append(lieu)
-    index = lieux.index(lieu)
-    return index
+
 
 def convertirBase(racine):
     listPersonne = {}
@@ -156,18 +145,15 @@ def convertirBase(racine):
                     personne.setNote(sousElement.text)
                 elif sousElement.tag == 'Aine':
                     personne.setAine(sousElement.text)
-                elif sousElement.tag == ('LieuNaissance'):
-                    index = getIndexLieux(sousElement.text)
-                    personne.setLieuNaissance(index)
+
                 elif sousElement.tag == 'LieuNaissance':
-                    index = getIndexLieux(sousElement.text)
-                    personne.setLieuNaissance(index)
+                    personne.setLieuNaissance(sousElement.text)
                 elif sousElement.tag == 'LieuDeces':
-                    index = getIndexLieux(sousElement.text)
-                    personne.setLieuDeces(index)
+                    personne.setLieuDeces(sousElement.text)
                 elif sousElement.tag == 'LieuMariage':
-                    index = getIndexLieux(sousElement.text)
-                    personne.setLieuMariage(index)
+                    personne.setLieuMariage(sousElement.text)
+
+
                 elif sousElement.tag == 'Conj':
                     conjoint = parseConjoint(sousElement.text)
                     conjoints.append(conjoint)
@@ -184,7 +170,6 @@ def convertirBase(racine):
         sosa = personne.getSosa()
         listPersonne[int(sosa)] = personne
 
-    sauvegardeBaseLieux(lieux)
     return listPersonne
 
 def retrouverEnfant(jsonBySosa):
@@ -227,7 +212,7 @@ def affichage(arbre, personnePrincipale):
     Photo = LabelFrame(Millieu, text='photo', borderwidth=2, relief=GROOVE)
     Photo.pack(side=LEFT)
 
-    Personnage = LabelFrame(Millieu,  text='Personne', borderwidth=2, relief=GROOVE)
+    Personnage = Frame(Millieu, borderwidth=2, relief=GROOVE, bg='white')
     Personnage.pack(side=LEFT, fill=BOTH,expand=1)
     Mariage = LabelFrame(Bas, text='Mariage(s)', borderwidth=2, relief=GROOVE)
     Mariage.pack(side=LEFT, fill=BOTH,expand=1)
@@ -244,7 +229,7 @@ def affichage(arbre, personnePrincipale):
 
     def getFather(personnePrincipale, arbre):
         pere = arbre[personnePrincipale.getPere()]
-        personneLabel.set(pere)
+        personneLabel.set(pere, Personnage)
 
         buttonFather.configure(command=partial(getFather, pere, arbre))
         buttonMother.configure(command=partial(getMother, pere, arbre))
@@ -252,7 +237,7 @@ def affichage(arbre, personnePrincipale):
 
     def getMother(personnePrincipale, arbre):
         mere = arbre[personnePrincipale.getMere()]
-        personneLabel.set(mere)
+        personneLabel.set(mere, Personnage)
 
         buttonMother.configure(command=partial(getMother, mere, arbre))
         buttonFather.configure(command=partial(getFather, mere, arbre))
@@ -261,7 +246,7 @@ def affichage(arbre, personnePrincipale):
     def getHeritier(personnePrincipale, arbre):
 
         heritier = arbre[personnePrincipale.getHeritier()]
-        personneLabel.set(heritier)
+        personneLabel.set(heritier, Personnage)
 
         buttonFather.configure(command=partial(getFather, heritier, arbre))
         buttonMother.configure(command=partial(getMother, heritier, arbre))
@@ -289,7 +274,6 @@ def affichage(arbre, personnePrincipale):
     Label(Pere, text="Pere").pack(padx=10, pady=10)
 
     Label(Photo, text="Photo").pack(padx=10, pady=10)
-    Label(Personnage, text="Personnage").pack(padx=10, pady=10)
 
     Label(Mariage, text="Mariage").pack(padx=10, pady=10)
     Label(Enfant, text="Enfant").pack(padx=10, pady=10)
@@ -311,6 +295,7 @@ def convertXMLFile():
     jsonBySosa = convertirBase(racine)
     result = retrouverEnfant(jsonBySosa)
     sauvegardeBasePersonne(jsonBySosa, 'data/baseDeDonneeBySosa.json')
+
 def plotRepartitionAnnuelle(result):
     test = {}
     for k, v in result.items():
@@ -340,51 +325,47 @@ def plotRepartitionAnnuelle(result):
     plt.suptitle('Repartition des dates de naissance par année')
     plt.show()
 
-def getForme(personne):
-    if personne.Sexe == 'F':
+def getForme(var):
+    if var % 2 == 0:
         return "square"
     else:
         return "circle"
 
-def exploreTreeDot(sosa, tree, sosaList, graph):
-    if sosa in tree:
+def getColor(var):
+    if var % 2 == 0:
+        return "azure"
+    else:
+        return "navajowhite"
+
+def exploreTreeDot(sosa, idOld, tree, sosaList, graph,i):
+    if sosa in tree and i<3:
         personne = tree[sosa]
-        conjointSosa = personne.getConjointSosa()
-        if conjointSosa in tree:
-            conjoint = tree[conjointSosa]
-            if (conjointSosa, sosa) not in sosaList and (sosa, conjointSosa) not in sosaList:
-                sosaList.append((conjointSosa, sosa))
+        id = personne.getNom() + str(personne.Sosa)
+        labelPersonne = personne.getDisplayStr()
+        shapePersonne = getForme(personne.Sosa)
+        shapeColor = getColor(personne.Sosa)
+        graph.add_node(pydot.Node(id, label=labelPersonne , style='filled', fontsize='16', shape=shapePersonne, fillcolor=shapeColor))
 
-                for item in personne.getEnfants():
-                    if item.Sosa != None:
-                        sonSosa = item.Sosa
-                        enfant = tree[sonSosa]
-                        a = enfant.getNom() + str(enfant.Sosa)
-                        b = conjoint.getNom() + str(conjoint.Sosa)
-                        c = personne.getNom() + str(personne.Sosa)
+        if i >0 and idOld != '':
+            graph.add_edge(pydot.Edge(id, idOld, arrows=True))
 
-                        graph.add_node(pydot.Node(a, label=enfant.getDisplayStr(), shape=getForme(enfant)))
-                        graph.add_node(pydot.Node(b, label=conjoint.getDisplayStr(), shape=getForme(conjoint)))
-                        graph.add_edge(pydot.Edge(c, a))
-                        graph.add_edge(pydot.Edge(b, a))
-
-        exploreTreeDot(personne.getMere(), tree, sosaList,graph)
-        exploreTreeDot(personne.getPere(), tree, sosaList,graph)
+        exploreTreeDot(personne.getMere(), id, tree, sosaList,graph, i+1)
+        exploreTreeDot(personne.getPere(), id, tree, sosaList,graph, i+1)
 # Louis XIV (M, birthday=1638-09-05, deathday=1715-09-01)
 def plotPngForThirdGen(tree):
-    for i in range(128,256):
-        if i in tree:
-            sosaList = []
-            graph = pydot.Dot("my_graph",graph_type="graph")
-            exploreTreeDot(i,tree, sosaList,graph)
-            # # affichage(result, result[2])
-            graph.write_png('data/png/'+str(i)+'-output.png')
+    for i in tree:
+        print(i)
+        sosaList = []
+        graph = pydot.Dot("my_graph",graph_type="graph", fontsize="16")
+        exploreTreeDot(i,'',tree, sosaList,graph,0)
+        # # affichage(result, result[2])
+        graph.write_png('data/png/'+str(i)+'-output.png')
 def main():
     # convertXMLFile()
-    tree = openBaseBySosa('data/baseDeDonneeBySosa.json')
-    # # plotRepartitionAnnuelle(result)
-    plotPngForThirdGen(tree)
+    arbre = openBaseBySosa('data/baseDeDonneeBySosa.json')
+    # plotRepartitionAnnuelle(result)
+    # plotPngForThirdGen(arbre)
 
-
+    affichage(arbre, arbre[2])
 if __name__ == "__main__":
     main()

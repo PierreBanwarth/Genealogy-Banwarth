@@ -3,6 +3,7 @@ import json
 from  classes.fichiers import *
 from classes.dates import *
 from classes.enfant import *
+from classes.lieux import *
 astrologie = getAstrologie()
 regnes = getRegnes()
 
@@ -82,14 +83,15 @@ class Personne:
     def setSosa(self, s):
         self.Sosa = int(s)
         self.setSexe()
+
     def setLieuDeces(self, s):
-        self.LieuDeces = s
+        self.LieuDeces = Lieu(s)
 
     def setLieuMariage(self, s):
-        self.LieuMariage = s
+        self.LieuMariage = Lieu(s)
 
     def setLieuNaissance(self, s):
-        self.LieuNaissance = s
+        self.LieuNaissance = Lieu(s)
 
     def setPerePresentMariage(self, s):
         self.PerePresentMariage = s
@@ -208,29 +210,6 @@ class Personne:
     def getAge(self):
         return 'Todo calcul age'
 
-    def getLieuNaissance(self):
-        if self.LieuNaissance == None:
-            return None
-        else:
-            lieux = getLieux()
-            DictLieux = lieux[int(self.LieuNaissance)]
-            if 'pays' in DictLieux:
-                return DictLieux['pays']+' '+DictLieux['ville']
-            else:
-                return DictLieux['ville']+' '+ DictLieux['departementName']+'('+DictLieux['departement']+')'
-
-    def getLieuDeces(self):
-        if self.LieuDeces != None:
-            with open('data/lieux.json') as json_file:
-                lieux = json.load(json_file)
-                DictLieux = lieux[int(self.LieuDeces)]
-                if 'pays' in DictLieux:
-                    return DictLieux['pays']+' '+DictLieux['ville']
-                else:
-                    return DictLieux['ville']+' '+ DictLieux['departementName']+'('+DictLieux['departement']+')'
-        else:
-            return self.LieuDeces
-
     def getConjointSosa(self):
         if self.Sosa != None:
             if self.Sosa % 2 == 0:
@@ -239,17 +218,7 @@ class Personne:
                 return self.Sosa-1
         else:
             return 0
-    def getLieuMariage(self):
-        if self.LieuMariage != None:
-            with open('data/lieux.json') as json_file:
-                lieux = json.load(json_file)
-                DictLieux = lieux[int(self.LieuMariage)]
-                if 'pays' in DictLieux:
-                    return DictLieux['pays']+' '+DictLieux['ville']
-                else:
-                    return DictLieux['ville']+' '+ DictLieux['departementName']+'('+DictLieux['departement']+')'
-        else:
-            self.lieuMariage
+
 
     def __str__(self):
         if self.Male:
@@ -260,13 +229,13 @@ class Personne:
 
     def getDisplayStr(self):
         if self.DateNaissance == None and self.DateDeces == None:
-            resultat = """%s %s \n(%s) """ % (self.Nom, self.Prenom, self.Sosa)
+            resultat = """%s %s\nSosa : %s """ % (self.Nom, self.Prenom, self.Sosa)
         if self.DateNaissance != None and self.DateDeces == None:
-            resultat = """%s %s \n(%s, Date de Naissance = %s) """ % (self.Nom, self.Prenom, self.Sosa, self.DateNaissance)
+            resultat = """%s %s\nSosa : %s\nDate de Naissance = %s """ % (self.Nom, self.Prenom, self.Sosa, self.DateNaissance)
         if self.DateNaissance == None and self.DateDeces != None:
-            resultat = """%s %s \n(%s, Date de Deces = %s) """ % (self.Nom, self.Prenom, self.Sosa , self.DateDeces)
+            resultat = """%s %s\nSosa : %s\nDate de Deces = %s """ % (self.Nom, self.Prenom, self.Sosa , self.DateDeces)
         if self.DateNaissance != None and self.DateDeces != None:
-            resultat = """%s %s \n(%s,  Date de Naissance = %s, Date de Deces = %s) """ % (self.Nom, self.Prenom, self.Sosa, self.DateNaissance, self.DateDeces)
+            resultat = """%s %s\nSosa : %s\nDate de Naissance = %s, \nDate de Deces = %s """ % (self.Nom, self.Prenom, self.Sosa, self.DateNaissance, self.DateDeces)
         return resultat
         # Louis XIV (M, birthday=1638-09-05, deathday=1715-09-01)
 
@@ -299,34 +268,33 @@ class Personne:
             result['Nom'] = self.Nom
         if self.Prenom != None:
             result['Prenom'] = self.Prenom
+
         if self.LieuNaissance != None:
-            result['LieuNaissance'] = self.LieuNaissance
+            result['LieuNaissance'] = str(self.LieuNaissance.toJSON())
         if self.LieuMariage != None:
-            result['LieuMariage'] = self.LieuMariage
+            result['LieuMariage'] = str(self.LieuMariage.toJSON())
+        if self.LieuDeces !=None:
+            result['LieuDeces'] = str(self.LieuDeces.toJSON())
+
         if self.MerePresenteMariage != None:
             result['MerePresenteMariage'] = self.MerePresenteMariage
         if self.Conjoints != None:
             result['Conjoint'] = self.Conjoints
+
         if self.DateNaissance != None:
             result['DateNaissance'] = str(self.DateNaissance)
         if self.DateMariage != None:
             result['DateMariage'] = str(self.DateMariage)
         if self.DateDeces !=None:
             result['DateDeces'] = str(self.DateDeces)
+
         if self.Note !=None:
             result['Note'] = self.Note
         if self.Cadet !=None:
             result['Cadet'] = self.Cadet
         if self.Aine !=None:
             result['Aine'] = self.Aine
-        if self.LieuDeces !=None:
-            result['LieuDeces'] = self.LieuDeces
 
-        if self.LieuNaissance !=None:
-            result['LieuNaissance'] = self.LieuNaissance
-
-        if self.LieuMariage !=None:
-            result['LieuMariage'] = self.LieuMariage
         if self.AgeDeces !=None:
             result['AgeDeces'] = self.AgeDeces
         if self.ConjointDecedesDeces !=None:

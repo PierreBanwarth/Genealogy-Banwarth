@@ -19,6 +19,7 @@ def formatShortDate(s):
         else:
             mois = tab[1]
         return jour+'/'+mois+'/'+tab[2]
+        
 def goodFormatDate(s):
     return len(s.split('/')) == 3  and len(s.split('/')[0]) == 2 and len(s.split('/')[1]) == 2 and len(s.split('/')[2]) == 4
 def goodFormatDateApproximative(s):
@@ -45,27 +46,6 @@ def dateEnfantFormat(s):
         return array[0]+'/'+array[1]+'/'+array[2]
     else:
         return s
-def getLieuxFromString(s):
-    if '*' in s:
-        s = s.split('*')
-        return {
-            'departement' : s[0],
-            'ville' : s[1]
-        }
-
-    else:
-        s = s[1:]
-        s = s.split(')')
-        if s[0] == 'I':
-            pays  ='Italie'
-        if s[0] == 'D' or s[0] == 'B':
-            pays  ='Swisse'
-        if s[0] == 'S':
-            pays  ='Allemagne'
-        return {
-            'pays' : pays,
-            'ville' : s[1]
-        }
 
 def getInfosDecesMariage(tableauString, key, str):
     resultat = None

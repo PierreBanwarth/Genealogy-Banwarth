@@ -106,13 +106,13 @@ class Enfant:
                 sexe = 'F'
 
         if self.DateNaissance == None and self.DateDeces == None:
-            resultat = """%s \n(%s) """ % (self.Prenom)
+            resultat = """%s\n(%s) """ % (self.Prenom)
         if self.DateNaissance != None and self.DateDeces == None:
-            resultat = """%s \n(Date Naissance = %s) """ % (self.Prenom, self.DateNaissance)
+            resultat = """%s\nDate Naissance = %s""" % (self.Prenom, self.DateNaissance)
         if self.DateNaissance == None and self.DateDeces != None:
-            resultat = """%s \n(Date Deces = %s) """ % (self.Prenom , self.DateDeces)
+            resultat = """%s\nDate Deces = %s""" % (self.Prenom , self.DateDeces)
         if self.DateNaissance != None and self.DateDeces != None:
-            resultat = """%s \n(Date Naissance = %s, Date Deces = %s) """ % (self.Prenom, self.DateNaissance, self.DateDeces)
+            resultat = """%s\nDate Naissance = %s\nDate Deces = %s""" % (self.Prenom, self.DateNaissance, self.DateDeces)
         return resultat
         # Louis XIV (M, birthday=1638-09-05, deathday=1715-09-01)
 
