@@ -340,6 +340,12 @@ def plotRepartitionAnnuelle(result):
     plt.suptitle('Repartition des dates de naissance par année')
     plt.show()
 
+def getForme(personne):
+    if personne.Sexe == 'F':
+        return "square"
+    else:
+        return "circle"
+
 def exploreTreeDot(sosa, tree, sosaList, graph):
     if sosa in tree:
         personne = tree[sosa]
@@ -356,24 +362,29 @@ def exploreTreeDot(sosa, tree, sosaList, graph):
                         a = enfant.getNom() + str(enfant.Sosa)
                         b = conjoint.getNom() + str(conjoint.Sosa)
                         c = personne.getNom() + str(personne.Sosa)
-                        graph.add_node(pydot.Node(a, shape="circle"))
-                        graph.add_node(pydot.Node(b, shape="circle"))
-                        graph.add_edge(pydot.Edge(c, a, color="blue"))
-                        graph.add_edge(pydot.Edge(b, a, color="blue"))
+
+                        graph.add_node(pydot.Node(a, label=enfant.getDisplayStr(), shape=getForme(enfant)))
+                        graph.add_node(pydot.Node(b, label=conjoint.getDisplayStr(), shape=getForme(conjoint)))
+                        graph.add_edge(pydot.Edge(c, a))
+                        graph.add_edge(pydot.Edge(b, a))
+
         exploreTreeDot(personne.getMere(), tree, sosaList,graph)
         exploreTreeDot(personne.getPere(), tree, sosaList,graph)
 # Louis XIV (M, birthday=1638-09-05, deathday=1715-09-01)
-
-
+def plotPngForThirdGen(tree):
+    for i in range(128,256):
+        if i in tree:
+            sosaList = []
+            graph = pydot.Dot("my_graph",graph_type="graph")
+            exploreTreeDot(i,tree, sosaList,graph)
+            # # affichage(result, result[2])
+            graph.write_png('data/png/'+str(i)+'-output.png')
 def main():
     # convertXMLFile()
-    result = openBaseBySosa('data/baseDeDonneeBySosa.json')
+    tree = openBaseBySosa('data/baseDeDonneeBySosa.json')
     # # plotRepartitionAnnuelle(result)
-    sosaList = []
-    graph = pydot.Dot("my_graph",graph_type="graph")
-    exploreTreeDot(2,result, sosaList,graph)
-    # # affichage(result, result[2])
-    graph.write_raw("output_raw.dot")
+    plotPngForThirdGen(tree)
+
 
 if __name__ == "__main__":
     main()

@@ -100,21 +100,19 @@ class Enfant:
     def getDisplayStr(self):
         sexe = 'F'
         if self.Sosa != None:
-            id = self.Sosa
             if self.Sosa%2==0:
                 sexe = 'M'
             else:
                 sexe = 'F'
-        else:
-            id = random.randrange(100000, 10000000)
+
         if self.DateNaissance == None and self.DateDeces == None:
-            resultat = """%s (id=%s, %s) """ % (self.Prenom.replace(" ", "").lower(), id, sexe)
+            resultat = """%s \n(%s) """ % (self.Prenom)
         if self.DateNaissance != None and self.DateDeces == None:
-            resultat = """%s (id=%s, %s, birthday=%s) """ % (self.Prenom.replace(" ", "").lower(), id, sexe, self.DateNaissance)
+            resultat = """%s \n(Date Naissance = %s) """ % (self.Prenom, self.DateNaissance)
         if self.DateNaissance == None and self.DateDeces != None:
-            resultat = """%s (id=%s, %s, deathDay=%s) """ % (self.Prenom.replace(" ", "").lower(), id, sexe , self.DateDeces)
+            resultat = """%s \n(Date Deces = %s) """ % (self.Prenom , self.DateDeces)
         if self.DateNaissance != None and self.DateDeces != None:
-            resultat = """%s (id=%s, %s,  birthday=%s, deathDay=%s) """ % (self.Prenom.replace(" ", "").lower(), id, sexe, self.DateNaissance, self.DateDeces)
+            resultat = """%s \n(Date Naissance = %s, Date Deces = %s) """ % (self.Prenom, self.DateNaissance, self.DateDeces)
         return resultat
         # Louis XIV (M, birthday=1638-09-05, deathday=1715-09-01)
 

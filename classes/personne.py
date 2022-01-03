@@ -260,13 +260,13 @@ class Personne:
 
     def getDisplayStr(self):
         if self.DateNaissance == None and self.DateDeces == None:
-            resultat = """%s %s -(id=%s, %s)- """ % (self.Nom.replace(" ", "").lower(), self.Prenom.replace(" ", ""), self.Sosa, self.Sexe)
+            resultat = """%s %s \n(%s) """ % (self.Nom, self.Prenom, self.Sosa)
         if self.DateNaissance != None and self.DateDeces == None:
-            resultat = """%s %s -(id=%s, %s, birthday=%s)- """ % (self.Nom.replace(" ", "").lower(), self.Prenom.replace(" ", ""), self.Sosa, self.Sexe, self.DateNaissance)
+            resultat = """%s %s \n(%s, Date de Naissance = %s) """ % (self.Nom, self.Prenom, self.Sosa, self.DateNaissance)
         if self.DateNaissance == None and self.DateDeces != None:
-            resultat = """%s %s -(id=%s, %s, deathDay=%s)- """ % (self.Nom.replace(" ", "").lower(), self.Prenom.replace(" ", ""), self.Sosa, self.Sexe , self.DateDeces)
+            resultat = """%s %s \n(%s, Date de Deces = %s) """ % (self.Nom, self.Prenom, self.Sosa , self.DateDeces)
         if self.DateNaissance != None and self.DateDeces != None:
-            resultat = """%s %s -(id=%s, %s,  birthday=%s, deathDay=%s)- """ % (self.Nom.replace(" ", "").lower(), self.Prenom.replace(" ", ""), self.Sosa, self.Sexe, self.DateNaissance, self.DateDeces)
+            resultat = """%s %s \n(%s,  Date de Naissance = %s, Date de Deces = %s) """ % (self.Nom, self.Prenom, self.Sosa, self.DateNaissance, self.DateDeces)
         return resultat
         # Louis XIV (M, birthday=1638-09-05, deathday=1715-09-01)
 
