@@ -4,6 +4,9 @@ import xml.etree.ElementTree as ET
 
 import pydot
 from tkinter import *
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
+import networkx as nx
 
 from classes.personne import *
 from classes.dates import *
@@ -14,8 +17,11 @@ from classes.fichiers import *
 import collections
 from functools import partial
 import graphviz
-
+from networkx.drawing.nx_pydot import graphviz_layout
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,
+NavigationToolbar2Tk)
+
 import os
 import os
 os.environ["PATH"] += os.pathsep + 'C:/Program Files/Graphviz/bin'
@@ -185,7 +191,8 @@ def retrouverEnfant(jsonBySosa):
     return result
 
 def affichage(arbre, personnePrincipale):
-    fenetre = Tk()
+    fenetre = ttk.Window(themename="superhero")
+
     fenetre['bg']='white'
 
     # https://python.doctor/page-tkinter-interface-graphique-python-tutoriel
@@ -252,32 +259,27 @@ def affichage(arbre, personnePrincipale):
         buttonMother.configure(command=partial(getMother, heritier, arbre))
         buttonFils.configure(command=partial(getHeritier, heritier, arbre))
 
-    buttonMother = Button(
+    buttonMother = ttk.Button(
         Mere,
         text="Mere",
-        command=partial(getMother, personnePrincipale, arbre)
+        command=partial(getMother, personnePrincipale, arbre),
+        bootstyle="primary"
     )
 
-    buttonFather = Button(
+    buttonFather = ttk.Button(
         Pere,
         text="Pere",
-        command=partial(getFather, personnePrincipale, arbre)
+        command=partial(getFather, personnePrincipale, arbre),
+        bootstyle="primary"
     )
-    buttonFils= Button(
+    buttonFils= ttk.Button(
         Millieu,
         text="Fils",
-        command=partial(getHeritier, personnePrincipale, arbre)
+        command=partial(getHeritier, personnePrincipale, arbre),
+        bootstyle="primary"
     )
 
     # Ajout de labels
-    Label(Mere, text="Mere").pack(padx=10, pady=10)
-    Label(Pere, text="Pere").pack(padx=10, pady=10)
-
-    Label(Photo, text="Photo").pack(padx=10, pady=10)
-
-    Label(Mariage, text="Mariage").pack(padx=10, pady=10)
-    Label(Enfant, text="Enfant").pack(padx=10, pady=10)
-    Label(Fratrie, text="Fratrie").pack(padx=10, pady=10)
     buttonFather.pack()
     buttonMother.pack()
     buttonFils.pack()
@@ -351,21 +353,46 @@ def exploreTreeDot(sosa, idOld, tree, sosaList, graph,i):
 
         exploreTreeDot(personne.getMere(), id, tree, sosaList,graph, i+1)
         exploreTreeDot(personne.getPere(), id, tree, sosaList,graph, i+1)
+
+
+def plotPngForThirdGen(tree, i):
+
+    sosaList = []
+    graph = pydot.Dot("my_graph",graph_type="graph", fontsize="16")
+    exploreTreeDot(tree[i],'',tree, sosaList,graph,0)
+    # # affichage(result, result[2])
+    graph.write_png('data/png/'+str(i)+'-output.png')
+    return graph
+
+# on fait un graph networkx
+def exploreTreeNetwork(id, idOld, tree, G, i):
+    if id in tree and i<5:
+        G.add_node(id)
+        if i>0 and idOld != '':
+            G.add_edge(id,idOld)
+
+        exploreTreeNetwork(id*2, id, tree, G, i+1)
+        exploreTreeNetwork(id*2+1, id, tree, G, i+1)
 # Louis XIV (M, birthday=1638-09-05, deathday=1715-09-01)
-def plotPngForThirdGen(tree):
-    for i in tree:
-        print(i)
-        sosaList = []
-        graph = pydot.Dot("my_graph",graph_type="graph", fontsize="16")
-        exploreTreeDot(i,'',tree, sosaList,graph,0)
-        # # affichage(result, result[2])
-        graph.write_png('data/png/'+str(i)+'-output.png')
+
+
+
+def test(tree, i):
+    window = Tk()
+    sosaList = []
+    G = nx.DiGraph()
+    exploreTreeNetwork(2, '', tree , G ,0)
+    pos=graphviz_layout(G, prog='dot')
+    nx.draw(G, pos, with_labels=True, arrows=True)
+
+    plt.show()
+
 def main():
     # convertXMLFile()
     arbre = openBaseBySosa('data/baseDeDonneeBySosa.json')
     # plotRepartitionAnnuelle(result)
     # plotPngForThirdGen(arbre)
-
-    affichage(arbre, arbre[2])
+    # affichage(arbre, arbre[2])
+    test(arbre, 2)
 if __name__ == "__main__":
     main()
