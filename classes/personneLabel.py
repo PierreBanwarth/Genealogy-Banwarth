@@ -27,20 +27,6 @@ class PersonneLabel:
         self.enfantsLabel = []
         self.enfantsText = []
 
-        self.imageFrame = Frame(labelPere, width=800, height=600, bg='blue')
-        self.imageFrame.grid_propagate(0)
-        self.imageFrame.pack_propagate(0)
-
-        file = 'data/png/'+str(personne.Sosa)+'-output.png'
-        image = Image.open(file)
-        zoom = 0.45
-        #multiple image size by zoom
-        pixels_x, pixels_y = tuple([int(zoom * x)  for x in image.size])
-        img = ImageTk.PhotoImage(image.resize((pixels_x, pixels_y)))
-        self.labelImage = Label(self.imageFrame, image=img, bg='white')
-        self.labelImage.image = img
-        self.labelImage.pack()
-
 
         for index, item in enumerate(personne.getEnfants()):
             self.enfantsText.append(StringVar())
@@ -61,25 +47,12 @@ class PersonneLabel:
             item.pack()
 
 
-        self.labelImage.pack()
-        self.imageFrame.pack()
 
     def set(self, personne, labelPere):
         for item in self.enfantsLabel:
             item.destroy()
-        self.labelImage.destroy()
         self.enfantsLabel = []
         self.enfantsText = []
-
-        file = 'data/png/'+str(personne.Sosa)+'-output.png'
-        image = Image.open(file)
-        zoom = 0.45
-        #multiple image size by zoom
-        pixels_x, pixels_y = tuple([int(zoom * x)  for x in image.size])
-        img = ImageTk.PhotoImage(image.resize((pixels_x, pixels_y)))
-        self.labelImage = Label(self.imageFrame, image=img, bg='white')
-        self.labelImage.image = img
-        self.labelImage.pack()
 
         for index, item in enumerate(personne.getEnfants()):
             self.enfantsText.append(StringVar())
