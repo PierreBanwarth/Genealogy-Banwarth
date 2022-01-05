@@ -51,7 +51,7 @@ def enfantFromJson(json):
                 elif 'DateDeces'in key:
                     enfant.DateDeces = Date({'key':'DateDeces', 'value':value})
             enfants.append(enfant)
-
+    print(enfants)
     return enfants
 
 

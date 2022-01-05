@@ -225,17 +225,17 @@ class Personne:
             particule = 'Mr'
         else:
             particule = 'Mdme'
-        return """ Nom : %s %s %s - Date de naissance : %s - Sosa : %s """ % (particule, self.Nom, self.Prenom, self.DateNaissance, self.Sosa )
+        return """%s""" % (self.Sosa)
 
     def getDisplayStr(self):
         if self.DateNaissance == None and self.DateDeces == None:
             resultat = """%s %s\nSosa : %s """ % (self.Nom, self.Prenom, self.Sosa)
         if self.DateNaissance != None and self.DateDeces == None:
-            resultat = """%s %s\nSosa : %s\nDate de Naissance = %s """ % (self.Nom, self.Prenom, self.Sosa, self.DateNaissance)
+            resultat = """%s %s\nSosa : %s\nN : %s """ % (self.Nom, self.Prenom, self.Sosa, self.DateNaissance)
         if self.DateNaissance == None and self.DateDeces != None:
-            resultat = """%s %s\nSosa : %s\nDate de Deces = %s """ % (self.Nom, self.Prenom, self.Sosa , self.DateDeces)
+            resultat = """%s %s\nSosa : %s\nD : %s """ % (self.Nom, self.Prenom, self.Sosa , self.DateDeces)
         if self.DateNaissance != None and self.DateDeces != None:
-            resultat = """%s %s\nSosa : %s\nDate de Naissance = %s, \nDate de Deces = %s """ % (self.Nom, self.Prenom, self.Sosa, self.DateNaissance, self.DateDeces)
+            resultat = """%s %s\nSosa : %s\nN : %s, \nD : %s """ % (self.Nom, self.Prenom, self.Sosa, self.DateNaissance, self.DateDeces)
         return resultat
         # Louis XIV (M, birthday=1638-09-05, deathday=1715-09-01)
 

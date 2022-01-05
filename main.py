@@ -9,20 +9,16 @@ from numpy import arange, sin, pi
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 
-import networkx as nx
 from classes.personne import *
 from classes.dates import *
 from classes.enfant import *
 from classes.personneLabel import PersonneLabel
 from classes.utils import *
+from classes.tree import *
 from classes.fichiers import *
 import collections
 from functools import partial
 import graphviz
-from networkx.drawing.nx_pydot import graphviz_layout
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,
-NavigationToolbar2Tk)
 
 import os
 import os
@@ -193,108 +189,103 @@ def retrouverEnfant(jsonBySosa):
     return result
 
 def affichage(arbre, personnePrincipale):
-    fenetre = ttk.Window(themename="superhero")
-    fenetre['bg']='white'
+    fenetre = ttk.Window(themename="cosmo")
 
     # https://python.doctor/page-tkinter-interface-graphique-python-tutoriel
-    # Haut
-    Haut = tk.Frame(fenetre)
+    # Haut*
+    Gauche = ttk.Frame(fenetre)
+    Gauche.pack(side=LEFT,fill=BOTH,expand=1)
+
+    Droite = ttk.Labelframe(fenetre, text='Arbre',bootstyle="dark")
+    Droite.pack(side=RIGHT,fill=BOTH,expand=1)
+
+
+
+    Haut = ttk.Frame(Gauche)
     Haut.pack(side=TOP,fill=BOTH,expand=1)
 
     # Personnage et photo
-    Millieu = tk.Frame(fenetre)
+    Millieu = ttk.Frame(Gauche)
     Millieu.pack(side=TOP, fill=BOTH,expand=1)
 
-    Bas = tk.Frame(fenetre, bg="white")
+    Bas = ttk.Frame(Gauche)
     Bas.pack(side=TOP, fill=BOTH,expand=1)
 
 
     # Frame du pere
-    Pere = tk.Frame(Haut, borderwidth=2, relief=GROOVE)
+    Pere = ttk.Frame(Haut)
     Pere.pack(side=LEFT, fill=BOTH,expand=1)
 
     #Frame de la mere
-    Mere = tk.Frame(Haut, borderwidth=2, relief=GROOVE)
+    Mere = ttk.Frame(Haut)
     Mere.pack(side=LEFT, fill=BOTH,expand=1)
 
-    Photo = tk.Label(Millieu, borderwidth=2, relief=GROOVE)
-    Photo.pack(side=LEFT)
-
-    Personnage = tk.Frame(Millieu, borderwidth=2, relief=GROOVE, bg='white')
+    Personnage = ttk.Frame(Millieu)
     Personnage.pack(side=LEFT, fill=BOTH,expand=1)
 
-    fig = plt.Figure()
-    #sub = fig.add_subplot('111')
-    canvas = FigureCanvasTkAgg(fig, master=fenetre)
-    #canvas.draw()
-    canvas.get_tk_widget().pack(fill='both', expand=True)
-    G = nx.DiGraph()
-    exploreTreeNetwork(2, '', arbre , G ,0)
 
-    pos=graphviz_layout(G, prog='dot')
-    ax = fig.gca()  # it can gives list of `ax` if there is more subplots.
+    tree = Tree(Droite, arbre)
 
-    nx.draw(G, pos, node_size=[len(str(v)) * 120 for v in G.nodes()], with_labels=True, arrows=True, ax=ax)
-
-    Mariage = tk.Frame(Bas, borderwidth=2, relief=GROOVE)
+    Mariage = ttk.Frame(Bas)
     Mariage.pack(side=LEFT, fill=BOTH,expand=1)
 
 
-    Enfant = tk.Frame(Bas, borderwidth=2, relief=GROOVE)
+    Enfant = ttk.Frame(Bas)
     Enfant.pack(side=LEFT, fill=BOTH,expand=1)
 
 
-    Fratrie = tk.Frame(Bas, borderwidth=2, relief=GROOVE)
+    Fratrie = ttk.Frame(Bas)
     Fratrie.pack(side=LEFT, fill=BOTH,expand=1)
 
-    personneLabel = PersonneLabel(personnePrincipale, Personnage, Enfant)
+    personneLabel = PersonneLabel(personnePrincipale, Personnage, Enfant, Pere, Mere, arbre)
 
 
 
-    def getFather(personnePrincipale, arbre, canvas, ax):
+    def getFather(personnePrincipale, arbre):
         pere = arbre[personnePrincipale.getPere()]
-        personneLabel.set(pere, Personnage)
-        canvasTree(ax, canvas, arbre, personnePrincipale.getPere())
+        personneLabel.set(pere, Personnage, arbre)
+        tree.canvasTree(arbre, personnePrincipale.getPere())
 
-        buttonFather.configure(command=partial(getFather, pere, arbre, canvas, ax))
-        buttonMother.configure(command=partial(getMother, pere, arbre, canvas, ax))
-        buttonFils.configure(command=partial(getHeritier, pere, arbre, canvas, ax))
+        buttonFather.configure(command=partial(getFather, pere, arbre))
+        buttonMother.configure(command=partial(getMother, pere, arbre))
+        buttonFils.configure(command=partial(getHeritier, pere, arbre))
 
-    def getMother(personnePrincipale, arbre, canvas, ax):
+    def getMother(personnePrincipale, arbre):
         mere = arbre[personnePrincipale.getMere()]
-        personneLabel.set(mere, Personnage)
-        canvasTree(ax, canvas, arbre, personnePrincipale.getMere())
-        buttonMother.configure(command=partial(getMother, mere, arbre, canvas, ax))
-        buttonFather.configure(command=partial(getFather, mere, arbre, canvas, ax))
-        buttonFils.configure(command=partial(getHeritier, mere, arbre, canvas, ax))
+        personneLabel.set(mere, Personnage, arbre)
+        tree.canvasTree(arbre, personnePrincipale.getMere())
 
-    def getHeritier(personnePrincipale, arbre, canvas, ax):
+        buttonMother.configure(command=partial(getMother, mere, arbre))
+        buttonFather.configure(command=partial(getFather, mere, arbre))
+        buttonFils.configure(command=partial(getHeritier, mere, arbre))
+
+    def getHeritier(personnePrincipale, arbre):
 
         heritier = arbre[personnePrincipale.getHeritier()]
-        personneLabel.set(heritier, Personnage)
-        canvasTree(ax, canvas, arbre, personnePrincipale.getHeritier())
+        personneLabel.set(heritier, Personnage, arbre)
+        tree.canvasTree(arbre, personnePrincipale.getHeritier())
 
-        buttonFather.configure(command=partial(getFather, heritier, arbre, canvas, ax))
-        buttonMother.configure(command=partial(getMother, heritier, arbre, canvas, ax))
-        buttonFils.configure(command=partial(getHeritier, heritier, arbre, canvas, ax))
+        buttonFather.configure(command=partial(getFather, heritier, arbre))
+        buttonMother.configure(command=partial(getMother, heritier, arbre))
+        buttonFils.configure(command=partial(getHeritier, heritier, arbre))
 
     buttonMother = ttk.Button(
         Mere,
         text="Mere",
-        command=partial(getMother, personnePrincipale, arbre, canvas, ax),
+        command=partial(getMother, personnePrincipale, arbre),
         bootstyle="primary"
     )
 
     buttonFather = ttk.Button(
         Pere,
         text="Pere",
-        command=partial(getFather, personnePrincipale, arbre, canvas, ax),
+        command=partial(getFather, personnePrincipale, arbre),
         bootstyle="primary"
     )
     buttonFils= ttk.Button(
         Millieu,
         text="Fils",
-        command=partial(getHeritier, personnePrincipale, arbre, canvas, ax),
+        command=partial(getHeritier, personnePrincipale, arbre),
         bootstyle="primary"
     )
 
@@ -306,16 +297,6 @@ def affichage(arbre, personnePrincipale):
     personneLabel.pack()
     # frame 3 dans frame 2
     fenetre.mainloop()
-
-def canvasTree(ax, canvas,arbre, i):
-    ax.clear()
-    fig = plt.Figure()
-    G = nx.DiGraph()
-    exploreTreeNetwork(i, '', arbre , G ,0)
-    pos=graphviz_layout(G, prog='dot')
-    nx.draw(G, pos, node_size=[300+(len(str(v)) * 75) for v in G.nodes()], with_labels=True, arrows=True, ax=ax)
-    #call the draw method on your canvas
-    canvas.draw()
 
 def convertXMLFile():
     arbre = ET.parse('data/table1.xml')
@@ -348,55 +329,6 @@ def plotRepartitionAnnuelle(result):
     for k, v in test.items():
         names.append(k)
         values.append(v)
-
-
-def getForme(var):
-    if var % 2 == 0:
-        return "square"
-    else:
-        return "circle"
-
-def getColor(var):
-    if var % 2 == 0:
-        return "azure"
-    else:
-        return "navajowhite"
-
-def exploreTreeDot(sosa, idOld, tree, sosaList, graph,i):
-    if sosa in tree and i<3:
-        personne = tree[sosa]
-        id = personne.getNom() + str(personne.Sosa)
-        labelPersonne = personne.getDisplayStr()
-        shapePersonne = getForme(personne.Sosa)
-        shapeColor = getColor(personne.Sosa)
-        graph.add_node(pydot.Node(id, label=labelPersonne , style='filled', fontsize='16', shape=shapePersonne, fillcolor=shapeColor))
-
-        if i >0 and idOld != '':
-            graph.add_edge(pydot.Edge(id, idOld, arrows=True))
-
-        exploreTreeDot(personne.getMere(), id, tree, sosaList,graph, i+1)
-        exploreTreeDot(personne.getPere(), id, tree, sosaList,graph, i+1)
-
-
-def plotPngForThirdGen(tree, i):
-
-    sosaList = []
-    graph = pydot.Dot("my_graph",graph_type="graph", fontsize="16")
-    exploreTreeDot(tree[i],'',tree, sosaList,graph,0)
-    # # affichage(result, result[2])
-    graph.write_png('data/png/'+str(i)+'-output.png')
-    return graph
-
-# on fait un graph networkx
-def exploreTreeNetwork(id, idOld, tree, G, i):
-    if id in tree and i<3:
-        G.add_node(tree[id].getDisplayStr())
-        if i>0 and idOld != '':
-            G.add_edge(tree[id].getDisplayStr(),tree[idOld].getDisplayStr())
-
-        exploreTreeNetwork(id*2, id, tree, G, i+1)
-        exploreTreeNetwork(id*2+1, id, tree, G, i+1)
-# Louis XIV (M, birthday=1638-09-05, deathday=1715-09-01)
 
 
 def main():
