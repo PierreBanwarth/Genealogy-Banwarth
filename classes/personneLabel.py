@@ -6,7 +6,6 @@ from PIL import Image, ImageTk
 
 class ParentLabel():
     def __init__(self, personne, labelPere):
-
         self.textNom = StringVar()
         self.textDateNaissance = StringVar()
         self.textLieuNaissance = StringVar()
@@ -59,24 +58,67 @@ class ParentLabel():
             self.textProfession.set('Profession : '+personne.Profession)
         self.pack()
 
-class PersonneLabel:
+
+class EnfantLabel():
+
+    def __init__(self, enfant, labelEnfant):
+        self.textNom = StringVar()
+        self.textDateNaissance = StringVar()
+        self.textDateDeces =StringVar()
+        self.textDateMariage =StringVar()
+        self.textSosa =StringVar()
+
+        self.labelNom = Label(labelEnfant, textvariable=self.textNom, bg='white')
+        self.labelDateNaissance = Label(labelEnfant, textvariable=self.textDateNaissance, bg='white')
+        self.labelDateDeces = Label(labelEnfant, textvariable=self.textDateDeces, bg='white')
+        self.labelDateMariage = Label(labelEnfant, textvariable=self.textDateMariage, bg='white')
+        self.labelLieuDeces = Label(labelEnfant, textvariable=self.textSosa, bg='white')
+        self.set(labelEnfant, enfant)
+
+    def set(self, labelEnfant, enfant):
+        if enfant.Prenom != None:
+            self.textNom.set(enfant.Prenom)
+
+        if enfant.DateNaissance != None:
+            self.textDateNaissance.set(enfant.DateNaissance)
+
+        if enfant.DateMariage != None:
+            self.textDateMariage.set(enfant.DateMariage)
+
+        if enfant.DateDeces != None:
+            self.textDateDeces.set(enfant.DateDeces)
+
+        if enfant.Sosa != None:
+            self.textSosa.set(enfant.Sosa)
+
+    def pack(self):
+        self.labelNom.pack()
+        self.labelDateNaissance.pack()
+        self.labelDateDeces.pack()
+        self.labelDateMariage.pack()
+        self.labelLieuDeces.pack()
+
+    def destroy(self):
+        self.labelNom.destroy()
+        self.labelDateNaissance.destroy()
+        self.labelDateDeces.destroy()
+        self.labelDateMariage.destroy()
+        self.labelLieuDeces.destroy()
+
+
+class PersonneLabel():
     def __init__(self, personne, labelPersonne, labelEnfant, labelPere, labelMere, arbre):
         self.Pere = None
         self.Mere = None
         self.Personne = None
+        self.Enfants = None
 
         self.labelPersonne = labelPersonne
         self.labelPere = labelPere
         self.labelMere = labelMere
+        self.labelEnfant = labelEnfant
 
-        self.labelEnfant  = labelEnfant
         self.enfantsLabel = []
-        self.enfantsText = []
-        print(personne.getEnfants())
-        for index, item in enumerate(personne.getEnfants()):
-            print(index+'   '+item)
-            self.enfantsText.append(StringVar())
-            self.enfantsLabel.append(Label(self.labelEnfant, textvariable=self.enfantsText[index]))
 
         self.set(personne, labelPersonne, arbre)
 
@@ -93,7 +135,7 @@ class PersonneLabel:
     def set(self, personne, labelPersonne, arbre):
         personnePere = arbre[personne.getPere()]
         personneMere = arbre[personne.getMere()]
-
+        enfants = personne.getEnfants()
         if self.Pere != None:
             self.Pere.destroy()
 
@@ -103,23 +145,17 @@ class PersonneLabel:
         if self.Personne != None:
             self.Personne.destroy()
 
+        if len(self.enfantsLabel)>0:
+            for item in self.enfantsLabel:
+                item.destroy()
+
         self.Pere = ParentLabel(personnePere, self.labelPere)
         self.Mere = ParentLabel(personneMere, self.labelMere)
         self.Personne = ParentLabel(personne, self.labelPersonne)
-
-
-        for item in self.enfantsLabel:
-            item.destroy()
         self.enfantsLabel = []
-        self.enfantsText = []
-
-        for index, item in enumerate(personne.getEnfants()):
-            self.enfantsText.append(StringVar())
-            self.enfantsLabel.append(Label(self.labelEnfant, textvariable=self.enfantsText[index]))
-
-        for index, item in enumerate(personne.getEnfants()):
-            if personne.getPrenom() != None:
-                self.enfantsText[index].set(personne.getPrenom())
-            else:
-                self.enfantsText[index].set(personne.getPrenom())
+        if len(enfants)>0:
+            for item in  enfants:
+                enfant = EnfantLabel(item,  self.labelEnfant)
+                self.enfantsLabel.append(enfant)
+                enfant.pack()
         self.pack()
