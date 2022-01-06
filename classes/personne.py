@@ -12,7 +12,8 @@ def openBaseBySosa(filename):
     json = openBase(filename)
     for sosa, json in json.items():
         personne = Personne()
-        finalJson[int(sosa)] = personne.setPersonne(json)
+        personne = personne.setPersonne(json)
+        finalJson[int(sosa)] = personne
     return finalJson
 
 
@@ -191,8 +192,12 @@ class Personne:
         result['dateNaissance'] = self.DateNaissance
         return result
 
+
     def getPere(self):
         return self.Sosa*2
+
+    def getMere(self):
+        return (self.Sosa*2)+1
 
     def getHeritier(self):
         if self.Sosa % 2 == 0:
@@ -200,8 +205,6 @@ class Personne:
         else:
             return int((self.Sosa-1)/2)
 
-    def getMere(self):
-        return (self.Sosa*2)+1
 # "departement": "57",
 # "departementName": "Moselle",
 # "regionName": "Grand Est",
@@ -218,14 +221,20 @@ class Personne:
                 return self.Sosa-1
         else:
             return 0
+    def getBelleMaman(self):
+        i = self.getConjointSosa()
+        return (i*2)+1
 
+    def getBeauPapa(self):
+        i = self.getConjointSosa()
+        return (i*2)
 
     def __str__(self):
         if self.Male:
             particule = 'Mr'
         else:
             particule = 'Mdme'
-        return """%s""" % (self.Sosa)
+        return """%s %s""" % (self.Sosa, self.Nom)
 
     def getDisplayStr(self):
         if self.DateNaissance == None and self.DateDeces == None:

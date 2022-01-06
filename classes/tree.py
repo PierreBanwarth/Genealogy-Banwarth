@@ -8,15 +8,15 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,
 NavigationToolbar2Tk)
 
 class Tree():
-    def __init__(self, frame, arbre):
-        self.abre = arbre
+    def __init__(self, frame, treeExplorer):
+        self.treeExplorer = treeExplorer
         self.frame = frame
 
         fig = plt.Figure()
         self.canvas = FigureCanvasTkAgg(fig, master=frame)
 
         G = nx.DiGraph()
-        self.exploreTreeNetwork(2, '', arbre , G ,0)
+        self.treeExplorer.exploreTreeNetworkX(2,'', G ,0)
 
         pos= nx.nx_pydot.pydot_layout(G, prog='dot')
 
@@ -34,7 +34,7 @@ class Tree():
         self.ax.spines['bottom'].set_visible(False)
         self.ax.spines['left'].set_visible(False)
 
-        labels = self.getLabel(G, arbre)
+        labels = treeExplorer.getLabels(G.nodes())
         nodes = nx.draw_networkx_nodes(
             G,
             pos,
@@ -59,18 +59,20 @@ class Tree():
         widget.pack(fill='both', expand=True)
 
         # nx.draw(G, pos, node_size=[len(arbre[v].getPrenom()) * 75 for v in G.nodes()], with_labels=False, arrows=True, ax=self.ax)
-    def draw(self, arbre, i):
+    def draw(self, treeExplorer):
         pass
-    def canvasTree(self, arbre, i):
+    def canvasTree(self, treeExplorer):
         self.ax.clear()
 
         fig = plt.Figure()
         fig.subplots_adjust(0, 0, 1, 1)
 
         G = nx.DiGraph()
-        self.exploreTreeNetwork(i, '', arbre , G ,0)
+        i = treeExplorer.getCurrentPersonneSosa()
+        treeExplorer.exploreTreeNetworkX(i,'', G ,0)
         pos= nx.nx_pydot.pydot_layout(G, prog='dot')
-        labels = self.getLabel(G, arbre)
+        labels = treeExplorer.getLabels(G.nodes())
+
         nodes = nx.draw_networkx_nodes(
             G,
             pos,
@@ -101,12 +103,6 @@ class Tree():
             exploreTreeDot(personne.getMere(), id, tree,graph, i+1)
             exploreTreeDot(personne.getPere(), id, tree,graph, i+1)
 
-    def getLabel(self, G, arbre):
-        result = {}
-        for item in G.nodes():
-            result[item] = arbre[item].getDisplayStr()
-        return result
-
     def plotPngForThirdGen(self, tree, i):
 
         sosaList = []
@@ -117,15 +113,7 @@ class Tree():
         return graph
 
     # on fait un graph networkx
-    def exploreTreeNetwork(self, id, idOld, tree, G, i):
-        if id in tree and i<3:
 
-            G.add_node(id)
-            if i>0 and idOld != '':
-                G.add_edge(id,idOld)
-
-            self.exploreTreeNetwork(id*2, id, tree, G, i+1)
-            self.exploreTreeNetwork(id*2+1, id, tree, G, i+1)
     # Louis XIV (M, birthday=1638-09-05, deathday=1715-09-01)
 
 
