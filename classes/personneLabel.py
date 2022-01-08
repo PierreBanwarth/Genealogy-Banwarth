@@ -6,6 +6,27 @@ from classes.personne import Personne
 
 from PIL import Image, ImageTk
 
+PADDING=10
+
+def setAttrib(personneAttrib, string ,label):
+    if personneAttrib != None:
+        label.set(string+' '+str(personneAttrib))
+    else:
+        label.set('-')
+
+def setMultiAttrb(personneAttrib, personneAttrib2, string ,label):
+
+    if personneAttrib != None and personneAttrib2 != None:
+        label.set(string+' '+str(personneAttrib)+' '+str(personneAttrib2))
+    else:
+        label.set('-')
+
+def setOrDestroy(text, label):
+    if '-' != text.get():
+        label.pack()
+    else:
+        label.destroy()
+
 class ParentLabel():
     def __init__(self, labelPere):
 
@@ -17,7 +38,7 @@ class ParentLabel():
         self.textLieuDeces =StringVar()
         self.textAge = StringVar()
         self.textProfession = StringVar()
-
+        self.textSigneAstro = StringVar()
         self.labelSosa = ttk.Label(labelPere, textvariable=self.textSosa)
         self.labelNom = ttk.Label(labelPere, textvariable=self.textNom )
         self.labelNaissance = ttk.Label(labelPere, textvariable=self.textDateNaissance)
@@ -39,41 +60,71 @@ class ParentLabel():
         self.labelProfession.pack(fill=BOTH,expand=1)
 
     def set(self, personne):
+        setMultiAttrb(personne.Nom, personne.Prenom, 'Nom :',self.textNom)
+        setAttrib(personne.Sosa, 'Sosa :', self.textSosa)
+        setAttrib(personne.DateNaissance, 'Date de Naissance :', self.textDateNaissance)
+        setAttrib(personne.LieuNaissance, 'Lieu de Naissance :', self.textLieuNaissance)
+        setAttrib(personne.DateDeces, 'Date de Deces :', self.textDeces)
+        setAttrib(personne.LieuDeces, 'Lieu De Deces :', self.textLieuDeces)
+        setAttrib(personne.Profession, 'Profession :', self.textProfession)
 
-        if personne.Nom != None and personne.Prenom != None:
-            self.textNom.set('Nom :'+personne.Nom +' '+personne.Prenom)
-        else:
-            self.textNom.set('-')
+class PersonnageLabel():
 
-        if personne.Sosa != None:
-            self.textSosa.set(str(personne.Sosa))
-        else:
-            self.textSosa.set('-')
+    def __init__(self, labelPere):
 
-        if personne.DateNaissance != None:
-            self.textDateNaissance.set('Date de Naissance : '+str(personne.DateNaissance))
-        else:
-            self.textDateNaissance.set('-')
+        self.textSosa = StringVar()
+        self.textNom = StringVar()
+        self.textDateNaissance = StringVar()
+        self.textLieuNaissance = StringVar()
+        self.textDeces =StringVar()
+        self.textLieuDeces =StringVar()
+        self.textAge = StringVar()
+        self.textProfession = StringVar()
+        self.textSigneAstro = StringVar()
 
-        if personne.LieuNaissance != None:
-            self.textLieuNaissance.set('Lieu de Naissance : '+personne.LieuNaissance)
-        else:
-            self.textLieuNaissance.set('-')
+        self.Gauche = ttk.Frame(labelPere)
+        self.Droite = ttk.Frame(labelPere)
 
-        if personne.DateDeces != None:
-            self.textDeces.set('Date de deces : '+str(personne.DateDeces))
-        else:
-            self.textDeces.set('-')
+        self.labelSigneAstro = ttk.Label(self.Gauche, textvariable=self.textSigneAstro)
+        self.labelSosa = ttk.Label(self.Gauche, textvariable=self.textSosa)
+        self.labelNom = ttk.Label(self.Gauche, textvariable=self.textNom )
+        self.labelNaissance = ttk.Label(self.Gauche, textvariable=self.textDateNaissance)
+        self.labelLieuNaissance = ttk.Label(self.Gauche, textvariable=self.textLieuNaissance)
+        self.labelDeces = ttk.Label(self.Gauche, textvariable=self.textDeces)
+        self.labelLieuDeces = ttk.Label(self.Gauche, textvariable=self.textLieuDeces)
+        self.labelAge = ttk.Label(self.Gauche, textvariable=self.textDateNaissance)
+        self.labelProfession = ttk.Label(self.Gauche, textvariable=self.textProfession)
+        self.noteTextLabel = ttk.Text(self.Droite, height=5, width=50)
 
-        if personne.LieuDeces != None:
-            self.textLieuDeces.set('Lieu de deces : '+personne.LieuDeces)
-        else:
-            self.textLieuDeces.set('-')
+    def pack(self):
+        self.labelSosa.pack(fill=BOTH,expand=1)
+        self.labelNom.pack(fill=BOTH,expand=1)
+        self.labelNaissance.pack(fill=BOTH,expand=1)
+        self.labelLieuNaissance.pack(fill=BOTH,expand=1)
+        self.labelDeces.pack(fill=BOTH,expand=1)
+        self.labelLieuDeces.pack(fill=BOTH,expand=1)
+        self.labelProfession.pack(fill=BOTH,expand=1)
+        self.labelProfession.pack(fill=BOTH,expand=1)
+        self.labelSigneAstro.pack(fill=BOTH,expand=1)
+        self.noteTextLabel.pack(fill=BOTH,expand=1)
+        self.Droite.pack(side=RIGHT,fill=BOTH,expand=1, padx=PADDING, pady=PADDING)
+        self.Gauche.pack(side=LEFT,fill=BOTH,expand=1, padx=PADDING, pady=PADDING)
 
-        if personne.Profession != None:
-            self.textProfession.set('Profession : '+personne.Profession)
+    def set(self, personne):
+        self.noteTextLabel.delete(1.0,END)
+        setMultiAttrb(personne.Nom, personne.Prenom, 'Nom :',self.textNom)
+        setAttrib(personne.Sosa, 'Sosa :', self.textSosa)
+        setAttrib(personne.DateNaissance, 'Date de Naissance :', self.textDateNaissance)
+        setAttrib(personne.LieuNaissance, 'Lieu de Naissance :', self.textLieuNaissance)
+        setAttrib(personne.DateDeces, 'Date de Deces :', self.textDeces)
+        setAttrib(personne.LieuDeces, 'Lieu De Deces :', self.textLieuDeces)
+        setAttrib(personne.Profession, 'Profession :', self.textProfession)
+        setAttrib(personne.getSigneAstro(), 'Signe Astrologique :', self.textSigneAstro)
+
+        if personne.Note != None:
+             self.noteTextLabel.insert(INSERT,str(personne.Note))
         else:
-            self.textProfession.set('-')
+             self.noteTextLabel.insert(INSERT,'-')
 
 class EnfantLabel():
 
@@ -92,37 +143,18 @@ class EnfantLabel():
 
 
     def set(self, enfant):
-        if enfant.Prenom != None:
-            self.textNom.set(enfant.Prenom)
-        else:
-            self.textNom.set('-')
-
-        if enfant.DateNaissance != None:
-            self.textDateNaissance.set(enfant.DateNaissance)
-        else:
-            self.textDateNaissance.set('-')
-
-        if enfant.DateMariage != None:
-            self.textDateMariage.set(enfant.DateMariage)
-        else:
-            self.textDateMariage.set('-')
-
-        if enfant.DateDeces != None:
-            self.textDateDeces.set(enfant.DateDeces)
-        else:
-            self.textDateDeces.set('-')
-
-        if enfant.Sosa != None:
-            self.textSosa.set(enfant.Sosa)
-        else:
-            self.textSosa.set('-')
+        setAttrib(enfant.Prenom, 'Prenom :', self.textNom)
+        setAttrib(enfant.DateNaissance, 'Date de Naissance :', self.textDateNaissance)
+        setAttrib(enfant.DateMariage, 'Date de Mariage :', self.textDateMariage)
+        setAttrib(enfant.DateDeces, 'Date de Deces :', self.textDateDeces)
+        setAttrib(enfant.Sosa, 'Sosa :', self.textSosa)
 
     def pack(self):
-        self.labelNom.pack()
-        self.labelDateNaissance.pack()
-        self.labelDateDeces.pack()
-        self.labelDateMariage.pack()
-        self.labelSosa.pack()
+        setOrDestroy(self.textNom, self.labelNom)
+        setOrDestroy(self.textDateNaissance, self.labelDateNaissance)
+        setOrDestroy(self.textDateDeces, self.labelDateDeces)
+        setOrDestroy(self.textDateMariage, self.labelDateMariage)
+        setOrDestroy(self.textSosa, self.labelSosa)
 
     def destroy(self):
         self.labelNom.destroy()
@@ -148,51 +180,30 @@ class MariageLabel():
         self.labelMamanMarie =Label(labelMariage,  textvariable=self.textMamanMarie)
 
     def pack(self):
-        self.labelSosa.pack()
-        self.labelNomEpouse.pack()
-        self.labelDateMariage.pack()
-        self.labelLieuMariage.pack()
-        self.labelPapaMarie.pack()
-        self.labelMamanMarie.pack()
+        setOrDestroy(self.textSosa, self.labelSosa)
+        setOrDestroy(self.textNomEpouse, self.labelNomEpouse)
+        setOrDestroy(self.textDateMariage, self.labelDateMariage)
+        setOrDestroy(self.textLieuMariage, self.labelLieuMariage)
+        setOrDestroy(self.textPapaMarie, self.labelPapaMarie)
+        setOrDestroy(self.textMamanMarie, self.labelMamanMarie)
+
 
     def set(self, personne, conjoint, papa, maman):
+        setMultiAttrb(papa.Nom, papa.Prenom, 'Beau Papa :',self.textPapaMarie)
+        setMultiAttrb(maman.Nom, maman.Prenom, 'Belle Maman :',self.textMamanMarie)
+        setMultiAttrb(conjoint.Nom, conjoint.Prenom, 'Conjoint :',self.textNomEpouse)
+        setAttrib(personne.DateMariage, 'Date Mariage : ', self.textDateMariage)
+        setAttrib(personne.LieuMariage, 'Lieu Mariage : ', self.textLieuMariage)
+        setAttrib(personne.Sosa, 'Sosa : ', self.textSosa)
 
-        if papa.Prenom != None and papa.Nom != None:
-            self.textPapaMarie.set(papa.Nom +' '+papa.Prenom)
-        else:
-            self.textPapaMarie.set('-')
 
-        if maman.Prenom != None and maman.Nom != None:
-            self.textMamanMarie.set(maman.Nom +' '+maman.Prenom)
-        else:
-            self.textMamanMarie.set('-')
-
-        if conjoint.Prenom != None and conjoint.Nom != None:
-            self.textNomEpouse.set(conjoint.Nom +' '+conjoint.Prenom)
-        else:
-            self.textNomEpouse.set('-')
-
-        if personne.DateMariage != None:
-            self.textDateMariage.set(personne.DateMariage)
-        else:
-            self.textDateMariage.set('-')
-
-        if personne.LieuMariage != None:
-            self.textLieuMariage.set(personne.LieuMariage)
-        else:
-            self.textLieuMariage.set('-')
-
-        if conjoint.Sosa != None:
-            self.textSosa.set(conjoint.Sosa)
-        else:
-            self.textSosa.set('-')
 
 class EnfantLabelListe():
 
-    def __init__(self, labelEnfant):
+    def __init__(self, labelEnfant, str):
         self.enfantListe = []
         self.labelEnfant = labelEnfant
-
+        self.sansEnfant = Label(self.labelEnfant,  text=str)
     def pack(self):
         for item in self.enfantListe:
             item.pack()
@@ -200,7 +211,6 @@ class EnfantLabelListe():
     def set(self, listEnfant):
 
         if len(listEnfant) == 0:
-            self.sansEnfant = Label(self.labelEnfant,  text='Sans enfants')
             self.sansEnfant.pack()
         else:
             self.sansEnfant.destroy()
@@ -217,24 +227,22 @@ class EnfantLabelListe():
 
 
 class PersonneLabel():
-    def __init__(self, labelPersonne, labelEnfant, labelPere, labelMere, labelMariage, treeExplorer):
+    def __init__(self, labelPersonne, labelEnfant, labelPere, labelMere, labelMariage, labelFratrie, treeExplorer):
 
         self.labelPersonne = labelPersonne
         self.labelEnfant = labelEnfant
         self.labelPere = labelPere
         self.labelMere = labelMere
         self.labelMariage = labelMariage
+        self.labelFratrie = labelFratrie
 
-        personnePere = treeExplorer.getPere()
-        personneMere = treeExplorer.getMere()
-        enfants = treeExplorer.getEnfants()
-        personne = treeExplorer.getCurrentPersonne()
-        #
+
         # personne.DateMariage = None
         # personne.LieuMariage = None
+        self.Fratrie = EnfantLabelListe(self.labelFratrie, 'Pas de Frere et Soeur')
+        self.Enfants = EnfantLabelListe(self.labelEnfant, '''Pas d'enfants''')
 
-        self.Personne = ParentLabel(self.labelPersonne)
-        self.Enfants = EnfantLabelListe(self.labelEnfant)
+        self.Personne = PersonnageLabel(self.labelPersonne)
         self.Pere = ParentLabel(self.labelPere)
         self.Mere = ParentLabel(self.labelMere)
         self.Mariage = MariageLabel(self.labelMariage)
@@ -247,6 +255,7 @@ class PersonneLabel():
         self.Mere.pack()
         self.Mariage.pack()
         self.Enfants.pack()
+        self.Fratrie.pack()
 
     def set(self, treeExplorer):
         personnePere = treeExplorer.getPere()
@@ -256,9 +265,10 @@ class PersonneLabel():
         beauPapa = treeExplorer.getBeauPapa()
         belleMaman = treeExplorer.getBelleMaman()
         personne = treeExplorer.getCurrentPersonne()
-
+        fratrie = treeExplorer.getFratrie()
         self.Pere.set(personnePere)
         self.Mere.set(personneMere)
         self.Personne.set(personne)
         self.Mariage.set(personne, conjoint, beauPapa, belleMaman)
         self.Enfants.set(enfants)
+        self.Fratrie.set(fratrie)

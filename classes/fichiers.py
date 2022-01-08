@@ -14,7 +14,7 @@ def getRegnes():
         return regnes
 
 def getAstrologie():
-    with open('data/regnes.json') as json_file:
+    with open('data/astrologie.json') as json_file:
         astrologie = json.load(json_file)
         return astrologie
 

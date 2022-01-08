@@ -3,6 +3,9 @@ from networkx.drawing.nx_pydot import graphviz_layout
 import networkx as nx
 import tkinter as tk
 import pydot
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
+
 
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,
 NavigationToolbar2Tk)
@@ -56,7 +59,7 @@ class Tree():
         nx.draw_networkx_labels(G, pos, labels, font_size=8, ax=self.ax)
 
         widget = self.canvas.get_tk_widget()
-        widget.pack(fill='both', expand=True)
+        widget.pack(fill=BOTH,expand=1)
 
         # nx.draw(G, pos, node_size=[len(arbre[v].getPrenom()) * 75 for v in G.nodes()], with_labels=False, arrows=True, ax=self.ax)
     def draw(self, treeExplorer):

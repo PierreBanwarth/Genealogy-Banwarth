@@ -4,22 +4,10 @@ from  classes.fichiers import *
 from classes.utils import *
 
 class Date:
+
     def __init__(self, json):
-        if 'Approximative' in json['key']:
-            self.exact = False
-        else:
-            self.exact = True
+        self.exact = 'Approximative' not in json['key'] or 'vers' in self.date or  'avant' in self.date or 'apres' in self.date or 'ou' in self.date
         self.date = json['value']
-        if 'vers' in self.date:
-            self.exact = False
-        if 'avant' in self.date:
-            self.exact = False
-        if 'apres' in self.date:
-            self.exact = False
-        if 'ou' in self.date:
-            self.exact = False
-
-
 
     def __str__(self):
         if self.date == None:

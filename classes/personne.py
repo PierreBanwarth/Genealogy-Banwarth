@@ -4,7 +4,7 @@ from  classes.fichiers import *
 from classes.dates import *
 from classes.enfant import *
 from classes.lieux import *
-astrologie = getAstrologie()
+
 regnes = getRegnes()
 
 def openBaseBySosa(filename):
@@ -138,30 +138,34 @@ class Personne:
         return regnesPersonne
 
     def getSigneAstro(self):
-        date = self.DateNaissance
-        dateArray = date.split('/')
-        jour = int(dateArray[0])
-        mois = int(dateArray[1])
-        finded= False
-        for signe in astrologie:
-            dateDebutSigne = signe['dateDebut']
-            dateFinSigne = signe['dateFin']
-            jourDebutSigne = int(dateDebutSigne.split('/')[0])
-            moisDebutSigne = int(dateDebutSigne.split('/')[1])
+        astrologie = getAstrologie()
+        if self.DateNaissance.exact:
+            date = self.DateNaissance.date
+            dateArray = date.split('/')
+            jour = int(dateArray[0])
+            mois = int(dateArray[1])
+            finded= False
+            for signe in astrologie:
+                dateDebutSigne = signe['dateDebut']
+                dateFinSigne = signe['dateFin']
+                print(dateDebutSigne)
+                print(dateFinSigne)
+                jourDebutSigne = int(dateDebutSigne.split('/')[0])
+                moisDebutSigne = int(dateDebutSigne.split('/')[1])
 
-            jourFinSigne = int(dateFinSigne.split('/')[0])
-            moisFinSigne = int(dateFinSigne.split('/')[1])
-            if mois == moisDebutSigne:
-                if jour >= jourDebutSigne:
-                    finded = True
-                    return signe['signe']
-            if mois == moisFinSigne:
-                if jour <= jourFinSigne:
-                    finded = True
-                    return signe['signe']
-        if not finded:
-            print(date)
+                jourFinSigne = int(dateFinSigne.split('/')[0])
+                moisFinSigne = int(dateFinSigne.split('/')[1])
+                if mois == moisDebutSigne:
+                    if jour >= jourDebutSigne:
+                        finded = True
+                        return signe['signe']
+                if mois == moisFinSigne:
+                    if jour <= jourFinSigne:
+                        finded = True
+                        return signe['signe']
 
+        else:
+            return 'inconnue'
     def getAnneeNaissance(self):
         if self.DateNaissance != None:
             return int(self.DateNaissance.getAnnee())
